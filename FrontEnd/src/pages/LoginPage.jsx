@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FormInput from '../components/FormInput';
 import ErrorMessage from '../components/ErrorMessage';
 import {Link} from 'react-router-dom';
+import styles from '../styles/AuthFormLayout.module.css'
 
 function LoginPage(){
     const [username, setUsername] = useState('');
@@ -19,12 +20,13 @@ function LoginPage(){
         // TBC: send the data to the backend
     }
     return (
-        <div className="form-container">
+        <div className={styles.formContainer}>
+          <h2>MyBookPlace</h2>
+  
+          {/* TBC: if the username/password is wrong*/}
+          <ErrorMessage message={error} />
+          
           <form onSubmit={handleSubmit}>
-            <h2>MyBookPlace</h2>
-    
-            {/* TBC: if the username/password is wrong*/}
-            <ErrorMessage message={error} />
     
             <FormInput 
               id = "username"
@@ -51,11 +53,12 @@ function LoginPage(){
             />
             
             <button type="submit">Login</button>
+            
           </form>
     
-          <div className="options">
+          <div className={styles.options}>
             <Link to="/forgot-password">Forgot Password?</Link>
-            <hr className="option-divider" />
+            <hr className={styles.optionDivider} />
             <Link to="/signup">Create New Account</Link>
           </div>
         </div>
