@@ -14,14 +14,22 @@
 }
 
 .inputElement {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
+  color: #333;
   width: 100%;
-  box-sizing: border-box;
+  padding: 0.9rem 1rem;
+  border: 1px solid #ccd0d5;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: #f0f2f5;
 }
 
+.inputElement:focus {
+  outline: none;
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
 .inputElement::placeholder {
   color: #aaa;
 }
