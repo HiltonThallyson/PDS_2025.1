@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormInput from '../components/FormInput';
 import ErrorMessage from '../components/ErrorMessage';
+import styles from '../styles/AuthFormLayout.module.css';
 
 function SignUpPage() {
     const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ function SignUpPage() {
     const [error, setError] = useState('');
     const handleSubmit = (event) => {
         event.preventDefault();
-        setError(''); // Clear previous errors on new submission
+        setError('');
         if (password !== confirmPassword) {
           setError('Passwords do not match');
           return;
@@ -24,15 +25,15 @@ function SignUpPage() {
         };
         console.log('Form submitted:', formData);
 
-        //send the data to the backend 
+        //TBC: send the data to the backend 
     };
 
   return (
-    <div className="form-container">
+    <div className={styles.formContainer}>
+      <h2>Create Account</h2>
+      <ErrorMessage message={error} />
+      
       <form onSubmit={handleSubmit}>
-        <h2>Create Account</h2>
-
-        <ErrorMessage message={error} />
 
         <FormInput 
           id = "email"
@@ -85,9 +86,9 @@ function SignUpPage() {
         <button type="submit">Sign Up</button>
       </form>
 
-      <div className="options">
-        <hr className="option-divider" />
-        <Link to="/login" className="login-link">Already have an account? Login</Link>
+      <div className={styles.options}>
+        <hr className={styles.optionDivider} />
+        <Link to="/login">Already have an account? Login</Link>
       </div>
     </div>
   );
