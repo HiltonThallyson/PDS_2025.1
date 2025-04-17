@@ -1,0 +1,40 @@
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.inputElement {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inputElement::placeholder {
+  color: #aaa;
+}
+
+/* Style for visually hidden labels (for accessibility) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
