@@ -24,4 +24,10 @@ public class LivroController {
         return googleService.buscarLivroPorTitulo(titulo);
     }
 
+    @GetMapping ("/autor")
+    public LivroDTO buscarLivroPorAutor(@RequestParam String autor){
+        System.out.println(autor);
+        return googleService.buscarLivroPorAutor(autor);
+    }
+
 }
