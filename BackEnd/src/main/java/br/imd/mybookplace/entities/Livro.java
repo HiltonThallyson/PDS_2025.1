@@ -1,4 +1,4 @@
-package br.imd.mybookplace.models;
+package br.imd.mybookplace.entities;
 
 public class Livro {
     private Long id;
