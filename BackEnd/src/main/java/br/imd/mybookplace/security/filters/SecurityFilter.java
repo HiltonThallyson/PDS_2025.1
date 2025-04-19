@@ -27,26 +27,52 @@ public class SecurityFilter extends OncePerRequestFilter{
     @Autowired
     UserRepository userRepository;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    // @Override
+    // protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    //         throws ServletException, IOException {
         
-        var token = this.recoverToken(request);
-        if(token!=null) {
-            var username = tokenService.validateToken(token);
-            Optional<UserDetails> user = userRepository.findByUsername(username);
+    //     var token = this.recoverToken(request);
+    //     if(token!=null) {
+    //         var username = tokenService.validateToken(token);
+    //         Optional<UserDetails> user = userRepository.findByUsername(username);
 
-            if(user.isPresent()) {
-                var myUser = user.get();
+    //         if(user.isPresent()) {
+    //             var myUser = user.get();
                 
-                var authorization = new UsernamePasswordAuthenticationToken(myUser, null, myUser.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authorization);
+    //             var authorization = new UsernamePasswordAuthenticationToken(myUser, null, myUser.getAuthorities());
+    //             SecurityContextHolder.getContext().setAuthentication(authorization);
+    //         }
+            
+            
+    //     }
+    //     filterChain.doFilter(request, response);
+    // }
+    @Override
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
+
+    var token = this.recoverToken(request);
+    if (token != null) {
+        try {
+            var username = tokenService.validateToken(token);
+
+            if (username != null) {
+                Optional<UserDetails> user = userRepository.findByUsername(username);
+
+                if (user.isPresent()) {
+                    var myUser = user.get();
+                    var authentication = new UsernamePasswordAuthenticationToken(myUser, null, myUser.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
-            
-            
+        } catch (Exception e) {
+            // Ignora erro de token inválido para não bloquear rotas públicas
         }
-        filterChain.doFilter(request, response);
     }
+
+    filterChain.doFilter(request, response);
+}
+
 
     private String recoverToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
