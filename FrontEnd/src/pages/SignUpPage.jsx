@@ -7,10 +7,11 @@ import styles from '../styles/AuthFormLayout.module.css';
 function SignUpPage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
+    const [nickname, setNickname] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
         if (password !== confirmPassword) {
@@ -18,14 +19,44 @@ function SignUpPage() {
           return;
         }
 
+        const alphanumericRegex = /^[a-zA-Z0-9._]+$/;
+        if (!alphanumericRegex.test(username)) {
+            setError('Username must contain only alphanumeric characters, ".", and "_"');
+            return;
+        }
+        
+        if (password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
         const formData = {
           email,
           username,
+          nickname,
           password,
         };
-        console.log('Form submitted:', formData);
 
-        //TBC: send the data to the backend 
+        try{
+          const respose = await fetch('http://localhost:8090/api/register',{
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+          if (!response.ok){
+            const errorData = await response.json();
+            setError(errorData.message);
+            return
+          }
+          console.log('User registered successfully!');
+          navigate('/login');
+        }
+        catch (error) {
+          console.error('Error:', error);
+          setError('An error occurred. Please try again later.');
+        }
     };
 
   return (
@@ -59,6 +90,18 @@ function SignUpPage() {
           srOnlyLabel = {true}
         />
 
+        <FormInput 
+          id = "nickname"
+          name = "nickname"
+          type = "text"
+          placeholder = "Nickname"
+          value = {nickname}
+          onChange = {(e) => setNickname(e.target.value)}
+          label = "Nickname"
+          required = {true}
+          srOnlyLabel = {true}
+        />
+          
         <FormInput
           id = "password"
           name = "password"

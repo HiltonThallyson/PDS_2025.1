@@ -9,15 +9,33 @@ function LoginPage(){
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
         const formData = {
             username,
             password,
         };
-        console.log('Form submitted:', formData);
-        // TBC: send the data to the backend
+        try{
+          const response = await fetch('http://localhost:8090/api/login',{
+            method: 'REQUEST',
+            headers:{
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+          if (!response.ok){
+            const errorData = await response.json();
+            setError(errorData.message);
+            return
+          }
+          console.log('User logged in successfully!');
+          navigate('/home');
+        }
+        catch (error) {
+          console.error('Error:', error);
+          setError('An error occurred. Please try again later.');
+        }
     }
     return (
         <div className={styles.formContainer}>
