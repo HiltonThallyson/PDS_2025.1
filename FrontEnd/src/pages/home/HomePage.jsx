@@ -64,72 +64,72 @@ function HomePage() {
 
     return (
         <div className={styles.homePageContainer}>
-            <h1>Bem-vindo(a) ao MyBookPlace, {location.state?.username}</h1>
-            <p>Faça sua pesquisa abaixo!</p>
-            <h2 className={styles.bookByAutor}>Livro por autor</h2>
+            <h1>Welcome to MyBookPlace, {location.state?.username}</h1>
+            <p>Search for your favorite books here!</p>
+            <h2 className={styles.bookByAutor}>Book by Author</h2>
             <form onSubmit={(e) => {e.preventDefault();fetchBooksByAuthor();}}>      
                 <input 
                     type="text"
                     name="author"
-                    placeholder="Pesquisar Autor"
+                    placeholder="Search Book by Author"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
                 />
 
-            <button type='submit'>Buscar Livro Por Autor</button>
+            <button type='submit'>Search book by author</button>
             </form>
             <div>
                 {isBookByAuthorStateIdle ? (
-                    <p>Aguardando solicitação</p>
+                    <p>Waiting...</p>
                 ) : isLoadingBooksByAuthor ? (
                     <p>Loading items...</p>
                 ) : booksByAuthor ? ( 
                     <div className={styles.bookItem}>
                         <h3>{booksByAuthor.title}</h3>
-                        <p>Subtítulo: {booksByAuthor.subtitle}</p>
-                        <p>Editora: {booksByAuthor.editora}</p>
-                        <p>Autor(es): {booksByAuthor.authors?.join(', ')}</p> 
-                        <p>Descrição: {booksByAuthor.description}</p>
+                        <p>Subtitle: {booksByAuthor.subtitle}</p>
+                        <p>Publisher: {booksByAuthor.editora}</p>
+                        <p>Authors: {booksByAuthor.authors?.join(', ')}</p> 
+                        <p>Description: {booksByAuthor.description}</p>
                         {booksByAuthor.thumbnail && <img src={booksByAuthor.thumbnail} alt="Capa do Livro" />} 
                     </div>
                 ) : errorFetchingBooksByAuthor ? (
-                    <p>Erro ao buscar livros: {errorFetchingBooksByAuthor.message}</p>
+                    <p>Error searching for book: {errorFetchingBooksByAuthor.message}</p>
                 ) :
                 (
-                    <p>Nenhum livro encontrado para este autor.</p>
+                    <p>Couldnt find book by this author</p>
                 )}
             </div>
-            <h2 className={styles.bookByAutor}>Livro por título</h2>
+            <h2 className={styles.bookByAutor}>Book by Title</h2>
             <form onSubmit={(e) => {e.preventDefault();fetchBooksByTitle();}}>      
                 <input 
                     type="text"
                     name="title"
-                    placeholder="Pesquisar Título"
+                    placeholder="Search Book by Title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
 
-            <button type='submit'>Buscar Livro Por Título</button>
+            <button type='submit'>Search book by title</button>
             </form>
             <div>
                 {isBookByTitleStateIdle ? (
-                    <p>Aguardando solicitação</p>
+                    <p>Waiting...</p>
                 ) : isLoadingBooksByTitle ? (
                     <p>Loading items...</p>
                 ) : booksByTitle ? ( 
                     <div className={styles.bookItem}>
                         <h3>{booksByTitle.title}</h3>
-                        <p>Subtítulo: {booksByTitle.subtitle}</p>
-                        <p>Editora: {booksByTitle.editora}</p>
-                        <p>Autor(es): {booksByTitle.authors?.join(', ')}</p> 
-                        <p>Descrição: {booksByTitle.description}</p>
+                        <p>Subtitle: {booksByTitle.subtitle}</p>
+                        <p>Publisher: {booksByTitle.editora}</p>
+                        <p>Authors: {booksByTitle.authors?.join(', ')}</p> 
+                        <p>Description: {booksByTitle.description}</p>
                         {booksByTitle.thumbnail && <img src={booksByTitle.thumbnail} alt="Capa do Livro" />} 
                     </div>
                 ) : errorFetchingBooksByTitle ? (
-                    <p>Erro ao buscar livros: {errorFetchingBooksByTitle.message}</p>
+                    <p>Error searching for book: {errorFetchingBooksByTitle.message}</p>
                 )
                 : (
-                    <p>Nenhum livro encontrado para este título.</p>
+                    <p>Couldnt find book with this title</p>
                 )}
             </div>
             
