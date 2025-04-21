@@ -19,7 +19,7 @@ import br.imd.mybookplace.entities.UserRole;
 import br.imd.mybookplace.repositories.UserRepository;
 
 @Service
-public class AuthorizationService implements UserDetailsService{
+public class AuthService implements UserDetailsService{
 
     @Autowired
     UserRepository userRepository;
