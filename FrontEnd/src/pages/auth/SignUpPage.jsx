@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FormInput from '../components/FormInput';
-import ErrorMessage from '../components/ErrorMessage';
-import styles from '../styles/AuthFormLayout.module.css';
+import FormInput from '../../components/FormInput';
+import ErrorMessage from '../../components/ErrorMessage';
+import styles from '../../styles/AuthFormLayout.module.css';
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
     const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ function SignUpPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
@@ -38,7 +40,7 @@ function SignUpPage() {
         };
 
         try{
-          const respose = await fetch('http://localhost:8090/api/register',{
+          const response = await fetch('http://localhost:8090/api/auth/register',{
             method: 'POST',
             headers:{
               'Content-Type': 'application/json',

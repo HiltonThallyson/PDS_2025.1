@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
-import FormInput from '../components/FormInput';
-import ErrorMessage from '../components/ErrorMessage';
-import styles from '../styles/AuthFormLayout.module.css'
+import FormInput from '../../components/FormInput';
+import ErrorMessage from '../../components/ErrorMessage';
+import styles from '../../styles/AuthFormLayout.module.css'
 
 function ConfirmationMessage({message}){
     return (

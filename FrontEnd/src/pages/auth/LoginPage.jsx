@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import FormInput from '../components/FormInput';
-import ErrorMessage from '../components/ErrorMessage';
+import FormInput from '../../components/FormInput';
+import ErrorMessage from '../../components/ErrorMessage';
 import {Link} from 'react-router-dom';
-import styles from '../styles/AuthFormLayout.module.css'
+import styles from '../../styles/AuthFormLayout.module.css'
+import { useNavigate } from "react-router-dom";
 
 function LoginPage(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -17,8 +19,8 @@ function LoginPage(){
             password,
         };
         try{
-          const response = await fetch('http://localhost:8090/api/login',{
-            method: 'REQUEST',
+          const response = await fetch('http://localhost:8090/api/auth/login',{
+            method: 'POST',
             headers:{
               'Content-Type': 'application/json',
             },
@@ -30,7 +32,9 @@ function LoginPage(){
             return
           }
           console.log('User logged in successfully!');
-          navigate('/home');
+          
+          navigate('/home', {state: { username: username }});
+
         }
         catch (error) {
           console.error('Error:', error);

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.imd.mybookplace.DTOS.CreateUserDTO;
 import br.imd.mybookplace.DTOS.LoginResponseDTO;
 import br.imd.mybookplace.DTOS.LoginUserDTO;
-import br.imd.mybookplace.services.AuthorizationService;
+import br.imd.mybookplace.services.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthenticationController {
 
     @Autowired
-    private AuthorizationService userService;
+    private AuthService userService;
 
 
     @PostMapping("/register")
