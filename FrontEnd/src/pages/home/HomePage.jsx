@@ -1,5 +1,9 @@
 import styles from '../../styles/HomePageStyles.module.css';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { Image } from "react-bootstrap";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -12,8 +16,8 @@ function HomePage() {
     const [isLoadingBooksByTitle, setisLoadingBooksByTitle] = useState(false);
     const [isBookByAuthorStateIdle, setisBookByAuthorStateIdle] = useState(true);
     const [isBookByTitleStateIdle, setisBookByTitleStateIdle] = useState(true);
-    const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
+    const [title, setTitle] = useState('');
       const [errorFetchingBooksByAuthor, setErrorFetchingBooksByAuthor] = useState(null);
       const [errorFetchingBooksByTitle, setErrorFetchingBooksByTitle] = useState(null);
 
@@ -72,19 +76,20 @@ function HomePage() {
             <h1>Welcome to MyBookPlace, {location.state?.username}</h1>
             <p>Search for your favorite books here!</p>
             <h2 className={styles.bookByAutor}>Book by Author</h2>
-            <form onSubmit={(e) => { e.preventDefault(); fetchBooksByAuthor(); } }>
-                <div className='textField'>
-
-                    <input
-                        type="text"
-                        name="author"
-                        placeholder="Search Book by Author"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)} />
-                </div>
-
-                <button type='submit'>Search book by author</button>
-            </form>
+            <Form onSubmit={(e) => { e.preventDefault(); fetchBooksByAuthor()}}>
+                <Row className="mb-3 align-items-center">
+                        <Form.Group controlId="formGroupAuthor">
+                            <Col>
+                                <Form.Control type="text" placeholder="Search Book by Author" onChange={(e) => setAuthor(e.target.value)} />
+                            </Col>
+                            <Col>
+                                <Button variant="primary" type="submit">
+                                    Search Book By Author
+                                </Button>
+                            </Col>
+                        </Form.Group>
+                    </Row>
+            </Form>
                 <div>
                     {isBookByAuthorStateIdle ? (
                         <p>Waiting...</p>
@@ -114,29 +119,30 @@ function HomePage() {
             (
             <p>Couldnt find book by this author</p>
             )}
-        </div><h2 className={styles.bookByAutor}>Book by Title</h2><form onSubmit={(e) => { e.preventDefault(); fetchBooksByTitle(); } }>
-                <input className='textField'
-                    type="text"
-                    name="title"
-                    placeholder="Search Book by Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)} />
-
-                <button type='submit'>Search book by title</button>
-            </form><div>
+        </div>
+            <h2 className={styles.bookByAutor}>Book by Title</h2>
+            <Form onSubmit={(e) => { e.preventDefault(); fetchBooksByTitle()}}>
+                <Row className="mb-3 align-items-center">
+                        <Form.Group controlId="formGroupTitle">
+                            <Col>
+                                <Form.Control type="text" placeholder="Search Book by Title" onChange={(e) => setTitle(e.target.value)} />
+                            </Col>
+                            <Col>
+                                <Button variant="primary" type="submit">
+                                    Search Book By Title
+                                </Button>
+                            </Col>
+                        </Form.Group>
+                    </Row>
+            </Form>
+            
+            <div>
                 {isBookByTitleStateIdle ? (
                     <p>Waiting...</p>
                 ) : isLoadingBooksByTitle ? (
                     <p>Loading items...</p>
                 ) : booksByTitle ? (
-                    // <div className={styles.bookItem}>
-                    //     <h3>{booksByTitle.title}</h3>
-                    //     <p>Subtitle: {booksByTitle.subtitle}</p>
-                    //     <p>Publisher: {booksByTitle.editora}</p>
-                    //     <p>Authors: {booksByTitle.authors?.join(', ')}</p>
-                    //     <p>Description: {booksByTitle.description}</p>
-                    //     {booksByTitle.thumbnail && <img src={booksByTitle.thumbnail} alt="Capa do Livro" />}
-                    // </div>
+                    
                     <Card className={styles.resultContainer}>
                             <Card.Img as={Image} variant="top" src={booksByTitle.thumbnail}/>
                             <Card.Body>
