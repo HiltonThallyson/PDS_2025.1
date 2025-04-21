@@ -1,22 +1,25 @@
 import styles from '../../styles/HomePageStyles.module.css';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function HomePage() {
     const location = useLocation();
     const [booksByTitle, setBooksByTitle] = useState(null);
     const [booksByAuthor, setBooksByAuthor] = useState(null);
-    const [isLoading, setisLoading] = useState(false);
-    const [isIdle, setisIdle] = useState(true);
+    const [isLoadingBooksByAuthor, setisLoadingBooksByAuthor] = useState(false);
+    const [isLoadingBooksByTitle, setisLoadingBooksByTitle] = useState(false);
+    const [isBookByAuthorStateIdle, setisBookByAuthorStateIdle] = useState(true);
+    const [isBookByTitleStateIdle, setisBookByTitleStateIdle] = useState(true);
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
-    //   const [error, setError] = useState(null);
+      const [errorFetchingBooksByAuthor, setErrorFetchingBooksByAuthor] = useState(null);
+      const [errorFetchingBooksByTitle, setErrorFetchingBooksByTitle] = useState(null);
 
     const fetchBooksByAuthor = async () => {
         console.log("fetchBooksByAuthor");
         try {
-            setisIdle(false);
-            setisLoading(true);
+            setisBookByAuthorStateIdle(false);
+            setisLoadingBooksByAuthor(true);
             const response = await fetch(`http://localhost:8090/api/livros/autor?autor=${author}`, {
                 method: 'GET',
                 headers: {
@@ -29,20 +32,17 @@ function HomePage() {
             }
             const data = await response.json();
             setBooksByAuthor(data);
-            setisLoading(false);
-            console.log(typeof data); // Deve mostrar "object"
-            console.log(data);
+            setisLoadingBooksByAuthor(false);
         } catch (error) {
-            console.error('Erro ao buscar livros:', error);
-            // setError(error);
+            setErrorFetchingBooksByAuthor(error);
         }
     };
 
     const fetchBooksByTitle = async () => {
         console.log("fetchBooksByTitle");
         try {
-            setisIdle(false);
-            setisLoading(true);
+            setisBookByTitleStateIdle(false);
+            setisLoadingBooksByTitle(true);
             const response = await fetch(`http://localhost:8090/api/livros/titulo?titulo=${title}`, {
                 method: 'GET',
                 headers: {
@@ -55,12 +55,9 @@ function HomePage() {
             }
             const data = await response.json();
             setBooksByTitle(data);
-            setisLoading(false);
-            console.log(typeof data); // Deve mostrar "object"
-            console.log(data);
+            setisLoadingBooksByTitle(false);
         } catch (error) {
-            console.error('Erro ao buscar livros:', error);
-            // setError(error);
+            setErrorFetchingBooksByTitle(error);
         }
     };
 
@@ -82,9 +79,9 @@ function HomePage() {
             <button type='submit'>Buscar Livro Por Autor</button>
             </form>
             <div>
-                {isIdle ? (
+                {isBookByAuthorStateIdle ? (
                     <p>Aguardando solicitação</p>
-                ) : isLoading ? (
+                ) : isLoadingBooksByAuthor ? (
                     <p>Loading items...</p>
                 ) : booksByAuthor ? ( 
                     <div className={styles.bookItem}>
@@ -95,7 +92,10 @@ function HomePage() {
                         <p>Descrição: {booksByAuthor.description}</p>
                         {booksByAuthor.thumbnail && <img src={booksByAuthor.thumbnail} alt="Capa do Livro" />} 
                     </div>
-                ) : (
+                ) : errorFetchingBooksByAuthor ? (
+                    <p>Erro ao buscar livros: {errorFetchingBooksByAuthor.message}</p>
+                ) :
+                (
                     <p>Nenhum livro encontrado para este autor.</p>
                 )}
             </div>
@@ -112,9 +112,9 @@ function HomePage() {
             <button type='submit'>Buscar Livro Por Título</button>
             </form>
             <div>
-                {isIdle ? (
+                {isBookByTitleStateIdle ? (
                     <p>Aguardando solicitação</p>
-                ) : isLoading ? (
+                ) : isLoadingBooksByTitle ? (
                     <p>Loading items...</p>
                 ) : booksByTitle ? ( 
                     <div className={styles.bookItem}>
@@ -125,7 +125,10 @@ function HomePage() {
                         <p>Descrição: {booksByTitle.description}</p>
                         {booksByTitle.thumbnail && <img src={booksByTitle.thumbnail} alt="Capa do Livro" />} 
                     </div>
-                ) : (
+                ) : errorFetchingBooksByTitle ? (
+                    <p>Erro ao buscar livros: {errorFetchingBooksByTitle.message}</p>
+                )
+                : (
                     <p>Nenhum livro encontrado para este título.</p>
                 )}
             </div>
