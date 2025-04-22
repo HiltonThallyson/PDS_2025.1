@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/livros")
 public class LivroController {
@@ -19,9 +21,9 @@ public class LivroController {
     }
 
     @GetMapping("/titulo")
-    public LivroDTO buscarLivroPorTitulo(@RequestParam String titulo){
+    public List<LivroDTO> buscarLivroPorTitulo(@RequestParam String titulo){
         System.out.println(titulo);
-        return googleService.buscarLivroPorTitulo(titulo);
+        return googleService.buscarLivrosPorTitulo(titulo);
     }
 
     @GetMapping ("/autor")
