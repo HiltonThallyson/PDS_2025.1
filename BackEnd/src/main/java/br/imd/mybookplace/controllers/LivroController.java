@@ -27,9 +27,9 @@ public class LivroController {
     }
 
     @GetMapping ("/autor")
-    public LivroDTO buscarLivroPorAutor(@RequestParam String autor){
+    public List<LivroDTO> buscarLivroPorAutor(@RequestParam String autor){
         System.out.println(autor);
-        return googleService.buscarLivroPorAutor(autor);
+        return googleService.buscarLivrosPorAutor(autor);
     }
 
 }
