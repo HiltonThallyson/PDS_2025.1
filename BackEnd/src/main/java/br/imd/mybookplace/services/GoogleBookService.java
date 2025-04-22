@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ public class GoogleBookService {
         this.webClient = builder.baseUrl("https://www.googleapis.com/books/v1").build();
     }
 
-    public LivroDTO buscarLivroPorTitulo(String titulo){
+    public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
         // Monta a URL da consulta com o parâmetro de título
         String url = UriComponentsBuilder.fromPath("/volumes")
                 .queryParam("q", "intitle:" + titulo)
@@ -30,37 +32,38 @@ public class GoogleBookService {
                 .block(); // .block() para obter resultado síncrono
 
         if (response == null || response.get("items") == null) {
-            return null;
+            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
         }
 
-        // Pegamos o primeiro livro retornado
-        Map<String, Object> primeiroItem = ((List<Map<String, Object>>) response.get("items")).get(0);
-        Map<String, Object> volumeInfo = (Map<String, Object>) primeiroItem.get("volumeInfo");
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+        List<LivroDTO> livros = new ArrayList<>();
 
-        // Preenche o DTO com as informações relevantes
-        LivroDTO dto = new LivroDTO();
-        dto.setTitle((String) volumeInfo.get("title"));
-        dto.setSubtitle((String) volumeInfo.get("subtitle"));
-        dto.setAuthors((List<String>) volumeInfo.get("authors"));
-        dto.setEditora((String) volumeInfo.get("publisher"));
-       dto.setDescription((String) volumeInfo.get("description"));
+        for (Map<String, Object> item : items) {
+            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
 
-        dto.setCategories((List<String>) volumeInfo.get("categories"));
+            LivroDTO dto = new LivroDTO();
+            dto.setTitle((String) volumeInfo.get("title"));
+            dto.setSubtitle((String) volumeInfo.get("subtitle"));
+            dto.setAuthors((List<String>) volumeInfo.get("authors"));
+            dto.setEditora((String) volumeInfo.get("publisher"));
+            dto.setDescription((String) volumeInfo.get("description"));
+            dto.setCategories((List<String>) volumeInfo.get("categories"));
 
-        // Links
-        Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-        if (imageLinks != null) {
-            dto.setThumbnail(imageLinks.get("thumbnail"));
+            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
+            if (imageLinks != null) {
+                dto.setThumbnail(imageLinks.get("thumbnail"));
+            }
+
+            livros.add(dto);
         }
-        System.out.println("cheguei aqui");
-        System.out.println(dto);
-        return dto;
+
+        return livros;
     }
 
-    public LivroDTO buscarLivroPorAutor(String autor){
-        // Monta a URL da consulta com o parâmetro de título
+    public List<LivroDTO> buscarLivrosPorAutor(String autor) {
+        // Monta a URL da consulta com o parâmetro de autor
         String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "authors:" + autor)
+                .queryParam("q", "inauthor:" + autor)
                 .build().toString();
 
         // Faz a requisição à API do Google Books
@@ -71,31 +74,32 @@ public class GoogleBookService {
                 .block(); // .block() para obter resultado síncrono
 
         if (response == null || response.get("items") == null) {
-            return null;
+            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
         }
 
-        // Pegamos o primeiro livro retornado
-        Map<String, Object> primeiroItem = ((List<Map<String, Object>>) response.get("items")).get(0);
-        Map<String, Object> volumeInfo = (Map<String, Object>) primeiroItem.get("volumeInfo");
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+        List<LivroDTO> livros = new ArrayList<>();
 
-        // Preenche o DTO com as informações relevantes
-        LivroDTO dto = new LivroDTO();
-        dto.setTitle((String) volumeInfo.get("title"));
-        dto.setSubtitle((String) volumeInfo.get("subtitle"));
-        dto.setAuthors((List<String>) volumeInfo.get("authors"));
-        dto.setEditora((String) volumeInfo.get("publisher"));
-        dto.setDescription((String) volumeInfo.get("description"));
+        for (Map<String, Object> item : items) {
+            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
 
-        dto.setCategories((List<String>) volumeInfo.get("categories"));
+            LivroDTO dto = new LivroDTO();
+            dto.setTitle((String) volumeInfo.get("title"));
+            dto.setSubtitle((String) volumeInfo.get("subtitle"));
+            dto.setAuthors((List<String>) volumeInfo.get("authors"));
+            dto.setEditora((String) volumeInfo.get("publisher"));
+            dto.setDescription((String) volumeInfo.get("description"));
+            dto.setCategories((List<String>) volumeInfo.get("categories"));
 
-        // Links
-        Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-        if (imageLinks != null) {
-            dto.setThumbnail(imageLinks.get("thumbnail"));
+            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
+            if (imageLinks != null) {
+                dto.setThumbnail(imageLinks.get("thumbnail"));
+            }
+
+            livros.add(dto);
         }
-        System.out.println("cheguei aqui");
-        System.out.println(dto);
-        return dto;
+
+        return livros;
     }
 
 
