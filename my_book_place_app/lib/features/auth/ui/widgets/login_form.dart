@@ -58,8 +58,8 @@ class LoginForm extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:
-                // Text("Um erro ocorreu ao tentar autenticar! Tente novamente."),
-                Text(e.toString()),
+                Text("Um erro ocorreu ao tentar autenticar! Tente novamente."),
+            // Text(e.toString()),
             duration: const Duration(seconds: 2),
           ),
         );
