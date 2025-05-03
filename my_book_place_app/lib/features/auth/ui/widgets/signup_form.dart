@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../themes/app_textstyles.dart';
+import '../../../../core/themes/app_textstyles.dart';
 import '../../interactor/bloc/auth_bloc.dart';
 import '../../interactor/bloc/event/auth_event.dart';
 
@@ -38,8 +38,8 @@ class SignUpForm extends StatelessWidget {
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.person),
-                                  label: const Text("Username"),
-                                  hintText: "Enter your username",
+                                  label: const Text("Usuário"),
+                                  hintText: "Insira seu nome de usuário",
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),
                                   focusedBorder: OutlineInputBorder(
@@ -57,8 +57,9 @@ class SignUpForm extends StatelessWidget {
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.lock),
-                                  label: const Text("Password"),
-                                  hintText: "Enter your password",
+                                  label: const Text("Senha"),
+                                  hintText:
+                                      "Insira sua senha, no mínimo 8 caracteres",
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),
                                   focusedBorder: OutlineInputBorder(
@@ -77,7 +78,7 @@ class SignUpForm extends StatelessWidget {
                                   isDense: true,
                                   icon: const Icon(Icons.email),
                                   label: const Text("Email"),
-                                  hintText: "Enter your Email",
+                                  hintText: "Insira seu email",
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),
                                   focusedBorder: OutlineInputBorder(
@@ -95,8 +96,8 @@ class SignUpForm extends StatelessWidget {
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.person_pin_sharp),
-                                  label: const Text("Nickname"),
-                                  hintText: "Enter your nickname",
+                                  label: const Text("Apelido"),
+                                  hintText: "Insira seu apelido",
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),
                                   focusedBorder: OutlineInputBorder(
@@ -128,7 +129,7 @@ class SignUpForm extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15))),
                         onPressed: () {},
                         child: const Text(
-                          "Sign Up",
+                          "Criar conta",
                           style: AppTextStyles.loginButtonText,
                         ),
                       ),
@@ -138,8 +139,8 @@ class SignUpForm extends StatelessWidget {
                       TextButton(
                         onPressed: () => _authBloc.add(SwitchToLoginEvent()),
                         child: const Text(
-                          "Already have an account? Sign In",
-                          style: TextStyle(color: Colors.indigo),
+                          "Já possui uma conta? Clique aqui para entrar!",
+                          style: AppTextStyles.textButtonsStyle,
                         ),
                       ),
                     ],

@@ -15,29 +15,40 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo,
+      backgroundColor: Colors.transparent,
+      extendBody: true,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.indigo,
         shadowColor: Colors.transparent,
+        elevation: 0,
         title: const Text(
           "MyBookPlace",
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
       ),
-      body: BlocBuilder<AuthBloc, AuthState>(
-          bloc: _authBloc,
-          builder: (context, state) {
-            if (state is AuthLoginState) {
-              return LoginForm(
-                authBloc: _authBloc,
-              );
-            } else {
-              return SignUpForm(
-                authBloc: _authBloc,
-              );
-            }
-          }),
+      body: Stack(
+        children: [
+          Image.asset("assets/images/mybookplace_background.png",
+              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width),
+          BlocBuilder<AuthBloc, AuthState>(
+            bloc: _authBloc,
+            builder: (context, state) {
+              if (state is AuthLoginState) {
+                return LoginForm(
+                  authBloc: _authBloc,
+                );
+              } else {
+                return SignUpForm(
+                  authBloc: _authBloc,
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

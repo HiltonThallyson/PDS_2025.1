@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 
+import '../../data/repositories/auth_repository_interface.dart';
 import 'event/auth_event.dart';
 import 'state/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthLoginState()) {
+  final AuthRepositoryInterface _authRepository;
+
+  AuthBloc(AuthRepositoryInterface authRepository)
+      : _authRepository = authRepository,
+        super(AuthLoginState()) {
     on<SwitchToLoginEvent>((event, emit) {
       emit(AuthLoginState());
     });
@@ -12,17 +19,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SwitchToSignUpEvent>((event, emit) {
       emit(AuthSignUpState());
     });
-
-    on<LoginEvent>((event, emit) {});
-
-    on<SignUpEvent>((event, emit) {});
   }
 
-  void login(String username, String password) {
-    // Simulate a login process
-    if (username == 'user' && password == 'password') {
-    } else {
-      // add.AuthErrorState('Invalid credentials'));
+  Future<bool> login(Map<String, String> credentials) async {
+    try {
+      final result = await _authRepository.authenticate(credentials);
+      return result;
+    } on HttpException catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
     }
   }
 
