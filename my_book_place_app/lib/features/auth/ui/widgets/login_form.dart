@@ -48,19 +48,19 @@ class LoginForm extends StatelessWidget {
           return;
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content:
                 Text("Um erro ocorreu ao tentar autenticar! Tente novamente."),
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content:
                 Text("Um erro ocorreu ao tentar autenticar! Tente novamente."),
             // Text(e.toString()),
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       }
@@ -108,6 +108,7 @@ class LoginForm extends StatelessWidget {
                                   icon: const Icon(Icons.person),
                                   label: const Text(
                                     "Usuário",
+                                    style: TextStyle(color: Colors.indigo),
                                   ),
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),

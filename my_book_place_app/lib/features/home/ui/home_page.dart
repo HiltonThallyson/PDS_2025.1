@@ -92,6 +92,41 @@ class HomePage extends StatelessWidget {
                   // physics: const NeverScrollableScrollPhysics(),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Todos os livros",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+              SizedBox(
+                height: 500,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 400),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: Colors.white,
+                      child: Container(
+                        height: 200,
+                        width: 150,
+                        margin: const EdgeInsets.all(10),
+                        child: const Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Título do livro"),
+                            Text("Autor do livro"),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: 10,
+                ),
+              ),
             ],
           ),
         ),
