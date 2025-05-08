@@ -1,9 +1,8 @@
 package org.example;
 
-public class AlcoholicDrink extends Product{
-    public AlcoholicDrink(float price) {
-        setName("AlcoholicDrink");
-        setPrice(price);
+public class AlcoholicDrink extends VisitableProduct{
+    public AlcoholicDrink(String name , float price) {
+        super(name, price);
     }
 
     @Override

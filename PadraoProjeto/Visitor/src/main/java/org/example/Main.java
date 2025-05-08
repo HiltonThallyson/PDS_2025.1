@@ -1,42 +1,32 @@
 package org.example;
 
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        Food food = new Food(10);
-        Cigarette cigarette = new Cigarette(5);
-        AlcoholicDrink alcoholicDrink = new AlcoholicDrink(5);
+        Food food = new Food("Torta", 10);
+        Cigarette cigarette = new Cigarette("Malboro", 5);
+        AlcoholicDrink alcoholicDrink = new AlcoholicDrink("RedLabel", 5);
 
-        ArrayList<Product> cart = new ArrayList<Product>();
-        cart.add(food);
-        cart.add(cigarette);
-        cart.add(alcoholicDrink);
+        Cart cart = new Cart();
+        cart.addProduct(food);
+        cart.addProduct(cigarette);
+        cart.addProduct(alcoholicDrink);
 
-        double totalPrice = calculateTotalPrice(cart);
+        double totalPrice = cart.calculateTotalPrice();
         System.out.println("Total price: " + totalPrice);
 
-        TaxVisitor taxVisitor = new BrazilTaxVisitor();
-        double totalPriceWithTax = 0;
-        for (Product product : cart) {
-            totalPriceWithTax += product.getPriceWithTax(taxVisitor);
-        }
-        System.out.println("Total price with tax: " + totalPriceWithTax);
-    }
+        TaxVisitor brTaxVisitor = new BrazilTaxVisitor();
+        TaxVisitor usTaxVisitor = new USTaxVisitor();
 
-    static double calculateTotalPrice(ArrayList<Product> cart) {
-        double totalPrice = 0;
-        for (Product product : cart) {
-            totalPrice += product.getPrice();
-        }
-        return totalPrice;
-    }
+       
+        double totalPriceWithTaxBrazil = 0;
+        double totalPriceWithTaxUS = 0;
+        
+        totalPriceWithTaxBrazil = cart.calculateTotalPriceWithTax(brTaxVisitor);
+        totalPriceWithTaxUS = cart.calculateTotalPriceWithTax(usTaxVisitor);
 
-    static double calculatePriceWithTax(ArrayList<Product> cart, TaxVisitor taxVisitor) {
-        double totalPriceWithTax = 0;
-        for (Product product : cart) {
-            totalPriceWithTax += product.getPriceWithTax(taxVisitor);
-        }
-        return totalPriceWithTax;
+        System.out.println("Total price with tax in Brazil: " + totalPriceWithTaxBrazil);
+        System.out.println("Total price with tax in USA: " + totalPriceWithTaxUS);
     }
+    
 }
