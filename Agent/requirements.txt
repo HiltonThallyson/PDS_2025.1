@@ -1,0 +1,26 @@
+fastapi
+uvicorn
+python-dotenv
+langchain
+langgraph
+langchain-tavily
+google-generativeai
+
+
+# Adicione suas chaves no .env:
+# TAVILY_API_KEY=sua-chave-tavily
+# GOOGLE_API_KEY=sua-chave-google
+
+# No terminal crie e ative um ambiente virtual:
+# python -m venv venv
+# source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate # Windows
+
+# Instale as dependências:
+# pip install -r requirements.txt
+
+# Execute o servidor:
+# uvicorn main:app --reload
+
+
+
