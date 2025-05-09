@@ -52,17 +52,19 @@ json_schema = {
 # Inicializa o modelo e a ferramenta
 tavily_tool = TavilySearch(max_results=5, topic="general")
 
+# Cria o modelo de prompt
 prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are a helpful assistant that search for prices of selected books in the internet and return the information to the user."
+            "You are a helpful assistant that search for prices of selected books in the internet and return the information to the user. You search for 5 prices. Format the response in JSON formart with these fields: title, author, [price,  link]. Return empty array if book offers not found"
             ,
         ),
         ("human", "{input}"),
     ]
 )
 
+# Inicializa o modelo de linguagem
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash",
     temperature=0,
@@ -75,7 +77,9 @@ llm.bind_tools([tavily_tool])
 
 agent = (prompt | llm)
 
+# Cria o executor do agente
 agent_executor = AgentExecutor(agent=agent, tools=[tavily_tool], verbose=True)
+
 
 def get_agent():
     return agent_executor
