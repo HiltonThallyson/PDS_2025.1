@@ -1,5 +1,6 @@
 package org.example;
 
-public interface VisitableProduct {
-    double getPriceWithTax(TaxVisitor taxVisitor);
+interface VisitableProduct {
+    abstract double getPriceWithTax(TaxVisitor taxVisitor);
+    abstract double getPrice();
 }
