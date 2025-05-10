@@ -81,23 +81,6 @@ agent = (prompt | llm)
 agent_executor = AgentExecutor(agent=agent, tools=[tavily_tool], verbose=True)
 
 
-def get_agent():
+def get_price_agent():
     return agent_executor
 
-
-
-
-
-
-
-
-# Cria o agente
-
-# agent = create_react_agent(
-#     llm,
-#     [tavily_tool],
-# )
-
-
-def get_agent():
-    return agent
