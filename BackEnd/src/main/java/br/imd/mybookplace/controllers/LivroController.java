@@ -32,4 +32,9 @@ public class LivroController {
         return googleService.buscarLivrosPorAutor(autor);
     }
 
+    @GetMapping("/quantidade")
+    public List<LivroDTO> buscarLivrosPorQuantidade(@RequestParam(name="qtdPorCategoria", required = false, defaultValue = "10") int qtdPorCategoria){
+        System.out.println(qtdPorCategoria);
+        return googleService.buscarLivrosPorQuantidade(qtdPorCategoria);
+    }
 }

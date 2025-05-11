@@ -102,5 +102,51 @@ public class GoogleBookService {
         return livros;
     }
 
+    public List<LivroDTO> buscarLivrosPorQuantidade(int qtdPorCategoria) {
+        //Categorias que serão consultadas
+        String [] categorias = {"history", "science", "technology", "art", "fiction"};
+        List<LivroDTO> livros = new ArrayList<>();
 
+        for (String categoria : categorias) {
+            // Monta a URL da consulta com o parâmetro categoria
+            String url = UriComponentsBuilder.fromPath("/volumes")
+                    .queryParam("q", "subject:" + categoria)
+                    .queryParam("maxResults", qtdPorCategoria)
+                    .build().toString();
+
+            // Faz a requisição à API do Google Books
+            Map<String, Object> response = webClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block(); // .block() para obter resultado síncrono
+
+            if (response == null || response.get("items") == null) {
+                return Collections.emptyList(); // Retorna lista vazia se não houver resultado
+            }
+
+            List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+
+            for (Map<String, Object> item : items) {
+                Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
+
+                LivroDTO dto = new LivroDTO();
+                dto.setTitle((String) volumeInfo.get("title"));
+                dto.setSubtitle((String) volumeInfo.get("subtitle"));
+                dto.setAuthors((List<String>) volumeInfo.get("authors"));
+                dto.setEditora((String) volumeInfo.get("publisher"));
+                dto.setDescription((String) volumeInfo.get("description"));
+                dto.setCategories((List<String>) volumeInfo.get("categories"));
+
+                Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
+                if (imageLinks != null) {
+                    dto.setThumbnail(imageLinks.get("thumbnail"));
+                }
+
+                livros.add(dto);
+            }
+        }
+
+        return livros;
+    }
 }
