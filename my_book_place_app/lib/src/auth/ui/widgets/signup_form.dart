@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/themes/app_textstyles.dart';
-import '../../interactor/bloc/auth_bloc.dart';
-import '../../interactor/bloc/event/auth_event.dart';
+import '../../interactor/blocs/auth_bloc.dart';
+import '../../interactor/blocs/events/auth_event.dart';
 
 class SignUpForm extends StatelessWidget {
   final AuthBloc _authBloc;

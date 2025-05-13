@@ -1,13 +1,14 @@
-import 'package:fluter_app/features/auth/ui/widgets/signup_form.dart';
+import 'package:fluter_app/src/auth/ui/widgets/signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../interactor/bloc/auth_bloc.dart';
-import '../interactor/bloc/state/auth_state.dart';
+import '../../general_widgets/mybookplace_appbar.dart';
+import '../interactor/blocs/auth_bloc.dart';
+import '../interactor/blocs/states/auth_state.dart';
 import 'widgets/login_form.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatelessWidget with MyBookPlaceAppBarMixin {
   AuthPage({super.key});
 
   final _authBloc = Modular.get<AuthBloc>();
@@ -15,18 +16,9 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.indigo,
       extendBody: true,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.indigo,
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          "MyBookPlace",
-          style: TextStyle(color: Colors.white, fontSize: 40),
-        ),
-      ),
+      appBar: buildAppBar(context),
       body: Stack(
         children: [
           Image.asset("assets/images/mybookplace_background.png",

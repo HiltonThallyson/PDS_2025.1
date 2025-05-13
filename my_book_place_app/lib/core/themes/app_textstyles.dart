@@ -11,4 +11,10 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: Colors.indigo,
   );
+
+  static const menuCardText = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.w500,
+    color: Colors.indigo,
+  );
 }

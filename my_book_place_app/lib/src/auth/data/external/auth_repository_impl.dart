@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../core/entities/user.dart';
-import 'auth_repository_interface.dart';
+import '../../interactor/infra/auth_repository_interface.dart';
 
-class AuthRepository implements AuthRepositoryInterface {
+class AuthRepositoryImpl implements AuthRepositoryInterface {
   final _baseAuthUrl = "http://localhost:8090/api/auth";
   final _loginEnpoint = "/login";
   final _registerEnpoint = "/register";

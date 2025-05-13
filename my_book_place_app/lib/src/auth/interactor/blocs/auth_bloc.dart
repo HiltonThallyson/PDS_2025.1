@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 
-import '../../data/repositories/auth_repository_interface.dart';
-import 'event/auth_event.dart';
-import 'state/auth_state.dart';
+import '../infra/auth_repository_interface.dart';
+import 'events/auth_event.dart';
+import 'states/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepositoryInterface _authRepository;

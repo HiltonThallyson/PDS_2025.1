@@ -1,13 +1,13 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../ui/home_page.dart';
+import '../../ui/menu_page.dart';
 
-class HomeModule extends Module {
+class MenuModule extends Module {
   @override
   void binds(i) {}
 
   @override
   void routes(r) {
-    r.child("/", child: (context) => const HomePage());
+    r.child("/", child: (context) => const MenuPage());
   }
 }

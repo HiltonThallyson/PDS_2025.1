@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../core/themes/app_textstyles.dart';
-import '../../interactor/bloc/auth_bloc.dart';
-import '../../interactor/bloc/event/auth_event.dart';
+import '../../interactor/blocs/auth_bloc.dart';
+import '../../interactor/blocs/events/auth_event.dart';
 
 class LoginForm extends StatelessWidget {
   final AuthBloc _authBloc;
@@ -31,7 +31,7 @@ class LoginForm extends StatelessWidget {
         await _authBloc.login(credentials).then(
           (success) {
             if (success) {
-              Modular.to.navigate("/home/");
+              Modular.to.navigate("/menu/");
             } else {
               if (!context.mounted) {
                 return;
