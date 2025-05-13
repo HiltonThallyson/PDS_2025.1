@@ -17,4 +17,16 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: Colors.indigo,
   );
+
+  static const bookTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
+
+  static const bookSubtitle = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
 }
