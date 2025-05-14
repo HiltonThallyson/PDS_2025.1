@@ -27,26 +27,8 @@ public class GoogleBookService {
         Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        List<LivroDTO> livros = new ArrayList<>();
 
-        for (Map<String, Object> item : items) {
-            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-            LivroDTO dto = new LivroDTO();
-            dto.setTitle((String) volumeInfo.get("title"));
-            dto.setSubtitle((String) volumeInfo.get("subtitle"));
-            dto.setAuthors((List<String>) volumeInfo.get("authors"));
-            dto.setEditora((String) volumeInfo.get("publisher"));
-            dto.setDescription((String) volumeInfo.get("description"));
-            dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-            if (imageLinks != null) {
-                dto.setThumbnail(imageLinks.get("thumbnail"));
-            }
-
-            livros.add(dto);
-        }
+        List<LivroDTO> livros = converterParaLivros(items);
 
         return livros;
     }
@@ -60,26 +42,8 @@ public class GoogleBookService {
         Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        List<LivroDTO> livros = new ArrayList<>();
-
-        for (Map<String, Object> item : items) {
-            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-            LivroDTO dto = new LivroDTO();
-            dto.setTitle((String) volumeInfo.get("title"));
-            dto.setSubtitle((String) volumeInfo.get("subtitle"));
-            dto.setAuthors((List<String>) volumeInfo.get("authors"));
-            dto.setEditora((String) volumeInfo.get("publisher"));
-            dto.setDescription((String) volumeInfo.get("description"));
-            dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-            if (imageLinks != null) {
-                dto.setThumbnail(imageLinks.get("thumbnail"));
-            }
-
-            livros.add(dto);
-        }
+        
+        List<LivroDTO> livros = converterParaLivros(items);
 
         return livros;
     }
@@ -100,24 +64,7 @@ public class GoogleBookService {
 
             List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
 
-            for (Map<String, Object> item : items) {
-                Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-                LivroDTO dto = new LivroDTO();
-                dto.setTitle((String) volumeInfo.get("title"));
-                dto.setSubtitle((String) volumeInfo.get("subtitle"));
-                dto.setAuthors((List<String>) volumeInfo.get("authors"));
-                dto.setEditora((String) volumeInfo.get("publisher"));
-                dto.setDescription((String) volumeInfo.get("description"));
-                dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-                Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-                if (imageLinks != null) {
-                    dto.setThumbnail(imageLinks.get("thumbnail"));
-                }
-
-                livros.add(dto);
-            }
+            livros.addAll(converterParaLivros(items));
         }
 
         return livros;
@@ -132,25 +79,9 @@ public class GoogleBookService {
         Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        List<LivroDTO> livros = new ArrayList<>();
 
-        for (Map<String, Object> item : items) {
-            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-            LivroDTO dto = new LivroDTO();
-            
-            dto.setTitle((String) volumeInfo.get("title"));
-            dto.setSubtitle((String) volumeInfo.get("subtitle"));
-            dto.setAuthors((List<String>) volumeInfo.get("authors"));
-            dto.setEditora((String) volumeInfo.get("publisher"));
-            dto.setDescription((String) volumeInfo.get("description"));
-            dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-            if (imageLinks != null) {
-                dto.setThumbnail(imageLinks.get("thumbnail"));
-            }
-            livros.add(dto);
-        }
+        List<LivroDTO> livros = converterParaLivros(items);
+        
         return livros;
     }
 
@@ -166,5 +97,29 @@ public class GoogleBookService {
         }
 
         return response;
+    }
+
+    private List<LivroDTO> converterParaLivros(List<Map<String, Object>> items){
+        List<LivroDTO> livros = new ArrayList<>();
+
+        for(Map<String, Object> item: items){
+            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
+
+            LivroDTO dto = new LivroDTO();
+            dto.setTitle((String) volumeInfo.get("title"));
+            dto.setSubtitle((String) volumeInfo.get("subtitle"));
+            dto.setAuthors((List<String>) volumeInfo.get("authors"));
+            dto.setEditora((String) volumeInfo.get("publisher"));
+            dto.setDescription((String) volumeInfo.get("description"));
+            dto.setCategories((List<String>) volumeInfo.get("categories"));
+
+            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
+            if (imageLinks != null) {
+                dto.setThumbnail(imageLinks.get("thumbnail"));
+            }
+
+            livros.add(dto);
+        }
+        return livros;
     }
 }
