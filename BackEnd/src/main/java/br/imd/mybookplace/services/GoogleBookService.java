@@ -24,16 +24,7 @@ public class GoogleBookService {
                 .queryParam("q", "intitle:" + titulo)
                 .build().toString();
 
-        // Faz a requisição à API do Google Books
-        Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-
-        if (response == null || response.get("items") == null) {
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-        }
+        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
         List<LivroDTO> livros = new ArrayList<>();
@@ -66,16 +57,7 @@ public class GoogleBookService {
                 .queryParam("q", "inauthor:" + autor)
                 .build().toString();
 
-        // Faz a requisição à API do Google Books
-        Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-
-        if (response == null || response.get("items") == null) {
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-        }
+        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
         List<LivroDTO> livros = new ArrayList<>();
@@ -114,16 +96,7 @@ public class GoogleBookService {
                     .queryParam("maxResults", qtdPorCategoria)
                     .build().toString();
 
-            // Faz a requisição à API do Google Books
-            Map<String, Object> response = webClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block(); // .block() para obter resultado síncrono
-
-            if (response == null || response.get("items") == null) {
-                return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-            }
+            Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
             List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
 
@@ -156,16 +129,7 @@ public class GoogleBookService {
                 .queryParam("q", "subject:" + categoria)
                 .build().toString();
 
-        //Faz a requisição à API do Google Books
-        Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-            
-        if (response == null || response.get("items") == null){
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-        }
+        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
         List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
         List<LivroDTO> livros = new ArrayList<>();
@@ -188,5 +152,19 @@ public class GoogleBookService {
             livros.add(dto);
         }
         return livros;
+    }
+
+    private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
+        Map<String, Object> response = webClient.get()
+            .uri(url)
+            .retrieve()
+            .bodyToMono(Map.class)
+            .block(); // .block() para obter resultado síncrono
+        
+        if (response == null || response.get("items") == null) {
+            return Collections.emptyMap(); // Retorna lista vazia se não houver resultado
+        }
+
+        return response;
     }
 }
