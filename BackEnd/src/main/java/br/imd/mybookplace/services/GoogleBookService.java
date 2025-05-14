@@ -19,161 +19,56 @@ public class GoogleBookService {
     }
 
     public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
-        // Monta a URL da consulta com o parâmetro de título
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "intitle:" + titulo)
-                .build().toString();
-
-        // Faz a requisição à API do Google Books
-        Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-
-        if (response == null || response.get("items") == null) {
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-        }
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        List<LivroDTO> livros = new ArrayList<>();
-
-        for (Map<String, Object> item : items) {
-            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-            LivroDTO dto = new LivroDTO();
-            dto.setTitle((String) volumeInfo.get("title"));
-            dto.setSubtitle((String) volumeInfo.get("subtitle"));
-            dto.setAuthors((List<String>) volumeInfo.get("authors"));
-            dto.setEditora((String) volumeInfo.get("publisher"));
-            dto.setDescription((String) volumeInfo.get("description"));
-            dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-            if (imageLinks != null) {
-                dto.setThumbnail(imageLinks.get("thumbnail"));
-            }
-
-            livros.add(dto);
-        }
-
-        return livros;
+        String url = construirUrl("intitle", titulo, null);
+        return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorAutor(String autor) {
-        // Monta a URL da consulta com o parâmetro de autor
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "inauthor:" + autor)
-                .build().toString();
+        String url = construirUrl("inauthor", autor, null);
 
-        // Faz a requisição à API do Google Books
-        Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-
-        if (response == null || response.get("items") == null) {
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-        }
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        List<LivroDTO> livros = new ArrayList<>();
-
-        for (Map<String, Object> item : items) {
-            Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-            LivroDTO dto = new LivroDTO();
-            dto.setTitle((String) volumeInfo.get("title"));
-            dto.setSubtitle((String) volumeInfo.get("subtitle"));
-            dto.setAuthors((List<String>) volumeInfo.get("authors"));
-            dto.setEditora((String) volumeInfo.get("publisher"));
-            dto.setDescription((String) volumeInfo.get("description"));
-            dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-            Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-            if (imageLinks != null) {
-                dto.setThumbnail(imageLinks.get("thumbnail"));
-            }
-
-            livros.add(dto);
-        }
-
-        return livros;
+        return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorQuantidade(int qtdPorCategoria) {
-        //Categorias que serão consultadas
         String [] categorias = {"history", "science", "technology", "art", "fiction"};
         List<LivroDTO> livros = new ArrayList<>();
 
         for (String categoria : categorias) {
-            // Monta a URL da consulta com o parâmetro categoria
-            String url = UriComponentsBuilder.fromPath("/volumes")
-                    .queryParam("q", "subject:" + categoria)
-                    .queryParam("maxResults", qtdPorCategoria)
-                    .build().toString();
+            String url = construirUrl("subject", categoria, qtdPorCategoria);
 
-            // Faz a requisição à API do Google Books
-            Map<String, Object> response = webClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block(); // .block() para obter resultado síncrono
-
-            if (response == null || response.get("items") == null) {
-                return Collections.emptyList(); // Retorna lista vazia se não houver resultado
-            }
-
-            List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-
-            for (Map<String, Object> item : items) {
-                Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
-
-                LivroDTO dto = new LivroDTO();
-                dto.setTitle((String) volumeInfo.get("title"));
-                dto.setSubtitle((String) volumeInfo.get("subtitle"));
-                dto.setAuthors((List<String>) volumeInfo.get("authors"));
-                dto.setEditora((String) volumeInfo.get("publisher"));
-                dto.setDescription((String) volumeInfo.get("description"));
-                dto.setCategories((List<String>) volumeInfo.get("categories"));
-
-                Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-                if (imageLinks != null) {
-                    dto.setThumbnail(imageLinks.get("thumbnail"));
-                }
-
-                livros.add(dto);
-            }
+            livros.addAll(buscarLivros(url));
         }
 
         return livros;
     }
 
     public List<LivroDTO> buscarLivrosPorCategoria(String categoria){
-        // Monta a URL da consulta com o parâmetro categoria
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "subject:" + categoria)
-                .build().toString();
+        String url = construirUrl("subject", categoria, null);
+   
+        return buscarLivros(url);
+    }
 
-        //Faz a requisição à API do Google Books
+    private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
         Map<String, Object> response = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block(); // .block() para obter resultado síncrono
-            
-        if (response == null || response.get("items") == null){
-            return Collections.emptyList(); // Retorna lista vazia se não houver resultado
+            .uri(url)
+            .retrieve()
+            .bodyToMono(Map.class)
+            .block(); // .block() para obter resultado síncrono
+        
+        if (response == null || response.get("items") == null) {
+            return Collections.emptyMap(); // Retorna lista vazia se não houver resultado
         }
 
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+        return response;
+    }
+
+    private List<LivroDTO> converterParaLivros(List<Map<String, Object>> items){
         List<LivroDTO> livros = new ArrayList<>();
 
-        for (Map<String, Object> item : items) {
+        for(Map<String, Object> item: items){
             Map<String, Object> volumeInfo = (Map<String, Object>) item.get("volumeInfo");
+
             LivroDTO dto = new LivroDTO();
-            
             dto.setTitle((String) volumeInfo.get("title"));
             dto.setSubtitle((String) volumeInfo.get("subtitle"));
             dto.setAuthors((List<String>) volumeInfo.get("authors"));
@@ -185,8 +80,33 @@ public class GoogleBookService {
             if (imageLinks != null) {
                 dto.setThumbnail(imageLinks.get("thumbnail"));
             }
+
             livros.add(dto);
         }
         return livros;
+    }
+
+    private List<LivroDTO> buscarLivros(String url){
+        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
+
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+
+        List<LivroDTO> livros = converterParaLivros(items);
+        
+        return livros;
+
+        //return converterParaLivros((List<Map<String, Object>>) fazerRequisicaoAPIGoogle(url).get("items"));
+    }
+
+    private String construirUrl(String tipoConsulta, String valorConsulta, Integer maxResults) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+            .fromPath("/volumes")
+            .queryParam("q", tipoConsulta + ":" + valorConsulta);
+
+        if (maxResults != null) {
+            builder.queryParam("maxResults", maxResults);
+        }
+
+        return builder.build().toString();
     }
 }
