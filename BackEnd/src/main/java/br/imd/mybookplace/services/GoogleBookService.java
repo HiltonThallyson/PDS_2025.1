@@ -24,13 +24,7 @@ public class GoogleBookService {
                 .queryParam("q", "intitle:" + titulo)
                 .build().toString();
 
-        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-
-        List<LivroDTO> livros = converterParaLivros(items);
-
-        return livros;
+        return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorAutor(String autor) {
@@ -39,13 +33,7 @@ public class GoogleBookService {
                 .queryParam("q", "inauthor:" + autor)
                 .build().toString();
 
-        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-        
-        List<LivroDTO> livros = converterParaLivros(items);
-
-        return livros;
+        return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorQuantidade(int qtdPorCategoria) {
@@ -60,11 +48,7 @@ public class GoogleBookService {
                     .queryParam("maxResults", qtdPorCategoria)
                     .build().toString();
 
-            Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
-
-            List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-
-            livros.addAll(converterParaLivros(items));
+            livros.addAll(buscarLivros(url));
         }
 
         return livros;
@@ -75,14 +59,8 @@ public class GoogleBookService {
         String url = UriComponentsBuilder.fromPath("/volumes")
                 .queryParam("q", "subject:" + categoria)
                 .build().toString();
-
-        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
-
-        List<LivroDTO> livros = converterParaLivros(items);
-        
-        return livros;
+   
+        return buscarLivros(url);
     }
 
     private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
@@ -121,5 +99,17 @@ public class GoogleBookService {
             livros.add(dto);
         }
         return livros;
+    }
+
+    private List<LivroDTO> buscarLivros(String url){
+        Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
+
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+
+        List<LivroDTO> livros = converterParaLivros(items);
+        
+        return livros;
+
+        //return converterParaLivros((List<Map<String, Object>>) fazerRequisicaoAPIGoogle(url).get("items"));
     }
 }
