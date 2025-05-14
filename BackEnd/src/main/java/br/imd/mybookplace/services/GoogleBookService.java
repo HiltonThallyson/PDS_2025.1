@@ -19,34 +19,22 @@ public class GoogleBookService {
     }
 
     public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
-        // Monta a URL da consulta com o parâmetro de título
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "intitle:" + titulo)
-                .build().toString();
-
+        String url = construirUrl("intitle", titulo, null);
         return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorAutor(String autor) {
-        // Monta a URL da consulta com o parâmetro de autor
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "inauthor:" + autor)
-                .build().toString();
+        String url = construirUrl("inauthor", autor, null);
 
         return buscarLivros(url);
     }
 
     public List<LivroDTO> buscarLivrosPorQuantidade(int qtdPorCategoria) {
-        //Categorias que serão consultadas
         String [] categorias = {"history", "science", "technology", "art", "fiction"};
         List<LivroDTO> livros = new ArrayList<>();
 
         for (String categoria : categorias) {
-            // Monta a URL da consulta com o parâmetro categoria
-            String url = UriComponentsBuilder.fromPath("/volumes")
-                    .queryParam("q", "subject:" + categoria)
-                    .queryParam("maxResults", qtdPorCategoria)
-                    .build().toString();
+            String url = construirUrl("subject", categoria, qtdPorCategoria);
 
             livros.addAll(buscarLivros(url));
         }
@@ -55,10 +43,7 @@ public class GoogleBookService {
     }
 
     public List<LivroDTO> buscarLivrosPorCategoria(String categoria){
-        // Monta a URL da consulta com o parâmetro categoria
-        String url = UriComponentsBuilder.fromPath("/volumes")
-                .queryParam("q", "subject:" + categoria)
-                .build().toString();
+        String url = construirUrl("subject", categoria, null);
    
         return buscarLivros(url);
     }
@@ -111,5 +96,17 @@ public class GoogleBookService {
         return livros;
 
         //return converterParaLivros((List<Map<String, Object>>) fazerRequisicaoAPIGoogle(url).get("items"));
+    }
+
+    private String construirUrl(String tipoConsulta, String valorConsulta, Integer maxResults) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+            .fromPath("/volumes")
+            .queryParam("q", tipoConsulta + ":" + valorConsulta);
+
+        if (maxResults != null) {
+            builder.queryParam("maxResults", maxResults);
+        }
+
+        return builder.build().toString();
     }
 }
