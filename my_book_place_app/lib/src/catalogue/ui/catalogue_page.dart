@@ -33,135 +33,145 @@ class _CataloguePageState extends State<CataloguePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.indigo,
-      appBar: buildAppBar(context),
-      body: BlocBuilder<CataloguePageBloc, CataloguePageState>(
-        bloc: _cataloguePageBloc,
-        builder: (context, state) {
-          if (state is CataloguePageLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is CataloguePageLoadedState) {
-            final bookList = state.bookList;
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     "Meus favoritos",
-                    //     style: TextStyle(color: Colors.white, fontSize: 20),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: MediaQuery.of(context).size.width,
-                    //   child: ListView.builder(
-                    //     itemBuilder: (context, index) {
-                    //       return Card(
-                    //         color: Colors.white,
-                    //         child: Container(
-                    //           height: 200,
-                    //           width: 150,
-                    //           margin: const EdgeInsets.all(10),
-                    //           child: const Column(
-                    //             mainAxisSize: MainAxisSize.min,
-                    //             children: [
-                    //               Text("Título do livro"),
-                    //               Text("Autor do livro"),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //     itemCount: 10,
-                    //     shrinkWrap: true,
-                    //     scrollDirection: Axis.horizontal,
-                    //     // physics: const NeverScrollableScrollPhysics(),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     "Livros mais votados",
-                    //     style: TextStyle(color: Colors.white, fontSize: 20),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: MediaQuery.of(context).size.width,
-                    //   child: ListView.builder(
-                    //     itemBuilder: (context, index) {
-                    //       return Card(
-                    //         color: Colors.white,
-                    //         child: Container(
-                    //           height: 200,
-                    //           width: 150,
-                    //           margin: const EdgeInsets.all(10),
-                    //           child: const Column(
-                    //             mainAxisSize: MainAxisSize.min,
-                    //             children: [
-                    //               Text("Titulo do livro"),
-                    //               Text("Autor do livro"),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //     itemCount: bookList.length,
-                    //     shrinkWrap: true,
-                    //     scrollDirection: Axis.horizontal,
-                    //     // physics: const NeverScrollableScrollPhysics(),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Todos os livros",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 500,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 400),
-                        itemBuilder: (context, index) {
-                          final book = bookList[index].getBookInfo();
-                          return BookCard(
-                              book: book, size: const Size(200, 600));
-                        },
-                        itemCount: 10,
-                      ),
-                    ),
-                  ],
+    return SelectionArea(
+      child: Scaffold(
+        backgroundColor: Colors.indigo,
+        appBar: buildAppBar(context),
+        body: BlocBuilder<CataloguePageBloc, CataloguePageState>(
+          bloc: _cataloguePageBloc,
+          builder: (context, state) {
+            if (state is CataloguePageLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
                 ),
-              ),
-            );
-          } else if (state is CataloguePageErrorState) {
-            return Center(
-              child: Text(
-                state.errorMessage,
-                style: const TextStyle(color: Colors.white),
-              ),
-            );
-          } else {
-            return const Center(
-              child: Text("Error"),
-            );
-          }
-        },
+              );
+            } else if (state is CataloguePageLoadedState) {
+              final bookList = state.bookList;
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      // const Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text(
+                      //     "Meus favoritos",
+                      //     style: TextStyle(color: Colors.white, fontSize: 20),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 300,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   child: ListView.builder(
+                      //     itemBuilder: (context, index) {
+                      //       return Card(
+                      //         color: Colors.white,
+                      //         child: Container(
+                      //           height: 200,
+                      //           width: 150,
+                      //           margin: const EdgeInsets.all(10),
+                      //           child: const Column(
+                      //             mainAxisSize: MainAxisSize.min,
+                      //             children: [
+                      //               Text("Título do livro"),
+                      //               Text("Autor do livro"),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //     itemCount: 10,
+                      //     shrinkWrap: true,
+                      //     scrollDirection: Axis.horizontal,
+                      //     // physics: const NeverScrollableScrollPhysics(),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      // const Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text(
+                      //     "Livros mais votados",
+                      //     style: TextStyle(color: Colors.white, fontSize: 20),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 300,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   child: ListView.builder(
+                      //     itemBuilder: (context, index) {
+                      //       return Card(
+                      //         color: Colors.white,
+                      //         child: Container(
+                      //           height: 200,
+                      //           width: 150,
+                      //           margin: const EdgeInsets.all(10),
+                      //           child: const Column(
+                      //             mainAxisSize: MainAxisSize.min,
+                      //             children: [
+                      //               Text("Titulo do livro"),
+                      //               Text("Autor do livro"),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //     itemCount: bookList.length,
+                      //     shrinkWrap: true,
+                      //     scrollDirection: Axis.horizontal,
+                      //     // physics: const NeverScrollableScrollPhysics(),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Todos os livros",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 500,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 400),
+                          itemBuilder: (context, index) {
+                            final book = bookList[index].getBookInfo();
+                            return InkWell(
+                              onTap: () => Modular.to.pushNamed(
+                                "/book-details",
+                                arguments: book,
+                              ),
+                              child: BookCard(
+                                  book: book, size: const Size(200, 600)),
+                            );
+                          },
+                          itemCount: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else if (state is CataloguePageErrorState) {
+              return Center(
+                child: Text(
+                  state.errorMessage,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text("Error"),
+              );
+            }
+          },
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final originalUrl = _book["thumbnail"];
-    final proxyUrl = "https://corsproxy.io/?" + Uri.encodeFull(originalUrl);
+    final proxyUrl = "http://corsproxy.io/?" + Uri.encodeFull(originalUrl);
     return Card(
       color: Colors.white,
       child: Container(

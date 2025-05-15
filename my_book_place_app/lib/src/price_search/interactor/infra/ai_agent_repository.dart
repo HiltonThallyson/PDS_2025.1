@@ -1,3 +1,5 @@
+import '../../../book-details/models/offer.dart';
+
 abstract interface class AiAgentRepository {
-  Future<List<dynamic>> getPriceWithAgent(String prompt);
+  Future<List<Offer>> getPriceWithAgent(String prompt);
 }

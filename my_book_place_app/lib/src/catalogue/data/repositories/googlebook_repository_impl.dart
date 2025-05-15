@@ -31,8 +31,8 @@ class GoogleBookRepositoryImpl implements GoogleBookRepositoryInterface {
         final authorsRaw = book["authors"] ?? [];
         final publisher = book["editora"] ?? "";
         final description = book["description"] ?? "";
-        var thumbnail = book["thumbnail"].toString();
-        thumbnail = thumbnail.replaceFirst("http://", "https://");
+        var thumbnail = book["thumbnail"] ?? "";
+        // thumbnail = thumbnail.replaceFirst("http://", "https://");
 
         final categoriesRaw = book["categories"] ?? [];
 

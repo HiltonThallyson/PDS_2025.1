@@ -29,4 +29,21 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
+  static const offerTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const offerSubtitle = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+
+  static const offerLink = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Colors.indigo,
+  );
 }
