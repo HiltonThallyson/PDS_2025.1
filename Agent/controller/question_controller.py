@@ -23,7 +23,7 @@ async def ask_question(query: Query):
         
 
         return json.loads(final_message)
-    except Exception as e:
+    except HTTPException as e:
         return {"error": str(e)}
     
 # @router.post("/generate-image-from-text")

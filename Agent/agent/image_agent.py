@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from google.genai import types
 from google import genai
 from PIL import Image
@@ -33,7 +34,7 @@ def generate_image_bytes(prompt: str) -> tuple[bytes, str]:
                 image_bytes = part.inline_data.data 
                 mime_type = part.inline_data.mime_type
                 return image_bytes, mime_type
-    raise Exception("Nenhuma imagem foi gerada pelo modelo do Google.")
+    raise HTTPException("Nenhuma imagem foi gerada pelo modelo do Google.")
 
 # def generate_image_base64(prompt: str) -> str:
 
