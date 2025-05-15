@@ -18,8 +18,7 @@ if not google_api_key:
 client = genai.Client(api_key=google_api_key)
 
 def generate_image_bytes(prompt: str) -> tuple[bytes, str]:
-    _client = genai.Client(api_key=google_api_key) 
-    response = _client.models.generate_content(
+    response = client.models.generate_content(
         model="gemini-2.0-flash-preview-image-generation", 
         contents=prompt,
         config=types.GenerateContentConfig(
