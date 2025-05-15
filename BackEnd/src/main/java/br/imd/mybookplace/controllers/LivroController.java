@@ -1,5 +1,6 @@
 package br.imd.mybookplace.controllers;
 
+
 import br.imd.mybookplace.DTOS.LivroDTO;
 import br.imd.mybookplace.services.GoogleBookService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api/livros")
@@ -20,6 +24,7 @@ public class LivroController {
     }
 
     @GetMapping("/titulo")
+
     public List<LivroDTO> buscarLivroPorTitulo(@RequestParam String titulo){
         System.out.println(titulo);
         return googleService.buscarLivrosPorTitulo(titulo);
@@ -42,4 +47,5 @@ public class LivroController {
         System.out.println(categoria);
         return googleService.buscarLivrosPorCategoria(categoria);
     }
+
 }

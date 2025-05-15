@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +18,7 @@ public class GoogleBookService {
     public GoogleBookService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl("https://www.googleapis.com/books/v1").build();
     }
+
 
     public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
         String url = construirUrl("intitle", titulo, null);
@@ -110,3 +112,4 @@ public class GoogleBookService {
         return builder.build().toString();
     }
 }
+
