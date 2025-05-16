@@ -6,6 +6,8 @@ import br.imd.mybookplace.repositories.LivroFavoritoRepository;
 import br.imd.mybookplace.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LivroFavoritoServiceTest {
 
     private LivroFavoritoRepository livroFavoritoRepository;
@@ -27,97 +30,97 @@ class LivroFavoritoServiceTest {
         livroFavoritoService = new LivroFavoritoService(livroFavoritoRepository, userRepository);
     }
 
+    private User criarUsuario(String userId) {
+        User user = new User();
+        user.setId(userId);
+        return user;
+    }
+
+    private LivroFavorito criarLivroFavorito(User user, String title, String author, String isbn, String thumbnailUrl) {
+        return new LivroFavorito(user, title, author, isbn, thumbnailUrl);
+    }
+
+    private void mockUsuarioExistente(String userId, User user) {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    }
+
+    private void mockLivroFavoritoExistente(User user, String isbn, LivroFavorito livroFavorito) {
+        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroFavorito));
+    }
+
+    private void mockLivroFavoritoInexistente(User user, String isbn) {
+        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.empty());
+    }
+
     @Test
     void adicionarLivroFavorito_DeveAdicionarLivroQuandoNaoExistir() {
-    // Arrange
-    String userId = "123";
-    String title = "Livro Teste";
-    String author = "Autor Teste";
-    String thumbnailUrl = "http://imagem.com";
-    String isbn = "123456789";
+        String userId = "123";
+        String title = "Livro Teste";
+        String author = "Autor Teste";
+        String thumbnailUrl = "http://imagem.com";
+        String isbn = "123456789";
 
-    User user = new User();
-    user.setId(userId);
+        User user = criarUsuario(userId);
+        LivroFavorito livroFavorito = criarLivroFavorito(user, title, author, isbn, thumbnailUrl);
 
-    LivroFavorito livroFavorito = new LivroFavorito(user, title, author, isbn, thumbnailUrl);
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoInexistente(user, isbn);
+        when(livroFavoritoRepository.save(any(LivroFavorito.class))).thenReturn(livroFavorito);
 
-    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-    when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.empty());
-    when(livroFavoritoRepository.save(any(LivroFavorito.class))).thenReturn(livroFavorito); // Configura o mock para retornar o objeto salvo
+        LivroFavorito resultado = livroFavoritoService.adicionarLivroFavorito(userId, title, author, thumbnailUrl, isbn);
 
-    // Act
-    LivroFavorito resultado = livroFavoritoService.adicionarLivroFavorito(userId, title, author, thumbnailUrl, isbn);
-
-    // Assert
-    assertNotNull(resultado); // Verifica que o resultado não é nulo
-    assertEquals(title, resultado.getTitle());
-    assertEquals(author, resultado.getAuthor());
-    assertEquals(isbn, resultado.getIsbn());
-    verify(livroFavoritoRepository, times(1)).save(any(LivroFavorito.class)); // Verifica que o método save foi chamado
-}
+        assertNotNull(resultado);
+        assertEquals(title, resultado.getTitle());
+        assertEquals(author, resultado.getAuthor());
+        assertEquals(isbn, resultado.getIsbn());
+        verify(livroFavoritoRepository, times(1)).save(any(LivroFavorito.class));
+    }
 
     @Test
     void adicionarLivroFavorito_DeveLancarExcecaoQuandoLivroJaExistir() {
-        // Arrange
         String userId = "123";
         String isbn = "123456789";
 
-        User user = new User();
-        user.setId(userId);
+        User user = criarUsuario(userId);
+        LivroFavorito livroExistente = criarLivroFavorito(user, "Livro Teste", "Autor Teste", isbn, "http://imagem.com");
 
-        LivroFavorito livroExistente = new LivroFavorito();
-        livroExistente.setIsbn(isbn);
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoExistente(user, isbn, livroExistente);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroExistente));
-
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             livroFavoritoService.adicionarLivroFavorito(userId, "Livro Teste", "Autor Teste", "http://imagem.com", isbn);
         });
     }
 
     @Test
-    void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritos(){
-        //Arrange
+    void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritos() {
         String userId = "123";
+        User user = criarUsuario(userId);
+        LivroFavorito livro1 = criarLivroFavorito(user, "Livro 1", "Autor 1", "123456789", "http://imagem1.com");
+        LivroFavorito livro2 = criarLivroFavorito(user, "Livro 2", "Autor 2", "987654321", "http://imagem2.com");
 
-        User user = new User();
-        user.setId(userId);
+        mockUsuarioExistente(userId, user);
+        when(livroFavoritoRepository.findByUser(user)).thenReturn(List.of(livro1, livro2));
 
-        LivroFavorito livro1 = new LivroFavorito(user, "Livro 1", "Autor 1", "123456789", "http://imagem1.com");
-        LivroFavorito livro2 = new LivroFavorito(user, "Livro 2", "Autor 2", "987654321", "http://imagem2.com");
-
-        List<LivroFavorito> listaFavoritos = List.of(livro1, livro2);
-        
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(livroFavoritoRepository.findByUser(user)).thenReturn(listaFavoritos);
-
-        //Act
         List<LivroFavorito> resultado = livroFavoritoService.listarFavoritosPorUsuario(userId);
 
-        //Assert
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
-        assertEquals("Livro 1", resultado.get(0).getTitle());
-        assertEquals("Livro 2", resultado.get(1).getTitle());
+        assertTrue(resultado.contains(livro1));
+        assertTrue(resultado.contains(livro2));
         verify(livroFavoritoRepository, times(1)).findByUser(user);
     }
 
     @Test
-    void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritosVazia(){
-        //Arrange
+    void listarFavoritosPorUsuario_DeveRetornarListaVaziaQuandoNaoHouverFavoritos() {
         String userId = "123";
-        User user = new User();
-        user.setId(userId);
+        User user = criarUsuario(userId);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        mockUsuarioExistente(userId, user);
         when(livroFavoritoRepository.findByUser(user)).thenReturn(List.of());
 
-        //Act
         List<LivroFavorito> resultado = livroFavoritoService.listarFavoritosPorUsuario(userId);
 
-        //Assert
         assertNotNull(resultado);
         assertTrue(resultado.isEmpty());
         verify(livroFavoritoRepository, times(1)).findByUser(user);
@@ -125,45 +128,34 @@ class LivroFavoritoServiceTest {
 
     @Test
     void removerLivroFavorito_DeveRemoverLivroQuandoExistir() {
-        // Arrange
         String userId = "123";
-        User user = new User();
-        user.setId(userId);
-
         String isbn = "123456789";
-        LivroFavorito livroFavorito = new LivroFavorito(user, "Livro Teste", "Autor Teste", isbn, "http://imagem.com");
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroFavorito));
+        User user = criarUsuario(userId);
+        LivroFavorito livroFavorito = criarLivroFavorito(user, "Livro Teste", "Autor Teste", isbn, "http://imagem.com");
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroFavorito));
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoExistente(user, isbn, livroFavorito);
 
-        //Act
         livroFavoritoService.removerLivroFavorito(userId, isbn);
 
-        //Assert
-        verify(livroFavoritoRepository, times(1)).delete(livroFavorito); // Verifica que o método delete foi chamado
-    
+        verify(livroFavoritoRepository, times(1)).delete(livroFavorito);
     }
 
     @Test
     void removerLivroFavorito_DeveLancarExcecaoQuandoLivroNaoExistir() {
-        //Arrange
         String userId = "123";
-        User user = new User();
-        user.setId(userId);
+        String isbn = "123456789";
 
-        String isbn  = "123456789";
+        User user = criarUsuario(userId);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.empty());
-        
-        //Act & Assert
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoInexistente(user, isbn);
+
         assertThrows(IllegalArgumentException.class, () -> {
-            livroFavoritoService.removerLivroFavorito(userId, isbn);});
+            livroFavoritoService.removerLivroFavorito(userId, isbn);
+        });
 
         verify(livroFavoritoRepository, never()).delete(any(LivroFavorito.class));
-
     }
 }
