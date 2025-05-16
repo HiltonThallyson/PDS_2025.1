@@ -6,8 +6,8 @@ import br.imd.mybookplace.repositories.LivroFavoritoRepository;
 import br.imd.mybookplace.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,5 +75,51 @@ class LivroFavoritoServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             livroFavoritoService.adicionarLivroFavorito(userId, "Livro Teste", "Autor Teste", "http://imagem.com", isbn);
         });
+    }
+
+    @Test
+    void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritos(){
+        //Arrange
+        String userId = "123";
+
+        User user = new User();
+        user.setId(userId);
+
+        LivroFavorito livro1 = new LivroFavorito(user, "Livro 1", "Autor 1", "123456789", "http://imagem1.com");
+        LivroFavorito livro2 = new LivroFavorito(user, "Livro 2", "Autor 2", "987654321", "http://imagem2.com");
+
+        List<LivroFavorito> listaFavoritos = List.of(livro1, livro2);
+        
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(livroFavoritoRepository.findByUser(user)).thenReturn(listaFavoritos);
+
+        //Act
+        List<LivroFavorito> resultado = livroFavoritoService.listarFavoritosPorUsuario(userId);
+
+        //Assert
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals("Livro 1", resultado.get(0).getTitle());
+        assertEquals("Livro 2", resultado.get(1).getTitle());
+        verify(livroFavoritoRepository, times(1)).findByUser(user);
+    }
+
+    @Test
+    void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritosVazia(){
+        //Arrange
+        String userId = "123";
+        User user = new User();
+        user.setId(userId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(livroFavoritoRepository.findByUser(user)).thenReturn(List.of());
+
+        //Act
+        List<LivroFavorito> resultado = livroFavoritoService.listarFavoritosPorUsuario(userId);
+
+        //Assert
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(livroFavoritoRepository, times(1)).findByUser(user);
     }
 }
