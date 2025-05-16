@@ -122,4 +122,48 @@ class LivroFavoritoServiceTest {
         assertTrue(resultado.isEmpty());
         verify(livroFavoritoRepository, times(1)).findByUser(user);
     }
+
+    @Test
+    void removerLivroFavorito_DeveRemoverLivroQuandoExistir() {
+        // Arrange
+        String userId = "123";
+        User user = new User();
+        user.setId(userId);
+
+        String isbn = "123456789";
+        LivroFavorito livroFavorito = new LivroFavorito(user, "Livro Teste", "Autor Teste", isbn, "http://imagem.com");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroFavorito));
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.of(livroFavorito));
+
+        //Act
+        livroFavoritoService.removerLivroFavorito(userId, isbn);
+
+        //Assert
+        verify(livroFavoritoRepository, times(1)).delete(livroFavorito); // Verifica que o método delete foi chamado
+    
+    }
+
+    @Test
+    void removerLivroFavorito_DeveLancarExcecaoQuandoLivroNaoExistir() {
+        //Arrange
+        String userId = "123";
+        User user = new User();
+        user.setId(userId);
+
+        String isbn  = "123456789";
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(livroFavoritoRepository.findByUserAndIsbn(user, isbn)).thenReturn(Optional.empty());
+        
+        //Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            livroFavoritoService.removerLivroFavorito(userId, isbn);});
+
+        verify(livroFavoritoRepository, never()).delete(any(LivroFavorito.class));
+
+    }
 }

@@ -47,7 +47,12 @@ public class LivroFavoritoService {
     }
 
     @Transactional
-    public void removerLivroFavorito(LivroFavorito livroFavorito){
+    public void removerLivroFavorito(String userId, String isbn){
+        User user = buscarUserPorID(userId);
+
+        LivroFavorito livroFavorito = livroFavoritoRepository.findByUserAndIsbn(user, isbn)
+            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado na lista de favoritos"));
+
         livroFavoritoRepository.delete(livroFavorito);
     }
 
