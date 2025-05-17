@@ -18,23 +18,31 @@ if not google_api_key:
 
 client = genai.Client(api_key=google_api_key)
 
-def generate_image_bytes(prompt: str) -> tuple[bytes, str]:
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-preview-image-generation", 
-        contents=prompt,
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-    )
-        
-    )
+class ImageAgent:
+    def __init__(self):
+        self.client = genai.Client(api_key=google_api_key)
 
-    if response.candidates and response.candidates[0].content.parts:
-        for part in response.candidates[0].content.parts:
-            if hasattr(part, 'inline_data') and part.inline_data and part.inline_data.data:
-                image_bytes = part.inline_data.data 
-                mime_type = part.inline_data.mime_type
-                return image_bytes, mime_type
-    raise HTTPException("Nenhuma imagem foi gerada pelo modelo do Google.")
+    def generate_model(self):
+        return client
+        
+
+# def generate_image_bytes(prompt: str) -> tuple[bytes, str]:
+#     response = client.models.generate_content(
+#         model="gemini-2.0-flash-preview-image-generation", 
+#         contents=prompt,
+#         config=types.GenerateContentConfig(
+#         response_modalities=['TEXT', 'IMAGE']
+#     )
+        
+#     )
+
+#     if response.candidates and response.candidates[0].content.parts:
+#         for part in response.candidates[0].content.parts:
+#             if hasattr(part, 'inline_data') and part.inline_data and part.inline_data.data:
+#                 image_bytes = part.inline_data.data 
+#                 mime_type = part.inline_data.mime_type
+#                 return image_bytes, mime_type
+#     raise HTTPException("Nenhuma imagem foi gerada pelo modelo do Google.")
 
 # def generate_image_base64(prompt: str) -> str:
 

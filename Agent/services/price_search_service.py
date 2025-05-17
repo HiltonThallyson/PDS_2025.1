@@ -1,6 +1,15 @@
-class PriceSearchService:
-    def __init__(self, price_repository):
-        self.price_repository = price_repository
+from fastapi import HTTPException
+from agent.facades.llm_agents_facade import LLMAgentsFacade
 
-    def search_prices(self, query):
-        return self.price_repository.find_prices(query)
+
+class PriceSearchService:
+    def search_prices(self, prompt: str):
+        try:
+            llm_agents_facade = LLMAgentsFacade()
+            response = llm_agents_facade.search_price(prompt)
+            return response
+        except HTTPException as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Erro ao buscar ofertas"
+            )

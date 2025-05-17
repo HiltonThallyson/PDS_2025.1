@@ -6,8 +6,8 @@ import '../../book-details/models/offer.dart';
 import '../interactor/infra/ai_agent_repository.dart';
 
 class AiAgentRepositoryImpl implements AiAgentRepository {
-  final _apiUrl = "http://127.0.0.1:8000/api";
-  final _searchPriceEndpoint = "/search-price";
+  final _apiUrl = "http://localhost:8090/api";
+  final _searchPriceEndpoint = "/llm/search_price";
 
   @override
   Future<List<Offer>> getPriceWithAgent(String prompt) async {
