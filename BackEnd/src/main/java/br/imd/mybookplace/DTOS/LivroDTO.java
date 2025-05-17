@@ -11,6 +11,15 @@ public class LivroDTO {
     private String description;
     private List<String> categories;
     private String thumbnail;
+    private String isbn;
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
 
     public String getThumbnail() {
         return thumbnail;

@@ -10,6 +10,7 @@ public class Livro {
     private String description;
     private String categories;
     private String thumbnailUrl;
+    private String isbn;
 
     public Long getId() {
         return id;
@@ -73,5 +74,13 @@ public class Livro {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }
