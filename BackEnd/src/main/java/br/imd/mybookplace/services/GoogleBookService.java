@@ -50,6 +50,11 @@ public class GoogleBookService {
         return buscarLivros(url);
     }
 
+    public List<LivroDTO> buscarLivrosPorISBN(String isbn) {
+        String url = construirUrl("isbn", isbn, 1);
+        return buscarLivros(url);
+    }
+
     private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
         Map<String, Object> response = webClient.get()
             .uri(url)
@@ -81,6 +86,26 @@ public class GoogleBookService {
             Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
             if (imageLinks != null) {
                 dto.setThumbnail(imageLinks.get("thumbnail"));
+            }
+
+            // Extrair ISBN
+            List<Map<String, String>> industryIdentifiers = (List<Map<String, String>>) volumeInfo.get("industryIdentifiers");
+            if (industryIdentifiers != null) {
+                String isbn13 = null;
+                String isbn10 = null;
+                for (Map<String, String> identifierMap : industryIdentifiers) {
+                    if (identifierMap != null) {
+                        String type = identifierMap.get("type");
+                        String idValue = identifierMap.get("identifier");
+                        if ("ISBN_13".equals(type)) {
+                            isbn13 = idValue;
+                        } else if ("ISBN_10".equals(type)) {
+                            isbn10 = idValue;
+                        }
+                    }
+                }
+                // Prioriza ISBN_13, mas usa ISBN_10 se o primeiro não estiver disponível
+                dto.setIsbn(isbn13 != null ? isbn13 : isbn10);
             }
 
             livros.add(dto);

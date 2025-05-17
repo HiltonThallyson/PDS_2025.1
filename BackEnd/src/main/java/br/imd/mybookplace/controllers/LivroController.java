@@ -48,4 +48,10 @@ public class LivroController {
         return googleService.buscarLivrosPorCategoria(categoria);
     }
 
+    @GetMapping("/isbn")
+    public List<LivroDTO> buscarLivrosPorISBN(@RequestParam String isbn){
+        System.out.println(isbn);
+        return googleService.buscarLivrosPorISBN(isbn);
+    }
+
 }
