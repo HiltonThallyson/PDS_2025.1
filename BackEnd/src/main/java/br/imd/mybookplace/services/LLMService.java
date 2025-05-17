@@ -33,8 +33,8 @@ public class LLMService {
                 .build();
 
         webClient = builder
-                .baseUrl("http://127.0.0.1:8000/api") // Sua URL base da API FastAPI
-                .exchangeStrategies(strategies)       // <<--- ESSA LINHA É CRUCIAL
+                .baseUrl("http://127.0.0.1:8000/api") 
+                .exchangeStrategies(strategies)       
                 .build();
     }
 
@@ -54,7 +54,6 @@ public class LLMService {
                     .bodyToMono(String.class)
                     .block();
 
-            // Tenta fazer o parse como uma lista de mapas
             List<Map<String, Object>> parsed = objectMapper.readValue(rawJson, new TypeReference<>() {
             });
 
@@ -70,9 +69,12 @@ public class LLMService {
                     price = ((Number) item.get("price")).doubleValue();
                 } else if (item.get("price") instanceof String) {
                     try {
-                        price = Double.parseDouble((String) item.get("price"));
+                        String priceString = (String) item.get("price");
+                        priceString = priceString.replace("R$", "");
+                        priceString = priceString.replace(",", ".");
+                        price = Double.parseDouble(priceString);
                     } catch (NumberFormatException e) {
-                        // ignora valor inválido
+                        throw new NumberFormatException("Erro ao converter preço");
                     }
                 }
 
@@ -85,7 +87,7 @@ public class LLMService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            throw new RuntimeException("Falha ao buscar ofertas da API externa: ");
         }
     }
 
@@ -99,7 +101,7 @@ public class LLMService {
         try {
             return webClient.post()
                     .uri(imageUrlEndpoint)
-                    .accept(MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG, MediaType.APPLICATION_OCTET_STREAM) // ou MediaType.TEXT_PLAIN se a API retornar só o base64
+                    .accept(MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG, MediaType.APPLICATION_OCTET_STREAM)
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(prompt)
                     .retrieve()
