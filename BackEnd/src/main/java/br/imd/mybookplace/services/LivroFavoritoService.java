@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.imd.mybookplace.entities.LivroFavorito;
 import br.imd.mybookplace.entities.User;
+import br.imd.mybookplace.exceptions.LivroFavoritoException;
 import br.imd.mybookplace.repositories.LivroFavoritoRepository;
 import br.imd.mybookplace.repositories.UserRepository;
 
@@ -38,7 +39,7 @@ public class LivroFavoritoService {
         Optional<LivroFavorito> livroExistente = livroFavoritoRepository.findByUserAndIsbn(user, isbn);
 
         if(livroExistente.isPresent()){
-            throw new IllegalArgumentException("Livro já existe na lista de favoritos");
+            throw new LivroFavoritoException("Livro já está na lista de favoritos");
         }
 
         LivroFavorito livroFavorito = criarLivroFavorito(user, title, author, thumbnailUrl, isbn);
@@ -51,14 +52,14 @@ public class LivroFavoritoService {
         User user = buscarUserPorID(userId);
 
         LivroFavorito livroFavorito = livroFavoritoRepository.findByUserAndIsbn(user, isbn)
-            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado na lista de favoritos"));
+            .orElseThrow(() -> new LivroFavoritoException("Não é possível remover um livro que não está na lista de favoritos"));
 
         livroFavoritoRepository.delete(livroFavorito);
     }
 
     private User buscarUserPorID(String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID: " + userId));
+            .orElseThrow(() -> new LivroFavoritoException("Usuário não encontrado com o ID: " + userId));
         
         return user;
     }
