@@ -2,6 +2,7 @@ package br.imd.mybookplace.services;
 
 import br.imd.mybookplace.entities.LivroFavorito;
 import br.imd.mybookplace.entities.User;
+import br.imd.mybookplace.exceptions.LivroFavoritoException;
 import br.imd.mybookplace.repositories.LivroFavoritoRepository;
 import br.imd.mybookplace.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +88,7 @@ class LivroFavoritoServiceTest {
         mockUsuarioExistente(userId, user);
         mockLivroFavoritoExistente(user, isbn, livroExistente);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(LivroFavoritoException.class, () -> {
             livroFavoritoService.adicionarLivroFavorito(userId, "Livro Teste", "Autor Teste", "http://imagem.com", isbn);
         });
     }
@@ -152,7 +153,7 @@ class LivroFavoritoServiceTest {
         mockUsuarioExistente(userId, user);
         mockLivroFavoritoInexistente(user, isbn);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(LivroFavoritoException.class, () -> {
             livroFavoritoService.removerLivroFavorito(userId, isbn);
         });
 
