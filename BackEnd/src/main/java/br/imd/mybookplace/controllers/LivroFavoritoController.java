@@ -25,31 +25,20 @@ public class LivroFavoritoController {
             @RequestParam String author,
             @RequestParam String thumbnailUrl,
             @RequestParam String isbn) {
-        try{
-            LivroFavorito livroFavorito = livroFavoritoService.adicionarLivroFavorito(userId, title, author, thumbnailUrl, isbn);
-            return ResponseEntity.status(HttpStatus.CREATED).body(livroFavorito);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+            
+        LivroFavorito livroFavorito = livroFavoritoService.adicionarLivroFavorito(userId, title, author, thumbnailUrl, isbn);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroFavorito);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<LivroFavorito>> listarFavoritosPorUsuario(@PathVariable String userId) {
-        try{
-            List<LivroFavorito> livrosFavoritos = livroFavoritoService.listarFavoritosPorUsuario(userId);
-            return ResponseEntity.ok(livrosFavoritos);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        List<LivroFavorito> livrosFavoritos = livroFavoritoService.listarFavoritosPorUsuario(userId);
+        return ResponseEntity.ok(livrosFavoritos);
     }
 
     @DeleteMapping("/{userId}/{isbn}")
     public ResponseEntity<Void> removerLivroFavorito(@PathVariable String userId, @PathVariable String isbn) {
-        try{
-            livroFavoritoService.removerLivroFavorito(userId, isbn);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        livroFavoritoService.removerLivroFavorito(userId, isbn);
+        return ResponseEntity.noContent().build();
     }
 }
