@@ -20,4 +20,9 @@ public class GlobalExceptionHandler {
                 .body("Não foi possível obter informações dos livros no momento. Por favor, tente novamente mais tarde.");
     }
 
+    @ExceptionHandler(LivroFavoritoException.class)
+    public ResponseEntity<String> handleLivroFavoritoException (LivroFavoritoException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
 }
