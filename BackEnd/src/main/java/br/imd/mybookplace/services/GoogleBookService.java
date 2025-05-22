@@ -1,8 +1,14 @@
 package br.imd.mybookplace.services;
 
 import br.imd.mybookplace.DTOS.LivroDTO;
+import br.imd.mybookplace.exceptions.GoogleBooksApiException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
@@ -14,6 +20,7 @@ import java.util.Map;
 @Service
 public class GoogleBookService {
    private final WebClient webClient;
+   private static final Logger logger = LoggerFactory.getLogger(GoogleBookService.class);
 
     public GoogleBookService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl("https://www.googleapis.com/books/v1").build();
@@ -56,17 +63,26 @@ public class GoogleBookService {
     }
 
     private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
-        Map<String, Object> response = webClient.get()
+        try{
+            Map<String, Object> response = webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(Map.class)
             .block(); // .block() para obter resultado síncrono
-        
-        if (response == null || response.get("items") == null) {
-            return Collections.emptyMap(); // Retorna lista vazia se não houver resultado
-        }
 
-        return response;
+            if (response == null || response.get("items") == null) {
+                return Collections.emptyMap(); // Retorna lista vazia se não houver resultado
+            }
+    
+            return response;
+        } catch (WebClientResponseException | WebClientRequestException e) {
+            logger.error("Erro ao acessar a API do Google Books: {}", e.getMessage());
+            throw new GoogleBooksApiException("Erro ao acessar a API do Google Books:" + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("Erro inesperado na API do Google Books: {}", e.getMessage());
+            throw new GoogleBooksApiException("Erro inesperado: " + e.getMessage(), e);
+        }
+        
     }
 
     private List<LivroDTO> converterParaLivros(List<Map<String, Object>> items){
