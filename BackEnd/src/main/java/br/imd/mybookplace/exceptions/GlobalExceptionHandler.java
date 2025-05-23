@@ -25,4 +25,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(LLMServiceException.class)
+    public ResponseEntity<String> handleLLMServiceException(LLMServiceException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<String> handleNumberFormatException(NumberFormatException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Formato numérico inválido fornecido: " + e.getMessage());
+    }
+
 }
