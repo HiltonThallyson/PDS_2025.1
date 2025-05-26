@@ -20,6 +20,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LivroFavoritoServiceTest {
 
+    //Explicar cada um dos métodos de teste
     private LivroFavoritoRepository livroFavoritoRepository;
     private UserRepository userRepository;
     private LivroFavoritoService livroFavoritoService;
@@ -55,6 +56,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void adicionarLivroFavorito_DeveAdicionarLivroQuandoNaoExistir() {
+        // Este teste verifica o comportamento do método adicionarLivroFavorito quando o livro ainda não está na lista de favoritos do usuário.
+        // O cenário simula um usuário existente e um livro que não está cadastrado como favorito.
+        // O teste valida se o livro é adicionado com sucesso à lista de favoritos.
         String userId = "123";
         String title = "Livro Teste";
         String author = "Autor Teste";
@@ -79,6 +83,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void adicionarLivroFavorito_DeveLancarExcecaoQuandoLivroJaExistir() {
+        // Este teste verifica se uma exceção é lançada ao tentar adicionar um livro que já está na lista de favoritos do usuário.
+        // O cenário simula um usuário existente e um livro que já está cadastrado como favorito.
+        // O teste valida se a exceção LivroFavoritoException é lançada corretamente.
         String userId = "123";
         String isbn = "123456789";
 
@@ -95,6 +102,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritos() {
+        // Este teste verifica se o método listarFavoritosPorUsuario retorna corretamente a lista de livros favoritos de um usuário.
+        // O cenário simula um usuário existente com dois livros favoritos cadastrados.
+        // O teste valida se a lista retornada contém os livros favoritos do usuário.
         String userId = "123";
         User user = criarUsuario(userId);
         LivroFavorito livro1 = criarLivroFavorito(user, "Livro 1", "Autor 1", "123456789", "http://imagem1.com");
@@ -114,6 +124,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void listarFavoritosPorUsuario_DeveRetornarListaVaziaQuandoNaoHouverFavoritos() {
+        // Este teste verifica o comportamento do método listarFavoritosPorUsuario quando o usuário não possui livros favoritos cadastrados.
+        // O cenário simula um usuário existente sem nenhum livro na lista de favoritos.
+        // O teste valida se o método retorna uma lista vazia corretamente.
         String userId = "123";
         User user = criarUsuario(userId);
 
@@ -129,6 +142,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void removerLivroFavorito_DeveRemoverLivroQuandoExistir() {
+        // Este teste verifica o comportamento do método removerLivroFavorito quando o livro está na lista de favoritos do usuário.
+        // O cenário simula um usuário existente e um livro que está cadastrado como favorito.
+        // O teste valida se o livro é removido com sucesso da lista de favoritos.
         String userId = "123";
         String isbn = "123456789";
 
@@ -145,6 +161,9 @@ class LivroFavoritoServiceTest {
 
     @Test
     void removerLivroFavorito_DeveLancarExcecaoQuandoLivroNaoExistir() {
+        // Este teste verifica se uma exceção é lançada ao tentar remover um livro que não está na lista de favoritos do usuário.
+        // O cenário simula um usuário existente e a tentativa de remoção de um livro que não está cadastrado como favorito.
+        // O teste valida se a exceção LivroFavoritoException é lançada corretamente.
         String userId = "123";
         String isbn = "123456789";
 
