@@ -42,10 +42,12 @@ class LLMControllerTest {
 
     @Test
     void searchOffers_DeveRetornarListaVazia_QuandoServiceRetornaVazio() throws Exception {
-        // Este teste garante que o endpoint /api/llm/search_price retorna uma lista vazia quando o service retorna uma lista vazia
-
+        // Este teste garante que o endpoint /api/llm/search_price retorna uma lista vazia quando o service retorna uma lista vazia, validando o fluxo normal sem erros.
+        
+        // Arrange
         when(llmService.searchOffers(any(LLMRequestDTO.class))).thenReturn(Collections.emptyList());
-
+        
+        // Act & Assert
         mockMvc.perform(post("/api/llm/search_price")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test\"}"))
@@ -55,10 +57,13 @@ class LLMControllerTest {
 
     @Test
     void searchOffers_DeveRetornarListaComOfertas_QuandoServiceRetornaOfertas() throws Exception {
-        // Este teste garante que o endpoint /api/llm/search_price retorna corretamente uma lista de ofertas
+        // Este teste garante que o endpoint /api/llm/search_price retorna corretamente uma lista de ofertas quando o service retorna uma lista não vazia, validando o fluxo normal de sucesso.
+        
+        // Arrange
         OfferDTO oferta = new OfferDTO();
         when(llmService.searchOffers(any(LLMRequestDTO.class))).thenReturn(Collections.singletonList(oferta));
-
+        
+        // Act & Assert
         mockMvc.perform(post("/api/llm/search_price")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test\"}"))
@@ -68,23 +73,29 @@ class LLMControllerTest {
 
     @Test
     void searchOffers_DeveRetornarBadRequest_QuandoServiceLancaLLMServiceException() throws Exception {
-        // Este teste garante que, se o service lançar LLMServiceException, o GlobalExceptionHandler responde com BadRequest
+        // Este teste garante que, se o service lançar LLMServiceException, o GlobalExceptionHandler responde com BadRequest (HTTP 400) e a mensagem de erro, validando o tratamento global de exceções de negócio.
+        
+        // Arrange
         String errorMessage = "Erro simulado ao buscar ofertas";
         when(llmService.searchOffers(any(LLMRequestDTO.class)))
                 .thenThrow(new LLMServiceException(errorMessage));
-
+        
+                // Act & Assert
         mockMvc.perform(post("/api/llm/search_price")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test\"}"))
-                .andExpect(status().isBadRequest()) // Espera 400 Bad Request
-                .andExpect(content().string(errorMessage)); // Verifica a mensagem de erro
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(errorMessage));
     }
 
     @Test
     void generateImage_DeveRetornarString_QuandoServiceRetornaString() throws Exception {
-        // Este teste garante que o endpoint /api/llm/generate_image_by_text retorna a string gerada pelo service
+        // Este teste garante que o endpoint /api/llm/generate_image_by_text retorna a string gerada pelo service quando o fluxo ocorre normalmente, validando o retorno esperado em caso de sucesso.
+        
+        // Arrange
         when(llmService.createImage(any(LLMRequestDTO.class))).thenReturn("imagem_base64");
-
+        
+        // Act & Assert
         mockMvc.perform(post("/api/llm/generate_image_by_text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test image\"}"))
@@ -94,15 +105,18 @@ class LLMControllerTest {
 
     @Test
     void generateImage_DeveRetornarBadRequest_QuandoServiceLancaLLMServiceException() throws Exception {
-        // Este teste garante que, se o service lançar LLMServiceException ao gerar imagem, o GlobalExceptionHandler responde com BadRequest
+        // Este teste garante que, se o service lançar LLMServiceException ao gerar imagem, o GlobalExceptionHandler responde com BadRequest (HTTP 400) e a mensagem de erro, validando o tratamento global de exceções de negócio.
+        
+        // Arrange
         String errorMessage = "Erro simulado ao gerar imagem";
         when(llmService.createImage(any(LLMRequestDTO.class)))
                 .thenThrow(new LLMServiceException(errorMessage));
-
+        
+        // Act & Assert
         mockMvc.perform(post("/api/llm/generate_image_by_text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test image\"}"))
-                .andExpect(status().isBadRequest()) // Espera 400 Bad Request
-                .andExpect(content().string(errorMessage)); // Verifica a mensagem de erro
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(errorMessage));
     }
 }
