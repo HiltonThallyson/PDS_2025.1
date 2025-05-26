@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+/**
+ * Controller responsável por expor endpoints de busca de ofertas e geração de imagens via LLM.
+ */
 @RestController
 @RequestMapping("/api/llm")
 public class LLMController {
@@ -21,11 +24,23 @@ public class LLMController {
     @Autowired
     private LLMService llmService;
     
+    /**
+     * Busca ofertas de livros a partir do prompt fornecido.
+     *
+     * @param prompt Objeto contendo as informações para busca de ofertas.
+     * @return Lista de ofertas encontradas.
+     */
     @PostMapping("/search_price")
     public List<OfferDTO> searchOffers(@RequestBody LLMRequestDTO prompt) {
         return llmService.searchOffers(prompt);        
     }
 
+    /**
+     * Gera uma imagem a partir do prompt fornecido.
+     *
+     * @param prompt Objeto contendo as informações para geração da imagem.
+     * @return String com a URL ou base64 da imagem gerada.
+     */
     @PostMapping("/generate_image_by_text")
     public String postMethodName(@RequestBody LLMRequestDTO prompt) {
         return llmService.createImage(prompt);
