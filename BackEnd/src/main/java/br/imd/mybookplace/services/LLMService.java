@@ -19,6 +19,9 @@ import br.imd.mybookplace.DTOS.LLMRequestDTO;
 import br.imd.mybookplace.DTOS.OfferDTO;
 import br.imd.mybookplace.exceptions.LLMServiceException;
 
+/**
+ * Serviço responsável por consumir a API local de LLM para busca de ofertas e geração de imagens.
+ */
 @Service
 public class LLMService {
 
@@ -41,6 +44,13 @@ public class LLMService {
                 .build();
     }
 
+    /**
+     * Busca ofertas de livros a partir do prompt fornecido, utilizando a API local de LLM.
+     *
+     * @param prompt Objeto contendo as informações para busca de ofertas.
+     * @return Lista de ofertas encontradas.
+     * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
+     */
     public List<OfferDTO> searchOffers(LLMRequestDTO prompt) {
         String searchPriceUrl = UriComponentsBuilder
                 .fromPath("/search_price")
@@ -94,6 +104,13 @@ public class LLMService {
         }
     }
 
+    /**
+     * Gera uma imagem a partir do prompt fornecido, utilizando a API local de LLM.
+     *
+     * @param prompt Objeto contendo as informações para geração da imagem.
+     * @return String com a URL ou base64 da imagem gerada.
+     * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
+     */
     public String createImage(LLMRequestDTO prompt) {
         String imageUrlEndpoint = UriComponentsBuilder 
                 .fromPath("/generate-image-from-text")
