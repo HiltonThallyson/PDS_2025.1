@@ -35,8 +35,8 @@ public class GoogleBookServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     public void buscarLivrosPorTitulo_DeveLancarGoogleBooksApiException_QuandoWebClientFalhar(){
-        // * Este teste garante que, se ocorrer uma falha de comunicação com a API do Google Books (simulada aqui com uma exceção do WebClient), o método buscarLivrosPorTitulo() lança uma exceção customizada GoogleBooksApiException. Isso valida o tratamento de erros do service ao consumir APIs externas.
-        // * É importante lembrar que o método buscarLivrosPorTitulo() é apenas uma chamada de wrapper para o método buscarLivros(), que é o que de fato faz a chamada à API do GooleBooks
+        // Este teste garante que, se ocorrer uma falha de comunicação com a API do Google Books (simulada aqui com uma exceção do WebClient), o método buscarLivrosPorTitulo() lança uma exceção customizada GoogleBooksApiException. Isso valida o tratamento de erros do service ao consumir APIs externas.
+        // É importante lembrar que o método buscarLivrosPorTitulo() é apenas uma chamada de wrapper para o método buscarLivros(), que é o que de fato faz a chamada à API do GooleBooks
 
         //Arrange
         String titulo = "titulo";
