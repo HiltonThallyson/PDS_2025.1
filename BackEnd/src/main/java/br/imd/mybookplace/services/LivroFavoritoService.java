@@ -13,6 +13,9 @@ import br.imd.mybookplace.repositories.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Serviço responsável por gerenciar os livros favoritos dos usuários.
+ */
 @Service
 public class LivroFavoritoService {
 
@@ -24,13 +27,17 @@ public class LivroFavoritoService {
         this.userRepository = userRepository;
     }
 
-    @Transactional(readOnly=true)
-    public List<LivroFavorito> listarFavoritosPorUsuario(String userId){
-        User user = buscarUserPorID(userId);
-
-        return livroFavoritoRepository.findByUser(user);
-    }
-
+    /**
+     * Adiciona um livro à lista de favoritos do usuário.
+     *
+     * @param userId ID do usuário.
+     * @param title Título do livro.
+     * @param author Autor do livro.
+     * @param thumbnailUrl URL da imagem de capa do livro.
+     * @param isbn ISBN do livro.
+     * @return O livro favorito adicionado.
+     * @throws LivroFavoritoException em caso de erro ao adicionar o livro aos favoritos.
+     */
     @Transactional
     public LivroFavorito adicionarLivroFavorito(String userId, String title, String author, String thumbnailUrl, String isbn){
         
@@ -47,6 +54,13 @@ public class LivroFavoritoService {
         return livroFavoritoRepository.save(livroFavorito);
     }
 
+    /**
+     * Remove um livro da lista de favoritos do usuário.
+     *
+     * @param userId ID do usuário.
+     * @param isbn ISBN do livro a ser removido.
+     * @throws LivroFavoritoException em caso de erro ao remover o livro dos favoritos.
+     */
     @Transactional
     public void removerLivroFavorito(String userId, String isbn){
         User user = buscarUserPorID(userId);
@@ -55,6 +69,34 @@ public class LivroFavoritoService {
             .orElseThrow(() -> new LivroFavoritoException("Não é possível remover um livro que não está na lista de favoritos"));
 
         livroFavoritoRepository.delete(livroFavorito);
+    }
+
+    /**
+     * Lista todos os livros favoritos do usuário.
+     *
+     * @param userId ID do usuário.
+     * @return Lista de livros favoritos do usuário.
+     * @throws LivroFavoritoException em caso de erro ao buscar os livros favoritos.
+     */
+    @Transactional(readOnly=true)
+    public List<LivroFavorito> listarFavoritosPorUsuario(String userId){
+        User user = buscarUserPorID(userId);
+
+        return livroFavoritoRepository.findByUser(user);
+    }
+
+    /**
+     * Verifica se um livro está na lista de favoritos do usuário.
+     *
+     * @param isbn ISBN do livro.
+     * @param userId ID do usuário.
+     * @return true se o livro está nos favoritos, false caso contrário.
+     * @throws LivroFavoritoException em caso de erro na verificação.
+     */
+    public boolean isLivroFavorito(String isbn, String userId) {
+        User user = buscarUserPorID(userId);
+
+        return livroFavoritoRepository.findByUserAndIsbn(user, isbn).isPresent();
     }
 
     private User buscarUserPorID(String userId) {
