@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Serviço responsável por consumir a API do Google Books e converter os resultados para LivroDTO.
+ */
 @Service
 public class GoogleBookService {
    private final WebClient webClient;
@@ -26,18 +29,38 @@ public class GoogleBookService {
         this.webClient = builder.baseUrl("https://www.googleapis.com/books/v1").build();
     }
 
-
+    /**
+     * Busca livros pelo título informado.
+     *
+     * @param titulo Título do livro a ser pesquisado.
+     * @return Lista de livros encontrados.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
         String url = construirUrl("intitle", titulo, null);
         return buscarLivros(url);
     }
 
+    /**
+     * Busca livros pelo nome do autor informado.
+     *
+     * @param autor Nome do autor a ser pesquisado.
+     * @return Lista de livros encontrados.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     public List<LivroDTO> buscarLivrosPorAutor(String autor) {
         String url = construirUrl("inauthor", autor, null);
 
         return buscarLivros(url);
     }
 
+    /**
+     * Busca livros de várias categorias, limitando a quantidade por categoria.
+     *
+     * @param qtdPorCategoria Quantidade máxima de livros por categoria.
+     * @return Lista de livros encontrados em todas as categorias.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     public List<LivroDTO> buscarLivrosPorQuantidade(int qtdPorCategoria) {
         String [] categorias = {"history", "science", "technology", "art", "fiction"};
         List<LivroDTO> livros = new ArrayList<>();
@@ -51,17 +74,38 @@ public class GoogleBookService {
         return livros;
     }
 
+    /**
+     * Busca livros por uma categoria específica.
+     *
+     * @param categoria Categoria a ser pesquisada.
+     * @return Lista de livros encontrados na categoria.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     public List<LivroDTO> buscarLivrosPorCategoria(String categoria){
         String url = construirUrl("subject", categoria, null);
    
         return buscarLivros(url);
     }
 
+    /**
+     * Busca livros pelo ISBN informado.
+     *
+     * @param isbn ISBN do livro a ser pesquisado.
+     * @return Lista de livros encontrados com o ISBN informado.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     public List<LivroDTO> buscarLivrosPorISBN(String isbn) {
         String url = construirUrl("isbn", isbn, 1);
         return buscarLivros(url);
     }
 
+    /**
+     * Realiza a requisição à API do Google Books e retorna o resultado como mapa.
+     *
+     * @param url URL já montada para consulta na API.
+     * @return Mapa com os dados retornados pela API.
+     * @throws GoogleBooksApiException em caso de erro na comunicação ou resposta inesperada da API.
+     */
     private Map<String, Object> fazerRequisicaoAPIGoogle(String url){
         try{
             Map<String, Object> response = webClient.get()
@@ -85,6 +129,12 @@ public class GoogleBookService {
         
     }
 
+    /**
+     * Converte a lista de itens da API do Google Books para uma lista de LivroDTO.
+     *
+     * @param items Lista de mapas representando os livros retornados pela API.
+     * @return Lista de LivroDTO.
+     */
     private List<LivroDTO> converterParaLivros(List<Map<String, Object>> items){
         List<LivroDTO> livros = new ArrayList<>();
 
@@ -129,6 +179,13 @@ public class GoogleBookService {
         return livros;
     }
 
+    /**
+     * Busca livros a partir de uma URL de consulta já montada.
+     *
+     * @param url URL de consulta na API do Google Books.
+     * @return Lista de LivroDTO encontrados.
+     * @throws GoogleBooksApiException em caso de erro na comunicação com a API do Google Books.
+     */
     private List<LivroDTO> buscarLivros(String url){
         Map<String, Object> response = fazerRequisicaoAPIGoogle(url);
 
@@ -141,6 +198,14 @@ public class GoogleBookService {
         //return converterParaLivros((List<Map<String, Object>>) fazerRequisicaoAPIGoogle(url).get("items"));
     }
 
+    /**
+     * Monta a URL de consulta para a API do Google Books.
+     *
+     * @param tipoConsulta Tipo de consulta (ex: intitle, inauthor, subject, isbn).
+     * @param valorConsulta Valor a ser pesquisado.
+     * @param maxResults Quantidade máxima de resultados (opcional).
+     * @return String com a URL montada.
+     */
     private String construirUrl(String tipoConsulta, String valorConsulta, Integer maxResults) {
         UriComponentsBuilder builder = UriComponentsBuilder
             .fromPath("/volumes")
