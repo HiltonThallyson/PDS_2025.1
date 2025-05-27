@@ -41,7 +41,7 @@ class LivroFavoritoControllerTest {
     @MockBean
     private TokenService tokenService;
 
-    private final String userId = "123";
+    private final Long userId = 123L;
     private final String title = "Livro Teste";
     private final String author = "Autor Teste";
     private final String thumbnailUrl = "http://imagem.com";
@@ -66,7 +66,7 @@ class LivroFavoritoControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/livros-favoritos")
-                        .param("userId", userId)
+                        .param("userId", userId.toString())
                         .param("title", title)
                         .param("author", author)
                         .param("thumbnailUrl", thumbnailUrl)
@@ -87,7 +87,7 @@ class LivroFavoritoControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/livros-favoritos")
-                        .param("userId", userId)
+                        .param("userId", userId.toString())
                         .param("title", title)
                         .param("author", author)
                         .param("thumbnailUrl", thumbnailUrl)

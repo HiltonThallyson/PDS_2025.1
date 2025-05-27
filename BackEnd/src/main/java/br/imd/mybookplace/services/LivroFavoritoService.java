@@ -24,14 +24,14 @@ public class LivroFavoritoService {
     }
 
     @Transactional(readOnly=true)
-    public List<LivroFavorito> listarFavoritosPorUsuario(String userId){
+    public List<LivroFavorito> listarFavoritosPorUsuario(Long userId){
         User user = buscarUserPorID(userId);
 
         return livroFavoritoRepository.findByUser(user);
     }
 
     @Transactional
-    public LivroFavorito adicionarLivroFavorito(String userId, String title, String author, String thumbnailUrl, String isbn){
+    public LivroFavorito adicionarLivroFavorito(Long userId, String title, String author, String thumbnailUrl, String isbn){
         
         User user = buscarUserPorID(userId);
 
@@ -47,7 +47,7 @@ public class LivroFavoritoService {
     }
 
     @Transactional
-    public void removerLivroFavorito(String userId, String isbn){
+    public void removerLivroFavorito(Long userId, String isbn){
         User user = buscarUserPorID(userId);
 
         LivroFavorito livroFavorito = livroFavoritoRepository.findByUserAndIsbn(user, isbn)
@@ -56,7 +56,7 @@ public class LivroFavoritoService {
         livroFavoritoRepository.delete(livroFavorito);
     }
 
-    private User buscarUserPorID(String userId) {
+    private User buscarUserPorID(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID: " + userId));
         

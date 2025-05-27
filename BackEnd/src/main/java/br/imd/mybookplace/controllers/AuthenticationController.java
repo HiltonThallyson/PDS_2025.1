@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.imd.mybookplace.DTOS.CreateUserDTO;
 import br.imd.mybookplace.DTOS.LoginResponseDTO;
 import br.imd.mybookplace.DTOS.LoginUserDTO;
+import br.imd.mybookplace.DTOS.UserInfoResponse;
 import br.imd.mybookplace.services.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -48,6 +50,24 @@ public class AuthenticationController {
         
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
+ @PostMapping("/me")
+    public ResponseEntity<UserInfoResponse> getUserInfo(
+    @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authorizationHeader.substring(7);
+        
+        var user = userService.getUserFromToken(token);
+        if (user != null) {
+            var userInfo = new UserInfoResponse(user);
+            return ResponseEntity.ok(userInfo);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    
     
     
 }

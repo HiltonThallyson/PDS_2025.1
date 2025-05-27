@@ -57,7 +57,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             var username = tokenService.validateToken(token);
 
             if (username != null) {
-                Optional<UserDetails> user = userRepository.findByUsername(username);
+                Optional<User> user = userRepository.findByUsername(username);
 
                 if (user.isPresent()) {
                     var myUser = user.get();

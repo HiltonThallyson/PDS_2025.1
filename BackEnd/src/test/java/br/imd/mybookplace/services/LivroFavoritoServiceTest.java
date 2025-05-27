@@ -30,7 +30,7 @@ class LivroFavoritoServiceTest {
         livroFavoritoService = new LivroFavoritoService(livroFavoritoRepository, userRepository);
     }
 
-    private User criarUsuario(String userId) {
+    private User criarUsuario(Long userId) {
         User user = new User();
         user.setId(userId);
         return user;
@@ -40,7 +40,7 @@ class LivroFavoritoServiceTest {
         return new LivroFavorito(user, title, author, isbn, thumbnailUrl);
     }
 
-    private void mockUsuarioExistente(String userId, User user) {
+    private void mockUsuarioExistente(Long userId, User user) {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
     }
 
@@ -54,7 +54,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void adicionarLivroFavorito_DeveAdicionarLivroQuandoNaoExistir() {
-        String userId = "123";
+        Long userId = 123L;
         String title = "Livro Teste";
         String author = "Autor Teste";
         String thumbnailUrl = "http://imagem.com";
@@ -78,7 +78,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void adicionarLivroFavorito_DeveLancarExcecaoQuandoLivroJaExistir() {
-        String userId = "123";
+        Long userId = 123L;
         String isbn = "123456789";
 
         User user = criarUsuario(userId);
@@ -94,7 +94,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void listarFavoritosPorUsuario_DeveRetornarListaDeFavoritos() {
-        String userId = "123";
+        Long userId = 123L;
         User user = criarUsuario(userId);
         LivroFavorito livro1 = criarLivroFavorito(user, "Livro 1", "Autor 1", "123456789", "http://imagem1.com");
         LivroFavorito livro2 = criarLivroFavorito(user, "Livro 2", "Autor 2", "987654321", "http://imagem2.com");
@@ -113,7 +113,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void listarFavoritosPorUsuario_DeveRetornarListaVaziaQuandoNaoHouverFavoritos() {
-        String userId = "123";
+        Long userId = 123L;
         User user = criarUsuario(userId);
 
         mockUsuarioExistente(userId, user);
@@ -128,7 +128,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void removerLivroFavorito_DeveRemoverLivroQuandoExistir() {
-        String userId = "123";
+        Long userId = 123L;
         String isbn = "123456789";
 
         User user = criarUsuario(userId);
@@ -144,7 +144,7 @@ class LivroFavoritoServiceTest {
 
     @Test
     void removerLivroFavorito_DeveLancarExcecaoQuandoLivroNaoExistir() {
-        String userId = "123";
+        Long userId = 123L;
         String isbn = "123456789";
 
         User user = criarUsuario(userId);

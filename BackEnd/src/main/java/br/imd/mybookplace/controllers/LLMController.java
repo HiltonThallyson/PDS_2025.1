@@ -16,6 +16,7 @@ import br.imd.mybookplace.services.LLMService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -26,7 +27,9 @@ public class LLMController {
     private LLMService llmService;
     
     @PostMapping("/search_price")
-    public List<OfferDTO> searchOffers(@RequestBody LLMRequestDTO prompt) {
+    public List<OfferDTO> searchOffers(
+    @RequestHeader("Authorization") String authorizationHeader,
+     @RequestBody LLMRequestDTO prompt) {
         try {
             return llmService.searchOffers(prompt);
         } catch (NumberFormatException e) {
@@ -39,7 +42,9 @@ public class LLMController {
     }
 
     @PostMapping("/generate_image_by_text")
-    public String postMethodName(@RequestBody LLMRequestDTO prompt) {
+    public String postMethodName(
+    @RequestHeader("Authorization") String authorizationHeader, 
+    @RequestBody LLMRequestDTO prompt) {
         try {
             return llmService.createImage(prompt);
         } catch (Exception e) {

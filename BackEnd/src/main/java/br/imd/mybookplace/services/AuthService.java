@@ -1,5 +1,6 @@
 package br.imd.mybookplace.services;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,13 @@ public class AuthService implements UserDetailsService{
             return user.get();
         }
         throw new UsernameNotFoundException("User not found");
+    }
+
+    
+     public User getUserFromToken(String token) {
+        String username = tokenService.validateToken(token);
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
     }
 }
