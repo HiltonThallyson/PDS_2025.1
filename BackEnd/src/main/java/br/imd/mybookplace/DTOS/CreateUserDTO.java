@@ -9,6 +9,13 @@ public class CreateUserDTO {
     String nickName;
     UserRole role;
 
+    public CreateUserDTO(String username, String password, String email, String nickName) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.nickName = nickName;
+    }
+
     public String getUsername() {
         return username;
     }
