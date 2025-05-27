@@ -11,11 +11,23 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import br.imd.mybookplace.entities.User;
+import br.imd.mybookplace.exceptions.TokenException;
 
+/**
+ * Serviço responsável por operações relacionadas a tokens JWT, como geração e validação.
+ */
 @Service
 public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
+
+    /**
+     * Gera um token JWT para o usuário autenticado.
+     *
+     * @param user Objeto de usuário autenticado.
+     * @return Token JWT gerado.
+     * @throws TokenException em caso de erro ao gerar o token.
+     */
 
     public String generateToken(User user) {
         try {
@@ -27,10 +39,17 @@ public class TokenService {
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar token", exception);
+            throw new TokenException("Erro ao gerar token", exception);
         }
     }
 
+    /**
+     * Valida um token JWT recebido e retorna o username extraído do token se válido.
+     *
+     * @param token Token JWT a ser validado.
+     * @return Username extraído do token se válido.
+     * @throws TokenException em caso de token inválido ou erro na validação.
+     */
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -40,7 +59,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token inválido", exception);
+            throw new TokenException("Token inválido", exception);
         }
     }
 }
