@@ -1,5 +1,6 @@
 package br.imd.mybookplace.controllers;
 
+import br.imd.mybookplace.DTOS.FavoriteBookDTO;
 import br.imd.mybookplace.entities.LivroFavorito;
 import br.imd.mybookplace.services.LivroFavoritoService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import java.util.List;
  * Controller responsável por gerenciar os endpoints de livros favoritos dos usuários.
  */
 @RestController
-@RequestMapping("/livros-favoritos")
+@RequestMapping("/api/livros-favoritos")
 public class LivroFavoritoController {
 
     private final LivroFavoritoService livroFavoritoService;
@@ -21,7 +22,8 @@ public class LivroFavoritoController {
         this.livroFavoritoService = livroFavoritoService;
     }
 
-    /**
+
+  /**
      * Adiciona um livro à lista de favoritos do usuário.
      *
      * @param userId ID do usuário.
@@ -30,17 +32,17 @@ public class LivroFavoritoController {
      * @param thumbnailUrl URL da imagem do livro.
      * @param isbn ISBN do livro.
      * @return ResponseEntity com o livro favorito criado e status 201.
-     */
-    @PostMapping
-    public ResponseEntity<LivroFavorito> adicionarLivroFavorito(
-            @RequestParam String userId,
-            @RequestParam String title,
-            @RequestParam String author,
-            @RequestParam String thumbnailUrl,
-            @RequestParam String isbn) {
+     */  
+  @PostMapping("/register-book/{userId}")
+    public ResponseEntity<FavoriteBookDTO> adicionarLivroFavorito(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long userId,
+            @RequestBody FavoriteBookDTO favoriteBookDTO
+            ) {
 
-        LivroFavorito livroFavorito = livroFavoritoService.adicionarLivroFavorito(userId, title, author, thumbnailUrl, isbn);
-        return ResponseEntity.status(HttpStatus.CREATED).body(livroFavorito);
+            LivroFavorito livroFavorito = livroFavoritoService.adicionarLivroFavorito(userId, favoriteBookDTO.getTitle(), favoriteBookDTO.getAuthor(), favoriteBookDTO.getThumbnailUrl(), favoriteBookDTO.getIsbn());
+            var response = new FavoriteBookDTO(livroFavorito.getTitle(), livroFavorito.getAuthor(), livroFavorito.getThumbnailUrl(), livroFavorito.getIsbn());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -50,9 +52,18 @@ public class LivroFavoritoController {
      * @return ResponseEntity com a lista de livros favoritos do usuário.
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<List<LivroFavorito>> listarFavoritosPorUsuario(@PathVariable String userId) {
-        List<LivroFavorito> livrosFavoritos = livroFavoritoService.listarFavoritosPorUsuario(userId);
-        return ResponseEntity.ok(livrosFavoritos);
+
+    public ResponseEntity<List<FavoriteBookDTO>> listarFavoritosPorUsuario(
+    @RequestHeader("Authorization") String authorizationHeader, 
+    @PathVariable Long userId) {
+       
+            List<LivroFavorito> livrosFavoritos = livroFavoritoService.listarFavoritosPorUsuario(userId);
+            List<FavoriteBookDTO> livrosFavoritosDTO = livrosFavoritos.stream()
+                .map(livro -> new FavoriteBookDTO(livro.getTitle(), livro.getAuthor(), livro.getThumbnailUrl(), livro.getIsbn()))
+                .toList();
+            
+            return ResponseEntity.ok(livrosFavoritosDTO);
+ 
     }
 
     /**
@@ -63,8 +74,14 @@ public class LivroFavoritoController {
      * @return ResponseEntity com status 204 (No Content) em caso de sucesso.
      */
     @DeleteMapping("/{userId}/{isbn}")
-    public ResponseEntity<Void> removerLivroFavorito(@PathVariable String userId, @PathVariable String isbn) {
-        livroFavoritoService.removerLivroFavorito(userId, isbn);
-        return ResponseEntity.noContent().build();
+
+    public ResponseEntity<Void> removerLivroFavorito(
+    @RequestHeader("Authorization") String authorizationHeader, 
+    @PathVariable Long userId, 
+    @PathVariable String isbn) {
+        try{
+            livroFavoritoService.removerLivroFavorito(userId, isbn);
+            return ResponseEntity.noContent().build();
+        
     }
 }

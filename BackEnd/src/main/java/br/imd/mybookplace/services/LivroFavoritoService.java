@@ -27,19 +27,15 @@ public class LivroFavoritoService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * Adiciona um livro à lista de favoritos do usuário.
-     *
-     * @param userId ID do usuário.
-     * @param title Título do livro.
-     * @param author Autor do livro.
-     * @param thumbnailUrl URL da imagem de capa do livro.
-     * @param isbn ISBN do livro.
-     * @return O livro favorito adicionado.
-     * @throws LivroFavoritoException em caso de erro ao adicionar o livro aos favoritos.
-     */
+    @Transactional(readOnly=true)
+    public List<LivroFavorito> listarFavoritosPorUsuario(Long userId){
+        User user = buscarUserPorID(userId);
+
+        return livroFavoritoRepository.findByUser(user);
+    }
+
     @Transactional
-    public LivroFavorito adicionarLivroFavorito(String userId, String title, String author, String thumbnailUrl, String isbn){
+    public LivroFavorito adicionarLivroFavorito(Long userId, String title, String author, String thumbnailUrl, String isbn){
         
         User user = buscarUserPorID(userId);
 
@@ -62,7 +58,7 @@ public class LivroFavoritoService {
      * @throws LivroFavoritoException em caso de erro ao remover o livro dos favoritos.
      */
     @Transactional
-    public void removerLivroFavorito(String userId, String isbn){
+    public void removerLivroFavorito(Long userId, String isbn){
         User user = buscarUserPorID(userId);
 
         LivroFavorito livroFavorito = livroFavoritoRepository.findByUserAndIsbn(user, isbn)
@@ -99,7 +95,7 @@ public class LivroFavoritoService {
         return livroFavoritoRepository.findByUserAndIsbn(user, isbn).isPresent();
     }
 
-    private User buscarUserPorID(String userId) {
+   private User buscarUserPorID(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new LivroFavoritoException("Usuário não encontrado com o ID: " + userId));
         

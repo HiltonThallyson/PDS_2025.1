@@ -12,6 +12,7 @@ import br.imd.mybookplace.services.LLMService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 /**
@@ -31,8 +32,11 @@ public class LLMController {
      * @return Lista de ofertas encontradas.
      */
     @PostMapping("/search_price")
-    public List<OfferDTO> searchOffers(@RequestBody LLMRequestDTO prompt) {
-        return llmService.searchOffers(prompt);        
+
+    public List<OfferDTO> searchOffers(
+    @RequestHeader("Authorization") String authorizationHeader,
+     @RequestBody LLMRequestDTO prompt) {
+            return llmService.searchOffers(prompt);
     }
 
     /**
@@ -42,7 +46,12 @@ public class LLMController {
      * @return String com a URL ou base64 da imagem gerada.
      */
     @PostMapping("/generate_image_by_text")
-    public String postMethodName(@RequestBody LLMRequestDTO prompt) {
-        return llmService.createImage(prompt);
+
+    public String postMethodName(
+    @RequestHeader("Authorization") String authorizationHeader, 
+    @RequestBody LLMRequestDTO prompt) {
+
+            return llmService.createImage(prompt);
+
     }
 }

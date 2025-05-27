@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class LivroController {
      * @return Lista de livros encontrados.
      */
     @GetMapping("/titulo")
-    public List<LivroDTO> buscarLivroPorTitulo(@RequestParam String titulo){
+
+    public List<LivroDTO> buscarLivroPorTitulo(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String titulo){
+
         System.out.println(titulo);
         return googleService.buscarLivrosPorTitulo(titulo);
     }
@@ -41,7 +44,7 @@ public class LivroController {
      * @return Lista de livros encontrados.
      */
     @GetMapping ("/autor")
-    public List<LivroDTO> buscarLivroPorAutor(@RequestParam String autor){
+    public List<LivroDTO> buscarLivroPorAutor(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String autor){
         System.out.println(autor);
         return googleService.buscarLivrosPorAutor(autor);
     }
@@ -53,7 +56,7 @@ public class LivroController {
      * @return Lista de livros encontrados em todas as categorias.
      */
     @GetMapping("/quantidade")
-    public List<LivroDTO> buscarLivrosPorQuantidade(@RequestParam(name="qtdPorCategoria", required = false, defaultValue = "10") int qtdPorCategoria){
+    public List<LivroDTO> buscarLivrosPorQuantidade(@RequestHeader("Authorization") String authorizationHeader, @RequestParam(name="qtdPorCategoria", required = false, defaultValue = "10") int qtdPorCategoria){
         System.out.println(qtdPorCategoria);
         return googleService.buscarLivrosPorQuantidade(qtdPorCategoria);
     }
@@ -65,7 +68,7 @@ public class LivroController {
      * @return Lista de livros encontrados na categoria.
      */
     @GetMapping("/categoria")
-    public List<LivroDTO> buscarLivrosPorCategoria(@RequestParam String categoria){
+    public List<LivroDTO> buscarLivrosPorCategoria(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String categoria){
         System.out.println(categoria);
         return googleService.buscarLivrosPorCategoria(categoria);
     }
@@ -77,7 +80,7 @@ public class LivroController {
      * @return Lista de livros encontrados com o ISBN informado.
      */
     @GetMapping("/isbn")
-    public List<LivroDTO> buscarLivrosPorISBN(@RequestParam String isbn){
+    public List<LivroDTO> buscarLivrosPorISBN(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String isbn){
         System.out.println(isbn);
         return googleService.buscarLivrosPorISBN(isbn);
     }
