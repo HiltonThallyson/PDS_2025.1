@@ -79,7 +79,6 @@ public class LivroFavoritoController {
     @RequestHeader("Authorization") String authorizationHeader, 
     @PathVariable Long userId, 
     @PathVariable String isbn) {
-        try{
             livroFavoritoService.removerLivroFavorito(userId, isbn);
             return ResponseEntity.noContent().build();
         

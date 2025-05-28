@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../core/themes/app_textstyles.dart';
 import '../../general_widgets/mybookplace_appbar.dart';
+import 'widgets/menu_card.dart';
 
 class MenuPage extends StatelessWidget with MyBookPlaceAppBarMixin {
   const MenuPage({super.key});
@@ -16,63 +17,23 @@ class MenuPage extends StatelessWidget with MyBookPlaceAppBarMixin {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           child: Wrap(
-            alignment: WrapAlignment.center,
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.center,
             spacing: 10,
             runSpacing: 10,
             children: [
-              InkWell(
-                onTap: () => Modular.to.pushNamed("/catalogue/"),
-                child: Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  color: Colors.white,
-                  child: const SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Catalogo",
-                          style: AppTextStyles.menuCardText,
-                        ),
-                        Icon(
-                          Icons.menu_book_rounded,
-                          color: Colors.indigo,
-                          size: 80,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () => Modular.to.pushNamed("/search-price"),
-                child: Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  color: Colors.white,
-                  child: const SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Ofertas",
-                          style: AppTextStyles.menuCardText,
-                        ),
-                        Icon(
-                          Icons.price_check_rounded,
-                          color: Colors.indigo,
-                          size: 80,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+              MenuCard(
+                  route: "/catalogue/",
+                  icon: Icons.menu_book_rounded,
+                  title: "Catalogo"),
+              MenuCard(
+                  route: "/search-price/",
+                  icon: Icons.price_check_rounded,
+                  title: "Ofertas"),
+              MenuCard(
+                route: "/gen-image/",
+                title: "Gerar imagem",
+                icon: Icons.image,
               ),
             ],
           ),

@@ -111,7 +111,7 @@ public class LLMService {
      * @return String com a URL ou base64 da imagem gerada.
      * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
      */
-    public String createImage(LLMRequestDTO prompt) {
+    public byte[] createImage(LLMRequestDTO prompt) {
         String imageUrlEndpoint = UriComponentsBuilder 
                 .fromPath("/generate-image-from-text")
                 .build()
@@ -124,7 +124,7 @@ public class LLMService {
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(prompt)
                     .retrieve()
-                    .bodyToMono(String.class)
+                    .bodyToMono(byte[].class)
                     .block(); 
         } catch (Exception e) {
             e.printStackTrace(); 

@@ -93,14 +93,14 @@ class LLMControllerTest {
         // Este teste garante que o endpoint /api/llm/generate_image_by_text retorna a string gerada pelo service quando o fluxo ocorre normalmente, validando o retorno esperado em caso de sucesso.
         
         // Arrange
-        when(llmService.createImage(any(LLMRequestDTO.class))).thenReturn("imagem_base64");
+        when(llmService.createImage(any(LLMRequestDTO.class))).thenReturn(new byte[]{});
         
         // Act & Assert
         mockMvc.perform(post("/api/llm/generate_image_by_text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"test image\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("imagem_base64"));
+                .andExpect(content().bytes(new byte[]{}));
     }
 
     @Test

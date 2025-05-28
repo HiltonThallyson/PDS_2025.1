@@ -73,21 +73,29 @@ class _BookDetailsPageState extends State<BookDetailsPage>
                               ),
                               height: 500,
                               width: double.maxFinite,
-                              child: GridView.builder(
-                                  itemCount: offers.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                    childAspectRatio: 1.2,
-                                  ),
-                                  itemBuilder: (_, index) {
-                                    final offer = offers[index].getOfferInfo();
-                                    return OfferCard(
-                                      offer: offer,
-                                    );
-                                  }),
+                              child: offers.isNotEmpty
+                                  ? GridView.builder(
+                                      itemCount: offers.length,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10,
+                                        childAspectRatio: 1.2,
+                                      ),
+                                      itemBuilder: (_, index) {
+                                        final offer =
+                                            offers[index].getOfferInfo();
+                                        return OfferCard(
+                                          offer: offer,
+                                        );
+                                      })
+                                  : const Center(
+                                      child: Text(
+                                        'Nenhuma oferta encontrada',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
                             ),
                           );
                         } else if (state is BookDetailsPageError) {
