@@ -58,7 +58,9 @@ class _GenImagePageState extends State<GenImagePage>
                         } else if (state is GenImageSuccessState) {
                           return Image.memory(
                             state.imageUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitHeight,
+                            width: double.maxFinite,
+                            height: MediaQuery.of(context).size.height * 0.45,
                           );
                         } else if (state is GenImageErrorState) {
                           return Center(

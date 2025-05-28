@@ -26,10 +26,10 @@ class MenuPage extends StatelessWidget with MyBookPlaceAppBarMixin {
                   route: "/catalogue/",
                   icon: Icons.menu_book_rounded,
                   title: "Catalogo"),
-              MenuCard(
-                  route: "/search-price/",
-                  icon: Icons.price_check_rounded,
-                  title: "Ofertas"),
+              // MenuCard(
+              //     route: "/search-price/",
+              //     icon: Icons.price_check_rounded,
+              //     title: "Ofertas"),
               MenuCard(
                 route: "/gen-image/",
                 title: "Gerar imagem",

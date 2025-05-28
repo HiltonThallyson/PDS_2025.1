@@ -24,15 +24,11 @@ class ImageGenRepositoryImpl implements ImageGenRepository {
           "Authorization": "Bearer ${_user.token}"
         },
         body: json.encode({"prompt": prompt}));
-    print("Content-Type: ${response.headers['content-type']}");
     if (response.statusCode == 200) {
-      print(
-          'Resposta recebida do servidor: ${response.body} name: ImageGenRepo');
       final data = response.bodyBytes;
-      print(data);
       return data;
     } else {
-      throw HttpException('Failed to generate image: ${response.reasonPhrase}');
+      throw const HttpException('Falha ao gerar a imagem.');
     }
   }
 }

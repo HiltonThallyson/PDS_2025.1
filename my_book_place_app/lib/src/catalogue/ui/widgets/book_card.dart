@@ -24,45 +24,44 @@ class BookCard extends StatelessWidget {
           children: [
             Positioned(
               top: 0,
-              child: Container(
-                height: 150,
-                width: _size.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(proxyUrl),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              // child: Image.network(
-              //   proxyUrl,
+              // child: Container(
               //   height: 150,
-              //   width: 150,
-              //   fit: BoxFit.fill,
+              //   width: _size.width,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       image: NetworkImage(proxyUrl),
+              //       fit: BoxFit.fill,
+              //     ),
+              //   ),
+              // ),
+              child: Image.network(
+                proxyUrl,
+                height: 150,
+                width: 150,
+                fit: BoxFit.fill,
+              ),
             ),
             Positioned(
               top: 200,
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _book["title"],
-                        style: AppTextStyles.bookTitle,
-                      ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        _book["subtitle"],
-                        style: AppTextStyles.bookSubtitle,
-                      ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                    ],
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _book["title"],
+                      style: AppTextStyles.bookTitle,
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      _book["subtitle"],
+                      style: AppTextStyles.bookSubtitle,
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                  ],
                 ),
               ),
             ),

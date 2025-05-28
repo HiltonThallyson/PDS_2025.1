@@ -51,7 +51,7 @@ public class LLMController {
     // br.imd.mybookplace.controllers.LLMController
 
     @PostMapping("/generate_image_by_text")
-    public ResponseEntity<?> generateImage( // Mude o tipo de retorno para ResponseEntity<?>
+    public ResponseEntity<?> generateImage( 
         @RequestHeader("Authorization") String authorizationHeader,
         @RequestBody LLMRequestDTO prompt) {
 
@@ -61,14 +61,10 @@ public class LLMController {
                 .header("Content-Type", "image/png") // Certifique-se que a API Python retorna PNG
                 .body(imageBytes);
         } catch (LLMServiceException e) {
-            // Logue o erro para depuração no servidor
-            // logger.error("Erro ao gerar imagem: ", e); 
             return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Falha ao gerar a imagem: " + e.getMessage());
         } catch (Exception e) {
-            // Captura genérica para outros erros inesperados
-            // logger.error("Erro inesperado no controller: ", e);
             return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Ocorreu um erro inesperado no servidor.");

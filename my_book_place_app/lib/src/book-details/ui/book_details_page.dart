@@ -49,9 +49,11 @@ class _BookDetailsPageState extends State<BookDetailsPage>
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                child: const SizedBox(
+                                child: Container(
                                   height: 50,
                                   width: 100,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 100),
                                   child: LinearProgressIndicator(
                                     color: Colors.indigo,
                                   ),
@@ -93,7 +95,8 @@ class _BookDetailsPageState extends State<BookDetailsPage>
                                   : const Center(
                                       child: Text(
                                         'Nenhuma oferta encontrada',
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 36),
                                       ),
                                     ),
                             ),
@@ -106,7 +109,9 @@ class _BookDetailsPageState extends State<BookDetailsPage>
                                   borderRadius: BorderRadius.circular(10)),
                               child: const SizedBox(
                                 height: 300,
-                                child: Text('Erro ao carregar os preços',
+                                width: double.maxFinite,
+                                child: Text(
+                                    'Houve um problema ao carregar as oferts, tente novamente.',
                                     style: TextStyle(color: Colors.black)),
                               ),
                             ),

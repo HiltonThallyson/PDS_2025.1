@@ -55,6 +55,9 @@ class LoginForm extends StatelessWidget {
           ),
         );
       } catch (e) {
+        if (!context.mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content:
@@ -108,7 +111,6 @@ class LoginForm extends StatelessWidget {
                                   icon: const Icon(Icons.person),
                                   label: const Text(
                                     "Usuário",
-                                    style: TextStyle(color: Colors.indigo),
                                   ),
                                   floatingLabelStyle: const TextStyle(
                                       color: Colors.indigo, fontSize: 20),
