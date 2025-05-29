@@ -67,19 +67,7 @@ public class LivroFavoritoService {
         livroFavoritoRepository.delete(livroFavorito);
     }
 
-    /**
-     * Lista todos os livros favoritos do usuário.
-     *
-     * @param userId ID do usuário.
-     * @return Lista de livros favoritos do usuário.
-     * @throws LivroFavoritoException em caso de erro ao buscar os livros favoritos.
-     */
-    @Transactional(readOnly=true)
-    public List<LivroFavorito> listarFavoritosPorUsuario(String userId){
-        User user = buscarUserPorID(userId);
-
-        return livroFavoritoRepository.findByUser(user);
-    }
+    
 
     /**
      * Verifica se um livro está na lista de favoritos do usuário.
@@ -89,7 +77,7 @@ public class LivroFavoritoService {
      * @return true se o livro está nos favoritos, false caso contrário.
      * @throws LivroFavoritoException em caso de erro na verificação.
      */
-    public boolean isLivroFavorito(String isbn, String userId) {
+    public boolean isLivroFavorito(String isbn, Long userId) {
         User user = buscarUserPorID(userId);
 
         return livroFavoritoRepository.findByUserAndIsbn(user, isbn).isPresent();

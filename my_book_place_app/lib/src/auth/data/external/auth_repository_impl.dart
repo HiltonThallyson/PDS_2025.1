@@ -16,16 +16,13 @@ class AuthRepositoryImpl implements AuthRepositoryInterface {
 
   @override
   Future<bool> authenticate(Map<String, String> credentials) async {
-    // try {
     final username = credentials["username"];
     final password = credentials["password"];
-    print("teste");
-    print(Uri.parse('$_baseAuthUrl$_loginEnpoint'));
-    // return true;
     final response = await http.post(Uri.parse('$_baseAuthUrl$_loginEnpoint'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          "Authorization": "Bearer ${_user.token}"
         },
         body: jsonEncode(
           {
@@ -41,11 +38,6 @@ class AuthRepositoryImpl implements AuthRepositoryInterface {
     } else {
       return false;
     }
-    // } catch (e) {
-    //   throw const HttpException(
-    //     "Erro ao autenticar usuário",
-    //   );
-    // }
   }
 
   @override

@@ -24,8 +24,8 @@ async def ask_question(query: Query):
 @router.post("/generate-image-from-text")
 async def generate_image_by_text_raw_bytes(request: Query): 
     try:
-        image_agent_service = ImageGenerationService()
-        image_bytes, mime_type = image_agent_service.generate_image_bytes(request.prompt)
+       
+        image_bytes, mime_type = ImageGenerationService().generate_image_bytes(request.prompt)
 
         if not image_bytes or not mime_type:
             raise HTTPException(

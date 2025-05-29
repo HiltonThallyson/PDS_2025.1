@@ -144,14 +144,14 @@ class _CataloguePageState extends State<CataloguePage>
                             final book = bookList[index].getBookInfo();
                             return InkWell(
                               onTap: () => Modular.to.pushNamed(
-                                "/book-details",
+                                "/book-details/",
                                 arguments: book,
                               ),
                               child: BookCard(
                                   book: book, size: const Size(200, 600)),
                             );
                           },
-                          itemCount: 10,
+                          itemCount: bookList.length,
                         ),
                       ),
                     ],

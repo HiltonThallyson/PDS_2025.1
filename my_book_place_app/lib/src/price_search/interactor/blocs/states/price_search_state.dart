@@ -9,3 +9,9 @@ class PriceSearchResult extends PriceSearchState {
 
   PriceSearchResult(this.result);
 }
+
+class PriceSearchError extends PriceSearchState {
+  final String message;
+
+  PriceSearchError(this.message);
+}

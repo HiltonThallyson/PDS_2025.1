@@ -20,19 +20,29 @@ class BookCard extends StatelessWidget {
         height: _size.height,
         width: _size.width,
         margin: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            Image.network(
-              proxyUrl,
-              height: 150,
-              width: 150,
-              fit: BoxFit.fill,
+            Positioned(
+              top: 0,
+              // child: Container(
+              //   height: 150,
+              //   width: _size.width,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       image: NetworkImage(proxyUrl),
+              //       fit: BoxFit.fill,
+              //     ),
+              //   ),
+              // ),
+              child: Image.network(
+                proxyUrl,
+                height: 150,
+                width: 150,
+                fit: BoxFit.fill,
+              ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
+            Positioned(
+              top: 200,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,11 +65,20 @@ class BookCard extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              "Categorias: ${_book["categories"].join(", ")}",
-              textAlign: TextAlign.end,
-              overflow: TextOverflow.ellipsis,
+            Positioned(
+              bottom: 0,
+              child: Text(
+                "Categorias: ${_book["categories"].join(", ")}",
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
+            Positioned(
+                right: 5,
+                top: 160,
+                child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.favorite_border_rounded)))
           ],
         ),
       ),
