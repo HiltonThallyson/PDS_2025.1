@@ -1,11 +1,14 @@
 package br.imd.mybookplace.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import br.imd.mybookplace.entities.LivroFavorito;
+import br.imd.mybookplace.entities.StatusLeitura;
 import br.imd.mybookplace.entities.User;
 import br.imd.mybookplace.exceptions.LivroFavoritoException;
 import br.imd.mybookplace.repositories.LivroFavoritoRepository;
@@ -13,7 +16,7 @@ import br.imd.mybookplace.repositories.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
-/**
+ /**
  * Serviço responsável por gerenciar os livros favoritos dos usuários.
  */
 @Service
@@ -27,6 +30,14 @@ public class LivroFavoritoService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Lista todos os livros favoritos do usuário.
+     *
+     * @param userId ID do usuário.
+     * @return Lista de livros favoritos do usuário.
+     * @throws LivroFavoritoException em caso de erro ao buscar os livros favoritos.
+     */
+    
     @Transactional(readOnly=true)
     public List<LivroFavorito> listarFavoritosPorUsuario(Long userId){
         User user = buscarUserPorID(userId);
@@ -67,8 +78,6 @@ public class LivroFavoritoService {
         livroFavoritoRepository.delete(livroFavorito);
     }
 
-    
-
     /**
      * Verifica se um livro está na lista de favoritos do usuário.
      *
@@ -81,6 +90,37 @@ public class LivroFavoritoService {
         User user = buscarUserPorID(userId);
 
         return livroFavoritoRepository.findByUserAndIsbn(user, isbn).isPresent();
+    }
+
+    /**
+     * Lista todos os livros favoritos do usuário agrupados por status de leitura.
+     *
+     * @param userId ID do usuário.
+     * @return Mapa com a lista de livros favoritos agrupados por StatusLeitura.
+     */
+  
+    @Transactional(readOnly=true)
+    public Map<StatusLeitura, List<LivroFavorito>> listarFavoritosPorStatus(Long userId) {
+        User user = buscarUserPorID(userId);
+        List<LivroFavorito> favoritos = livroFavoritoRepository.findByUser(user);
+        return favoritos.stream().collect(Collectors.groupingBy(LivroFavorito::getStatusLeitura));
+    }
+
+    /**
+     * Atualiza o status de leitura de um livro favorito do usuário.
+     *
+     * @param userId ID do usuário.
+     * @param isbn ISBN do livro.
+     * @param novoStatus Novo status de leitura.
+     * @throws LivroFavoritoException se o livro não for encontrado.
+     */
+    @Transactional
+    public void atualizarStatusLeitura(Long userId, String isbn, StatusLeitura novoStatus) {
+        User user = buscarUserPorID(userId);
+        LivroFavorito livroFavorito = livroFavoritoRepository.findByUserAndIsbn(user, isbn)
+            .orElseThrow(() -> new LivroFavoritoException("Livro não encontrado na lista de favoritos"));
+        livroFavorito.setStatusLeitura(novoStatus);
+        livroFavoritoRepository.save(livroFavorito);
     }
 
    private User buscarUserPorID(Long userId) {

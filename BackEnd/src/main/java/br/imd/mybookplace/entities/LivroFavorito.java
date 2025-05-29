@@ -20,10 +20,15 @@ public class LivroFavorito {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_leitura", nullable = false)
+    private StatusLeitura statusLeitura = StatusLeitura.QUERO_LER;
+
     //informacoes para exibicao rapida
     private String title;
     private String author;
     private String thumbnailUrl;
+
 
     public LivroFavorito(User user, String title, String author, String isbn, String thumbnailUrl) {
         this.user = user;
@@ -31,6 +36,7 @@ public class LivroFavorito {
         this.author = author;
         this.isbn = isbn;
         this.thumbnailUrl = thumbnailUrl;
+        this.statusLeitura = StatusLeitura.QUERO_LER;
     }
 
     public LivroFavorito(){};
@@ -80,5 +86,13 @@ public class LivroFavorito {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public StatusLeitura getStatusLeitura() {
+        return statusLeitura;
+    }
+
+    public void setStatusLeitura(StatusLeitura statusLeitura) {
+        this.statusLeitura = statusLeitura;
     }
 }
