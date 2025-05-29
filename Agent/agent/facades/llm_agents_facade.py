@@ -1,3 +1,4 @@
+import base64
 import re
 from google.genai import types
 from fastapi import HTTPException, Response
@@ -16,29 +17,39 @@ class LLMAgentsFacade:
         final_message = agent.invoke({"input": prompt})
         final_message = format_model_response(final_message["output"])
 
-        print("Final message:", final_message)
         return final_message
     
-    def generate_image_by_text(self, prompt: str):
+    
+    def generate_image_by_text(self, prompt: str) -> tuple[bytes, str]:
         """
-        Generate an image from text using the LLM agent.
+        Generate an image from text using the LLM agent, now with robust debugging.
         """
 
-        image_agent = ImageAgent().generate_model()
-        response = image_agent.models.generate_content(
-            model="gemini-2.0-flash-preview-image-generation", 
-            contents=prompt,
-            config=types.GenerateContentConfig(
-            response_modalities=['TEXT', 'IMAGE']
-        )
+        try:
+            image_agent = ImageAgent().generate_model()
             
-        )
+            response = image_agent.models.generate_content(
+                model="gemini-2.0-flash-preview-image-generation", 
+                contents=prompt,
+                config=types.GenerateContentConfig(response_modalities=['TEXT', 'IMAGE'])
+            )
 
-        if response.candidates and response.candidates[0].content.parts:
+            if not response.candidates:
+                raise HTTPException(status_code=500, detail="A API do Google não retornou candidatos. A requisição pode ter sido bloqueada por segurança.")
+
             for part in response.candidates[0].content.parts:
                 if hasattr(part, 'inline_data') and part.inline_data and part.inline_data.data:
-                    image_bytes = part.inline_data.data 
+                    image_bytes = part.inline_data.data
                     mime_type = part.inline_data.mime_type
-                    return image_bytes, mime_type
-        raise HTTPException("Nenhuma imagem foi gerada pelo modelo do Google.")
+                    
+                    try:
+                        
+                        return image_bytes, mime_type
+                    except Exception as e:
+                        raise HTTPException(status_code=500, detail="Erro ao processar os dados da imagem retornada pelo Google.")
+            raise HTTPException(status_code=500, detail="Nenhuma imagem válida foi encontrada na resposta do Google após análise.")
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Erro crítico")
+
     

@@ -12,11 +12,10 @@ class PriceSearchBloc extends Bloc<PriceSearchEvent, PriceSearchState> {
       try {
         emit(PriceSearchLoading());
         final result = await _repository.getPriceWithAgent(event.prompt);
-        print(result);
         emit(PriceSearchResult(result));
       } catch (e) {
-        print(e);
-        emit(PriceSearchInitial());
+        emit(PriceSearchError(
+            "Houve um problema ao buscar ofertas. Tente novamente."));
       }
     });
   }

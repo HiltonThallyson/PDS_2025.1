@@ -98,6 +98,7 @@ public class LivroFavoritoService {
      * @param userId ID do usuário.
      * @return Mapa com a lista de livros favoritos agrupados por StatusLeitura.
      */
+  
     @Transactional(readOnly=true)
     public Map<StatusLeitura, List<LivroFavorito>> listarFavoritosPorStatus(Long userId) {
         User user = buscarUserPorID(userId);

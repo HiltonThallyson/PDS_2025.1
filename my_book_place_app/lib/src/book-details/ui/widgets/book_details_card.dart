@@ -78,7 +78,7 @@ class _BookDetailsCardState extends State<BookDetailsCard> {
                   onPressed: () {
                     widget._bookDetailsPageBloc.add(
                       PriceSearchEvent(
-                          "Busque os preços para o livro '${widget._book['title']}'"),
+                          "Busque os preços para o livro '${widget._book['title']}' dos autores ${widget._book['authors'].join(', ')}"),
                     );
                   },
                   label: const Text('Pesquisar ofertas')),

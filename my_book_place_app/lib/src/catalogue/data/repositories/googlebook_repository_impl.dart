@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/entities/user.dart';
 import '../../interactor/infra/repositories/googlebook_repository_interface.dart';
 import '../../models/book.dart';
 
@@ -11,16 +14,15 @@ class GoogleBookRepositoryImpl implements GoogleBookRepositoryInterface {
   final _bookByAuthorEndpoint = "/autor";
   final _bookByTitleEndpoint = "/titulo";
 
+  final _user = Modular.get<User>();
+
   @override
   Future<List<Book>> getBookListByQty(int qty) async {
-    final uri =
-        Uri.parse("$_apiUrl$_bookByQtyEndpoint").replace(queryParameters: {
-      "qtdPorCategoria": qty.toString(),
-    });
-
+    final uri = Uri.parse("$_apiUrl$_bookByQtyEndpoint?qtdPorCategoria=$qty");
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": "Bearer ${_user.token}"
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -52,7 +54,7 @@ class GoogleBookRepositoryImpl implements GoogleBookRepositoryInterface {
       }
       return books;
     } else {
-      throw Exception("Falha ao carregar livros");
+      throw const HttpException("Falha ao carregar livros");
     }
   }
 

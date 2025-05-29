@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../core/entities/user.dart';
 import '../../data/ai_agent_repository_impl.dart';
 import '../infra/ai_agent_repository.dart';
 import '../../ui/price_search_page.dart';
@@ -9,6 +10,7 @@ class PriceSearchModule extends Module {
   @override
   void binds(i) {
     i.add<PriceSearchBloc>(PriceSearchBloc.new);
+    i.addSingleton<User>(User.new);
     i.add<AiAgentRepository>(AiAgentRepositoryImpl.new);
   }
 

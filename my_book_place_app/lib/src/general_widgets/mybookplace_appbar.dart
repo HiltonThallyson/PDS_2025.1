@@ -5,6 +5,7 @@ mixin MyBookPlaceAppBarMixin {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      foregroundColor: Colors.white,
       centerTitle: true,
       title: const Text(
         "MyBookPlace",
