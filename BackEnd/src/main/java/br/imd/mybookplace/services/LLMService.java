@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -15,16 +17,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.imd.mybookplace.DTOS.LLMRequestDTO;
 import br.imd.mybookplace.DTOS.OfferDTO;
+import br.imd.mybookplace.exceptions.LLMServiceException;
 
+/**
+ * Serviço responsável por consumir a API local de LLM para busca de ofertas e geração de imagens.
+ */
 @Service
 public class LLMService {
 
     private  WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
+       private static final Logger logger = LoggerFactory.getLogger(GoogleBookService.class);
+
 
     final int bufferSizeInBytes = 20 * 1024 * 1024; // Aumentado para 20 MB como exemplo
-
-        
 
     public LLMService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl("http://127.0.0.1:8000/api").build();
@@ -33,11 +39,18 @@ public class LLMService {
                 .build();
 
         webClient = builder
-                .baseUrl("http://127.0.0.1:8000/api") // Sua URL base da API FastAPI
-                .exchangeStrategies(strategies)       // <<--- ESSA LINHA É CRUCIAL
+                .baseUrl("http://127.0.0.1:8000/api") 
+                .exchangeStrategies(strategies)       
                 .build();
     }
 
+    /**
+     * Busca ofertas de livros a partir do prompt fornecido, utilizando a API local de LLM.
+     *
+     * @param prompt Objeto contendo as informações para busca de ofertas.
+     * @return Lista de ofertas encontradas.
+     * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
+     */
     public List<OfferDTO> searchOffers(LLMRequestDTO prompt) {
         String searchPriceUrl = UriComponentsBuilder
                 .fromPath("/search_price")
@@ -54,7 +67,6 @@ public class LLMService {
                     .bodyToMono(String.class)
                     .block();
 
-            // Tenta fazer o parse como uma lista de mapas
             List<Map<String, Object>> parsed = objectMapper.readValue(rawJson, new TypeReference<>() {
             });
 
@@ -70,9 +82,12 @@ public class LLMService {
                     price = ((Number) item.get("price")).doubleValue();
                 } else if (item.get("price") instanceof String) {
                     try {
-                        price = Double.parseDouble((String) item.get("price"));
+                        String priceString = (String) item.get("price");
+                        priceString = priceString.replace("R$", "");
+                        priceString = priceString.replace(",", ".");
+                        price = Double.parseDouble(priceString);
                     } catch (NumberFormatException e) {
-                        // ignora valor inválido
+                        throw new NumberFormatException("Erro ao converter preço");
                     }
                 }
 
@@ -84,32 +99,36 @@ public class LLMService {
             return offers;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            logger.error("Falha ao buscar ofertas da API externa", e);
+            throw new LLMServiceException("Falha ao buscar ofertas da API externa: " + e.getMessage(), e);
         }
     }
 
-    public String createImage(LLMRequestDTO prompt) {
+    /**
+     * Gera uma imagem a partir do prompt fornecido, utilizando a API local de LLM.
+     *
+     * @param prompt Objeto contendo as informações para geração da imagem.
+     * @return String com a URL ou base64 da imagem gerada.
+     * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
+     */
+    public byte[] createImage(LLMRequestDTO prompt) {
         String imageUrlEndpoint = UriComponentsBuilder 
                 .fromPath("/generate-image-from-text")
                 .build()
                 .toString();
 
-        
         try {
             return webClient.post()
                     .uri(imageUrlEndpoint)
-                    .accept(MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG, MediaType.APPLICATION_OCTET_STREAM) // ou MediaType.TEXT_PLAIN se a API retornar só o base64
+                    .accept(MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG, MediaType.APPLICATION_OCTET_STREAM)
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(prompt)
                     .retrieve()
-                    .bodyToMono(String.class)
+                    .bodyToMono(byte[].class)
                     .block(); 
         } catch (Exception e) {
             e.printStackTrace(); 
-            throw new RuntimeException("Falha ao gerar imagem da API externa: " + e.getMessage(), e);
+            throw new LLMServiceException("Falha ao gerar imagem da API externa: " + e.getMessage(), e);
         }
     }
-
-    
 }

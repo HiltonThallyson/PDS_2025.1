@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../core/entities/user.dart';
 import '../../book-details/models/offer.dart';
 import '../interactor/infra/ai_agent_repository.dart';
 
 class AiAgentRepositoryImpl implements AiAgentRepository {
-  final _apiUrl = "http://127.0.0.1:8000/api";
-  final _searchPriceEndpoint = "/search-price";
+  final _apiUrl = "http://localhost:8090/api";
+  final _searchPriceEndpoint = "/llm/search_price";
+
+  final _user = Modular.get<User>();
 
   @override
   Future<List<Offer>> getPriceWithAgent(String prompt) async {
@@ -16,6 +21,7 @@ class AiAgentRepositoryImpl implements AiAgentRepository {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          "Authorization": "Bearer ${_user.token}"
         },
         uri,
         body: jsonEncode({
@@ -37,7 +43,7 @@ class AiAgentRepositoryImpl implements AiAgentRepository {
 
       return offers;
     } else {
-      throw Exception("Falha na consulta de preços");
+      throw const HttpException("Falha na consulta de preços");
     }
   }
 }

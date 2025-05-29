@@ -1,5 +1,4 @@
 import re
-import json
 
 def format_model_response(text):
     match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)

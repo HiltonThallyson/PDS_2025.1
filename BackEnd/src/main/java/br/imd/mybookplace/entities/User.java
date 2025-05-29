@@ -11,16 +11,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Table(name = "usuarios")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
+
 @AllArgsConstructor
 public class User implements UserDetails{
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "Username", nullable = false, unique = true)
     String username;
@@ -43,37 +47,7 @@ public class User implements UserDetails{
         this.userRole = userRole;
     }
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getUsername() {
-        return username;
-    }   
     
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getNickName() {
-        return nickName;
-    }
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.userRole == UserRole.ADMIN) {

@@ -1,4 +1,3 @@
-import 'package:fluter_app/src/catalogue/models/book.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../price_search/interactor/infra/ai_agent_repository.dart';
