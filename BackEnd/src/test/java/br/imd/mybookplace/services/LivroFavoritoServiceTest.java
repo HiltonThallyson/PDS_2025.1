@@ -2,6 +2,7 @@ package br.imd.mybookplace.services;
 
 import br.imd.mybookplace.entities.LivroFavorito;
 import br.imd.mybookplace.entities.User;
+import br.imd.mybookplace.entities.StatusLeitura;
 import br.imd.mybookplace.exceptions.LivroFavoritoException;
 import br.imd.mybookplace.repositories.LivroFavoritoRepository;
 import br.imd.mybookplace.repositories.UserRepository;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -195,5 +197,67 @@ class LivroFavoritoServiceTest {
         });
 
         verify(livroFavoritoRepository, never()).delete(any(LivroFavorito.class));
+    }
+
+    @Test
+    void listarFavoritosPorStatus_DeveAgruparPorStatusLeitura() {
+        // Arrange
+        Long userId = 1L;
+        User user = criarUsuario(userId);
+        LivroFavorito livro1 = criarLivroFavorito(user, "Livro 1", "Autor 1", "111", "url1");
+        livro1.setStatusLeitura(StatusLeitura.QUERO_LER);
+        LivroFavorito livro2 = criarLivroFavorito(user, "Livro 2", "Autor 2", "222", "url2");
+        livro2.setStatusLeitura(StatusLeitura.LENDO);
+        LivroFavorito livro3 = criarLivroFavorito(user, "Livro 3", "Autor 3", "333", "url3");
+        livro3.setStatusLeitura(StatusLeitura.LIDO);
+        mockUsuarioExistente(userId, user);
+        when(livroFavoritoRepository.findByUser(user)).thenReturn(List.of(livro1, livro2, livro3));
+
+        // Act
+        Map<StatusLeitura, List<LivroFavorito>> agrupados = livroFavoritoService.listarFavoritosPorStatus(userId);
+
+        // Assert
+        assertEquals(1, agrupados.get(StatusLeitura.QUERO_LER).size());
+        assertEquals(1, agrupados.get(StatusLeitura.LENDO).size());
+        assertEquals(1, agrupados.get(StatusLeitura.LIDO).size());
+        assertTrue(agrupados.get(StatusLeitura.QUERO_LER).contains(livro1));
+        assertTrue(agrupados.get(StatusLeitura.LENDO).contains(livro2));
+        assertTrue(agrupados.get(StatusLeitura.LIDO).contains(livro3));
+    }
+
+    @Test
+    void atualizarStatusLeitura_DeveAtualizarStatusQuandoLivroExistir() {
+        // Arrange
+        Long userId = 1L;
+        String isbn = "123";
+        User user = criarUsuario(userId);
+        LivroFavorito livro = criarLivroFavorito(user, "Livro Teste", "Autor Teste", isbn, "url");
+        livro.setStatusLeitura(StatusLeitura.QUERO_LER);
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoExistente(user, isbn, livro);
+        when(livroFavoritoRepository.save(any(LivroFavorito.class))).thenReturn(livro);
+
+        // Act
+        livroFavoritoService.atualizarStatusLeitura(userId, isbn, StatusLeitura.LENDO);
+
+        // Assert
+        assertEquals(StatusLeitura.LENDO, livro.getStatusLeitura());
+        verify(livroFavoritoRepository, times(1)).save(livro);
+    }
+
+    @Test
+    void atualizarStatusLeitura_DeveLancarExcecaoQuandoLivroNaoExistir() {
+        // Arrange
+        Long userId = 1L;
+        String isbn = "999";
+        User user = criarUsuario(userId);
+        mockUsuarioExistente(userId, user);
+        mockLivroFavoritoInexistente(user, isbn);
+
+        // Assert
+        assertThrows(LivroFavoritoException.class, () -> {
+            livroFavoritoService.atualizarStatusLeitura(userId, isbn, StatusLeitura.LIDO);
+        });
+        verify(livroFavoritoRepository, never()).save(any(LivroFavorito.class));
     }
 }
