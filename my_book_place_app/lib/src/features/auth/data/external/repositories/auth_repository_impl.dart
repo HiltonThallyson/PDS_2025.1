@@ -23,7 +23,6 @@ class AuthRepositoryImpl implements AuthRepositoryInterface {
 
   @override
   Future<bool> register(Map<String, String> credentials) async {
-    // TODO: implement register
-    throw UnimplementedError();
+    return await _authApiClient.register(credentials);
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../../../core/themes/app_textstyles.dart';
 import '../../blocs/auth_bloc.dart';
@@ -6,10 +9,72 @@ import '../../blocs/auth_event.dart';
 
 class SignUpForm extends StatelessWidget {
   final AuthBloc _authBloc;
-  const SignUpForm({
+  SignUpForm({
     required authBloc,
     super.key,
   }) : _authBloc = authBloc;
+
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _nicknameController = TextEditingController();
+  final _passwordFocusNode = FocusNode();
+  final _usernameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _nicknameFocusNode = FocusNode();
+  final _passwordVisible = ValueNotifier<bool>(false);
+
+  void _validateAndSubmit(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      final credentials = {
+        "username": _usernameController.text,
+        "password": _passwordController.text,
+        "email": _emailController.text,
+        "nickname": _nicknameController.text,
+      };
+      try {
+        await _authBloc.signUp(credentials).then(
+          (success) {
+            if (success) {
+              _authBloc.add(SwitchToLoginEvent());
+            } else {
+              if (!context.mounted) {
+                return;
+              }
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    "Houve um problema ao criar a conta! Tente novamente."),
+                duration: Duration(seconds: 2),
+              ));
+            }
+          },
+        );
+      } on HttpException catch (_) {
+        if (!context.mounted) {
+          return;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text("Houve um problema com a solicitação! Tente novamente."),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (e) {
+        if (!context.mounted) {
+          return;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text("Um erro ocorreu ao tentar criar conta! Tente novamente."),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +95,14 @@ class SignUpForm extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Form(
+                      key: _formKey,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
                             TextFormField(
                               keyboardType: TextInputType.text,
+                              controller: _usernameController,
+                              focusNode: _usernameFocusNode,
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.person),
@@ -54,6 +122,9 @@ class SignUpForm extends StatelessWidget {
                                     MediaQuery.of(context).size.height * 0.03),
                             TextFormField(
                               keyboardType: TextInputType.text,
+                              controller: _passwordController,
+                              focusNode: _passwordFocusNode,
+                              obscureText: !_passwordVisible.value,
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.lock),
@@ -74,6 +145,8 @@ class SignUpForm extends StatelessWidget {
                                     MediaQuery.of(context).size.height * 0.03),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
+                              controller: _emailController,
+                              focusNode: _emailFocusNode,
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.email),
@@ -93,6 +166,8 @@ class SignUpForm extends StatelessWidget {
                                     MediaQuery.of(context).size.height * 0.03),
                             TextFormField(
                               keyboardType: TextInputType.text,
+                              controller: _nicknameController,
+                              focusNode: _nicknameFocusNode,
                               decoration: InputDecoration(
                                   isDense: true,
                                   icon: const Icon(Icons.person_pin_sharp),
@@ -127,7 +202,9 @@ class SignUpForm extends StatelessWidget {
                             backgroundColor: Colors.pink,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15))),
-                        onPressed: () {},
+                        onPressed: () {
+                          _validateAndSubmit(context);
+                        },
                         child: const Text(
                           "Criar conta",
                           style: AppTextStyles.loginButtonText,

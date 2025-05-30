@@ -32,6 +32,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<bool> signUp(Map<String, String> credentials) async {
+    try {
+      final result = await _authRepository.register(credentials);
+      return result;
+    } on HttpException catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   void logout() {
     // emit(AuthLoggedOut());
   }
