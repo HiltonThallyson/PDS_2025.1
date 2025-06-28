@@ -1,64 +1,53 @@
-// package br.imd.mybookplace.controllers;
-
-// import br.imd.mybookplace.DTOS.FavoriteBookDTO;
-// import br.imd.mybookplace.entities.LivroFavorito;
-// import br.imd.mybookplace.entities.StatusLeitura;
-// import br.imd.mybookplace.services.LivroFavoritoService;
-// import org.springframework.http.HttpStatus;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.*;
+// package br.imd.framework.controllers;
 
 // import java.util.List;
 // import java.util.Map;
 // import java.util.stream.Collectors;
 
-// /**
-//  * Controller responsável por gerenciar os endpoints de livros favoritos dos usuários.
-//  */
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.DeleteMapping;
+// import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.PatchMapping;
+// import org.springframework.web.bind.annotation.PathVariable;
+// import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.RequestHeader;
+// import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RestController;
+
+// import br.imd.framework.DTOs.FavoritoProdutoDTO;
+// import br.imd.framework.DTOs.ProdutoDTO;
+// import br.imd.framework.entities.Produto;
+// import br.imd.framework.services.FavoritoService;
+// import br.imd.mybookplace.DTOS.FavoriteBookDTO;
+// import br.imd.mybookplace.entities.LivroFavorito;
+// import br.imd.mybookplace.entities.StatusLeitura;
+// import br.imd.mybookplace.services.LivroFavoritoService;
+
 // @RestController
-// @RequestMapping("/api/livros-favoritos")
-// public class LivroFavoritoController {
+// @RequestMapping("/api/favoritos")
+// public class FavoritoController {
 
-//     private final LivroFavoritoService livroFavoritoService;
 
-//     public LivroFavoritoController(LivroFavoritoService livroFavoritoService) {
-//         this.livroFavoritoService = livroFavoritoService;
+//     private final FavoritoService favoritoService;
+
+//     public FavoritoController(FavoritoService livroFavoritoService) {
+//         this.favoritoService = livroFavoritoService;
 //     }
 
-//   /**
-//      * Adiciona um livro à lista de favoritos do usuário.
-//      *
-//      * @param userId ID do usuário.
-//      * @param title Título do livro.
-//      * @param author Autor do livro.
-//      * @param thumbnailUrl URL da imagem do livro.
-//      * @param isbn ISBN do livro.
-//      * @return ResponseEntity com o livro favorito criado e status 201.
-//      */  
-//   @PostMapping("/register-book/{userId}")
-//     public ResponseEntity<FavoriteBookDTO> adicionarLivroFavorito(
+//     public ResponseEntity<ProdutoDTO> adicionarProdutoFavorito(
 //             @RequestHeader("Authorization") String authorizationHeader,
 //             @PathVariable Long userId,
-//             @RequestBody FavoriteBookDTO favoriteBookDTO
+//             @RequestBody ProdutoDTO produtoDTO
 //             ) {
 
-//             LivroFavorito livroFavorito = livroFavoritoService.adicionarLivroFavorito(
+//             ProdutoDTO produtoFavorito = favoritoService.adicionarProdutoFavorito(
 //                 userId,
-//                 favoriteBookDTO.getTitle(),
-//                 favoriteBookDTO.getAuthor(),
-//                 favoriteBookDTO.getThumbnailUrl(),
-//                 favoriteBookDTO.getIsbn()
-//                 );
-
-//             var response = new FavoriteBookDTO(
-//                 livroFavorito.getTitle(),
-//                 livroFavorito.getAuthor(),
-//                 livroFavorito.getThumbnailUrl(),
-//                 livroFavorito.getIsbn(),
-//                 livroFavorito.getStatusLeitura()
+//                 produtoDTO
 //                 );
             
-//             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//             return ResponseEntity.status(HttpStatus.CREATED).body(produtoFavorito);
 //     }
 
 //     /**
@@ -68,22 +57,23 @@
 //      * @return ResponseEntity com a lista de livros favoritos do usuário.
 //      */
 //     @GetMapping("/{userId}")
-//     public ResponseEntity<List<FavoriteBookDTO>> listarFavoritosPorUsuario(
+//     public ResponseEntity<List<ProdutoDTO>> listarFavoritosPorUsuario(
 //     @RequestHeader("Authorization") String authorizationHeader, 
 //     @PathVariable Long userId) {
        
-//             List<LivroFavorito> livrosFavoritos = livroFavoritoService.listarFavoritosPorUsuario(userId);
+//             List<ProdutoDTO> produtosFavoritos = favoritoService.listarFavoritosPorUsuario(userId);
 
-//             List<FavoriteBookDTO> livrosFavoritosDTO = livrosFavoritos.stream()
-//                 .map(livro -> new FavoriteBookDTO(
-//                     livro.getTitle(),
-//                     livro.getAuthor(),
-//                     livro.getThumbnailUrl(),
-//                     livro.getIsbn(),
-//                     livro.getStatusLeitura()))
-//                 .toList();
+//             // List<ProdutoDTO> livrosFavoritosDTO = produtosFavoritos.stream()
+//             //     .map(livro -> new FavoriteBookDTO(
+//             //         livro.getTitle(),
+//             //         livro.getAuthor(),
+//             //         livro.getThumbnailUrl(),
+//             //         livro.getIsbn(),
+//             //         livro.getStatusLeitura()))
+//             //     .toList();
             
-//             return ResponseEntity.ok(livrosFavoritosDTO);
+//             // return ResponseEntity.ok(livrosFavoritosDTO);
+//             return ResponseEntity.ok(produtosFavoritos);
 //     }
 
 //     /**
@@ -99,7 +89,7 @@
 //         @PathVariable Long userId, 
 //         @PathVariable String isbn) {
             
-//         livroFavoritoService.removerLivroFavorito(userId, isbn);
+//         favoritoService.removerLivroFavorito(userId, isbn);
 //         return ResponseEntity.noContent().build();
 //     }
 
@@ -114,7 +104,7 @@
 //             @RequestHeader("Authorization") String authorizationHeader,
 //             @PathVariable Long userId) {
 
-//         Map<StatusLeitura, List<LivroFavorito>> agrupados = livroFavoritoService.listarFavoritosPorStatus(userId);
+//         Map<StatusLeitura, List<LivroFavorito>> agrupados = favoritoService.listarFavoritosPorStatus(userId);
 
 //         Map<StatusLeitura, List<FavoriteBookDTO>> agrupadosDTO = agrupados.entrySet().stream()
 //             .collect(Collectors.toMap(
@@ -148,7 +138,7 @@
 //             @PathVariable String isbn,
 //             @RequestParam StatusLeitura statusLeitura) {
 
-//         livroFavoritoService.atualizarStatusLeitura(userId, isbn, statusLeitura);
+//         favoritoService.atualizarStatusLeitura(userId, isbn, statusLeitura);
 //         return ResponseEntity.noContent().build();
 //     }
 // }
