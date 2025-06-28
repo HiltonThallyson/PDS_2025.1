@@ -33,7 +33,7 @@ class AuthRepositoryImpl implements AuthRepositoryInterface {
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
-      _user.fromJson(responseBody);
+      _user.token = responseBody["token"];
       return true;
     } else {
       return false;

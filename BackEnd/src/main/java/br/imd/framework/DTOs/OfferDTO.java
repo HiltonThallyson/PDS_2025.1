@@ -1,6 +1,4 @@
-package br.imd.mybookplace.DTOS;
-
-import java.util.Map;
+package br.imd.framework.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

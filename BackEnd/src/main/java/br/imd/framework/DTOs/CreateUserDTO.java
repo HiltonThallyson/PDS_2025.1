@@ -1,19 +1,19 @@
-package br.imd.mybookplace.DTOS;
+package br.imd.framework.DTOs;
 
-import br.imd.mybookplace.entities.UserRole;
+import br.imd.framework.entities.UserRole;
 
 public class CreateUserDTO {
     String username;
     String password;
     String email;
-    String nickName;
+    String nickname;
     UserRole role;
 
-    public CreateUserDTO(String username, String password, String email, String nickName) {
+    public CreateUserDTO(String username, String password, String email, String nickname) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 
     public String getUsername() {
@@ -35,10 +35,10 @@ public class CreateUserDTO {
         this.email = email;
     }
     public String getNickName() {
-        return nickName;
+        return nickname;
     }
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickName(String nickname) {
+        this.nickname = nickname;
     }
 
     public UserRole getRole() {

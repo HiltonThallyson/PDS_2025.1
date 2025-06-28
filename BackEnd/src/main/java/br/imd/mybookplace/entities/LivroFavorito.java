@@ -1,5 +1,6 @@
 package br.imd.mybookplace.entities;
 
+import br.imd.framework.entities.User;
 import jakarta.persistence.*;
 
 import jakarta.persistence.UniqueConstraint;

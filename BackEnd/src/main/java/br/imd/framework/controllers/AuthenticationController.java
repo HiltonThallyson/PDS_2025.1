@@ -1,13 +1,13 @@
-package br.imd.mybookplace.controllers;
+package br.imd.framework.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.imd.mybookplace.DTOS.CreateUserDTO;
-import br.imd.mybookplace.DTOS.LoginResponseDTO;
-import br.imd.mybookplace.DTOS.LoginUserDTO;
-import br.imd.mybookplace.DTOS.UserInfoResponse;
-import br.imd.mybookplace.services.AuthService;
+import br.imd.framework.DTOs.CreateUserDTO;
+import br.imd.framework.DTOs.LoginResponseDTO;
+import br.imd.framework.DTOs.LoginUserDTO;
+import br.imd.framework.DTOs.UserInfoDTO;
+import br.imd.framework.services.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,7 @@ public class AuthenticationController {
     }
 
  @PostMapping("/me")
-    public ResponseEntity<UserInfoResponse> getUserInfo(
+    public ResponseEntity<UserInfoDTO> getUserInfo(
     @RequestHeader("Authorization") String authorizationHeader
     ) {
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -65,7 +65,7 @@ public class AuthenticationController {
         
         var user = userService.getUserFromToken(token);
         if (user != null) {
-            var userInfo = new UserInfoResponse(user);
+            var userInfo = new UserInfoDTO(user);
             return ResponseEntity.ok(userInfo);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -1,11 +1,11 @@
 package br.imd.mybookplace.controllers;
 
-import br.imd.mybookplace.DTOS.CreateUserDTO;
-import br.imd.mybookplace.DTOS.LoginResponseDTO;
-import br.imd.mybookplace.DTOS.LoginUserDTO;
+import br.imd.framework.DTOs.CreateUserDTO;
+import br.imd.framework.DTOs.LoginUserDTO;
+import br.imd.framework.controllers.AuthenticationController;
+import br.imd.framework.services.AuthService;
 import br.imd.mybookplace.exceptions.AuthException;
 import br.imd.mybookplace.exceptions.GlobalExceptionHandler;
-import br.imd.mybookplace.services.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

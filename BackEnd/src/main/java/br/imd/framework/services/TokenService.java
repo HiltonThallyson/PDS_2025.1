@@ -1,4 +1,4 @@
-package br.imd.mybookplace.services;
+package br.imd.framework.services;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import br.imd.mybookplace.entities.User;
+import br.imd.framework.entities.User;
 import br.imd.mybookplace.exceptions.TokenException;
 
 /**

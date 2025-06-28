@@ -1,4 +1,4 @@
-package br.imd.mybookplace.controllers;
+package br.imd.framework.controllers;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.imd.mybookplace.DTOS.LLMRequestDTO;
-import br.imd.mybookplace.DTOS.OfferDTO;
+import br.imd.framework.DTOs.LLMRequestDTO;
+import br.imd.framework.DTOs.OfferDTO;
+import br.imd.framework.services.LLMService;
 import br.imd.mybookplace.exceptions.LLMServiceException;
-import br.imd.mybookplace.services.LLMService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

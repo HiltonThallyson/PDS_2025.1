@@ -1,10 +1,11 @@
 package br.imd.mybookplace.controllers;
 
-import br.imd.mybookplace.DTOS.LLMRequestDTO;
-import br.imd.mybookplace.DTOS.OfferDTO;
+import br.imd.framework.DTOs.LLMRequestDTO;
+import br.imd.framework.DTOs.OfferDTO;
+import br.imd.framework.controllers.LLMController;
+import br.imd.framework.services.LLMService;
 import br.imd.mybookplace.exceptions.GlobalExceptionHandler;
 import br.imd.mybookplace.exceptions.LLMServiceException;
-import br.imd.mybookplace.services.LLMService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

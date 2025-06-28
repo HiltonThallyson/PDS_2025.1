@@ -1,4 +1,4 @@
-package br.imd.mybookplace.security.config;
+package br.imd.framework.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

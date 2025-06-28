@@ -1,6 +1,4 @@
-package br.imd.mybookplace.entities;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+package br.imd.framework.entities;
 
 public enum UserRole {
     ADMIN("admin"),

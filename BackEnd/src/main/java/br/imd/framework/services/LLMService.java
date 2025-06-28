@@ -1,11 +1,9 @@
-package br.imd.mybookplace.services;
+package br.imd.framework.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -15,8 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.imd.mybookplace.DTOS.LLMRequestDTO;
-import br.imd.mybookplace.DTOS.OfferDTO;
+import br.imd.framework.DTOs.LLMRequestDTO;
+import br.imd.framework.DTOs.OfferDTO;
 import br.imd.mybookplace.exceptions.LLMServiceException;
 
 /**
@@ -27,8 +25,6 @@ public class LLMService {
 
     private  WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
-       private static final Logger logger = LoggerFactory.getLogger(GoogleBookService.class);
-
 
     final int bufferSizeInBytes = 20 * 1024 * 1024; // Aumentado para 20 MB como exemplo
 
@@ -99,7 +95,6 @@ public class LLMService {
             return offers;
 
         } catch (Exception e) {
-            logger.error("Falha ao buscar ofertas da API externa", e);
             throw new LLMServiceException("Falha ao buscar ofertas da API externa: " + e.getMessage(), e);
         }
     }

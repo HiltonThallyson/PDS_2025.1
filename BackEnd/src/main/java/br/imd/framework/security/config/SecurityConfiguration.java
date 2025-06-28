@@ -1,4 +1,4 @@
-package br.imd.mybookplace.security.config;
+package br.imd.framework.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.Customizer;
 
-import br.imd.mybookplace.security.filters.SecurityFilter;
+import br.imd.framework.security.filters.SecurityFilter;
+
+import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity

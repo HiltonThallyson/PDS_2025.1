@@ -1,4 +1,4 @@
-package br.imd.mybookplace.security.filters;
+package br.imd.framework.security.filters;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.imd.mybookplace.entities.User;
-import br.imd.mybookplace.repositories.UserRepository;
-import br.imd.mybookplace.services.TokenService;
+import br.imd.framework.entities.User;
+import br.imd.framework.repositories.UserRepository;
+import br.imd.framework.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

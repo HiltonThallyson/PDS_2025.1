@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import br.imd.framework.entities.User;
+import br.imd.framework.repositories.UserRepository;
 import br.imd.mybookplace.entities.LivroFavorito;
 import br.imd.mybookplace.entities.StatusLeitura;
-import br.imd.mybookplace.entities.User;
 import br.imd.mybookplace.exceptions.LivroFavoritoException;
 import br.imd.mybookplace.repositories.LivroFavoritoRepository;
-import br.imd.mybookplace.repositories.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 

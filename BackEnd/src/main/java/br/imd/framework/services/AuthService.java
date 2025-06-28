@@ -1,4 +1,4 @@
-package br.imd.mybookplace.services;
+package br.imd.framework.services;
 
 
 import java.nio.file.attribute.UserPrincipal;
@@ -13,12 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.imd.mybookplace.DTOS.CreateUserDTO;
-import br.imd.mybookplace.DTOS.LoginUserDTO;
-import br.imd.mybookplace.entities.User;
-import br.imd.mybookplace.entities.UserRole;
+import br.imd.framework.DTOs.CreateUserDTO;
+import br.imd.framework.DTOs.LoginUserDTO;
+import br.imd.framework.entities.User;
+import br.imd.framework.entities.UserRole;
+import br.imd.framework.repositories.UserRepository;
 import br.imd.mybookplace.exceptions.AuthException;
-import br.imd.mybookplace.repositories.UserRepository;
 
 @Service
 public class AuthService implements UserDetailsService{

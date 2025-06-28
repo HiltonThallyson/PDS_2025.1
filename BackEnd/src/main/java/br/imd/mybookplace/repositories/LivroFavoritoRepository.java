@@ -1,7 +1,8 @@
 package br.imd.mybookplace.repositories;
 
+import br.imd.framework.entities.User;
 import br.imd.mybookplace.entities.LivroFavorito;
-import br.imd.mybookplace.entities.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

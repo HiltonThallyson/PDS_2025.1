@@ -1,4 +1,4 @@
-package br.imd.mybookplace.DTOS;
+package br.imd.framework.DTOs;
 
 public class LLMRequestDTO {
     private String prompt;

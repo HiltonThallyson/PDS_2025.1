@@ -1,18 +1,18 @@
-package br.imd.mybookplace.DTOS;
+package br.imd.framework.DTOs;
 
-import br.imd.mybookplace.entities.User;
+import br.imd.framework.entities.User;
 
 
-public class UserInfoResponse {
+public class UserInfoDTO {
     private Long id;
     private String username;
     private String email;
-    private String nickName;
+    private String nickname;
 
-    public UserInfoResponse(User user) {
+    public UserInfoDTO(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
-        this.nickName = user.getNickName();
+        this.nickname = user.getNickName();
         this.username = user.getUsername();
     }
 
@@ -36,10 +36,10 @@ public class UserInfoResponse {
         this.email = email;
     }
     public String getNickName() {
-        return nickName;
+        return nickname;
     }
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickName(String nickname) {
+        this.nickname = nickname;
     }
     
 }
