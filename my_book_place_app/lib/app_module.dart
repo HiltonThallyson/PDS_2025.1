@@ -1,11 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'src/auth/interactor/modules/auth_module.dart';
-import 'src/book-details/interactor/modules/book_details_module.dart';
-import 'src/catalogue/interactor/modules/catalogue_module.dart';
-import 'src/gen-image/interactor/modules/gen_image_module.dart';
-import 'src/menu/interactor/modules/menu_module.dart';
-import 'src/price_search/interactor/modules/price_search_module.dart';
+import 'src/features/auth/modules/auth_module.dart';
+import 'src/features/book-details/modules/book_details_module.dart';
+import 'src/features/catalogue/modules/catalogue_module.dart';
+import 'src/features/gen-image/modules/gen_image_module.dart';
+import 'src/features/menu/modules/menu_module.dart';
+import 'src/features/price_search/modules/price_search_module.dart';
 import 'splash_page.dart';
 
 class AppModule extends Module {

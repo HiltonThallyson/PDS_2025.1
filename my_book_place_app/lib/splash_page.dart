@@ -22,16 +22,20 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-          child: Column(
-        children: [
-          Icon(Icons.book, size: 100),
-          CircularProgressIndicator(
-            color: Colors.purple,
-          ),
-        ],
-      )),
+    return Scaffold(
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: double.maxFinite,
+        child: const Center(
+            child: Column(
+          children: [
+            Icon(Icons.book, size: 100),
+            CircularProgressIndicator(
+              color: Colors.purple,
+            ),
+          ],
+        )),
+      ),
     );
   }
 }
