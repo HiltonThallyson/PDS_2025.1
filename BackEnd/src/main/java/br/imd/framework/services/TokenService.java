@@ -11,7 +11,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import br.imd.framework.entities.User;
-import br.imd.mybookplace.exceptions.TokenException;
+import br.imd.framework.exceptions.TokenException;
 
 /**
  * Serviço responsável por operações relacionadas a tokens JWT, como geração e validação.

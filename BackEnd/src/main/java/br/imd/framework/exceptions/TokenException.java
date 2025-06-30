@@ -1,4 +1,4 @@
-package br.imd.mybookplace.exceptions;
+package br.imd.framework.exceptions;
 
 public class TokenException extends RuntimeException {
     public TokenException(String message) {

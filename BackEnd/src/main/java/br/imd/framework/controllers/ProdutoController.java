@@ -1,35 +1,37 @@
 package br.imd.framework.controllers;
 
 import java.util.List;
-
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.imd.framework.DTOs.ProdutoDTO;
+import br.imd.framework.entities.Produto;
 import br.imd.framework.services.ProdutoService;
 
 @RestController
 @RequestMapping("/api/produtos")
-public class ProdutoController {
-    private final ProdutoService produtoService;
+@ConditionalOnBean(ProdutoService.class)
+public class ProdutoController <T extends Produto>{
+    private final ProdutoService<T> produtoService;
 
-    public ProdutoController(ProdutoService produtoService) {
+    public ProdutoController(ProdutoService<T> produtoService) {
         this.produtoService = produtoService;
     }
 
     @GetMapping("/nome")
-    public List<ProdutoDTO> buscarProdutoPorNome(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String nome){
+    public ResponseEntity<List<T>> buscarProdutoPorNome(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String nome){
 
         System.out.println(nome);
-        return produtoService.buscarPorNome(nome);
+        return ResponseEntity.ok(produtoService.buscarPorNome(nome));
     }
 
     @GetMapping("/quantidade")
-    public List<ProdutoDTO> buscarProdutosPorQuantidade(@RequestHeader("Authorization") String authorizationHeader, @RequestParam(name="qtdPorCategoria", required = false, defaultValue = "10") int qtdPorCategoria){
+    public ResponseEntity<List<T>> buscarProdutosPorQuantidade(@RequestHeader("Authorization") String authorizationHeader, @RequestParam(name="qtdPorCategoria", required = false, defaultValue = "10") int qtdPorCategoria){
         System.out.println(qtdPorCategoria);
-        return produtoService.buscarPorQuantidade(qtdPorCategoria);
+        return ResponseEntity.ok(produtoService.buscarPorQuantidade(qtdPorCategoria));
     }
 }

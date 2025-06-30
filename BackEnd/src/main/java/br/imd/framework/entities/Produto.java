@@ -9,6 +9,8 @@ public abstract class Produto {
         this.thumbnailUrl = thumbnailUrl;
     }
 
+    public Produto() {}
+
     public String getTitle() {
         return title;
     }

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
+import br.imd.framework.exceptions.LLMServiceException;
 import br.imd.framework.services.LLMService;
-import br.imd.mybookplace.exceptions.LLMServiceException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

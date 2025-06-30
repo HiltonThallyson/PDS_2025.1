@@ -1,4 +1,4 @@
-package br.imd.mybookplace.exceptions;
+package br.imd.framework.exceptions;
 
 public class LLMServiceException extends RuntimeException{
     public LLMServiceException(String message){

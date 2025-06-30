@@ -1,4 +1,4 @@
-package br.imd.mybookplace.exceptions;
+package br.imd.framework.exceptions;
 
 public class AuthException extends RuntimeException{
     public AuthException(String message) {

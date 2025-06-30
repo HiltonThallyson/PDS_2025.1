@@ -1,8 +1,6 @@
 package br.imd.framework.services;
 
 
-import java.nio.file.attribute.UserPrincipal;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +15,8 @@ import br.imd.framework.DTOs.CreateUserDTO;
 import br.imd.framework.DTOs.LoginUserDTO;
 import br.imd.framework.entities.User;
 import br.imd.framework.entities.UserRole;
+import br.imd.framework.exceptions.AuthException;
 import br.imd.framework.repositories.UserRepository;
-import br.imd.mybookplace.exceptions.AuthException;
 
 @Service
 public class AuthService implements UserDetailsService{

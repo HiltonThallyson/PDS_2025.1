@@ -2,16 +2,12 @@ package br.imd.framework.services;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import br.imd.framework.entities.Produto;
 
-import br.imd.framework.DTOs.ProdutoDTO;
 
-@Service
-public abstract class ProdutoService {
+public abstract class ProdutoService<T extends Produto> {
 
-    abstract public List<ProdutoDTO> buscarPorNome(String titulo);
+    abstract public List<T> buscarPorNome(String titulo);
 
-    abstract public List<ProdutoDTO> buscarPorQuantidade(int qtdPorCategoria);
+    abstract public List<T> buscarPorQuantidade(int qtdPorCategoria);
 }

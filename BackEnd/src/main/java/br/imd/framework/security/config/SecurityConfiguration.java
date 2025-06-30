@@ -23,6 +23,12 @@ public class SecurityConfiguration {
 
     @Autowired
     private SecurityFilter securityFilter;
+
+     @Bean
+    public SecurityFilter securityFilter() {
+        return new SecurityFilter();
+    }
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -33,7 +39,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

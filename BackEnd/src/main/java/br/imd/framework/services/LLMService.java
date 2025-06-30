@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
-import br.imd.mybookplace.exceptions.LLMServiceException;
+import br.imd.framework.exceptions.LLMServiceException;
 
 /**
  * Serviço responsável por consumir a API local de LLM para busca de ofertas e geração de imagens.
