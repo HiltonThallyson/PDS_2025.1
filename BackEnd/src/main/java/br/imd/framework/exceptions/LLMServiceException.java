@@ -1,6 +1,6 @@
 package br.imd.framework.exceptions;
 
-public class LLMServiceException extends RuntimeException{
+public abstract class LLMServiceException extends RuntimeException{
     public LLMServiceException(String message){
         super (message);
     }
