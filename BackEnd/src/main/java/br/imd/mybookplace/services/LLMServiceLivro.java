@@ -15,13 +15,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
 import br.imd.framework.exceptions.LLMServiceException;
 import br.imd.framework.services.LLMService;
+import br.imd.mybookplace.DTOS.LLMRequestDTOLivro;
 
 @Service
-public class LLMServiceLivro extends LLMService{
+public class LLMServiceLivro extends LLMService<LLMRequestDTOLivro> {
     private  WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -46,19 +46,18 @@ public class LLMServiceLivro extends LLMService{
      * @return Lista de ofertas encontradas.
      * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
      */
-    public String searchOffers(LLMRequestDTO prompt) {
+    public String searchOffers(LLMRequestDTOLivro prompt) {
         String searchPriceUrl = UriComponentsBuilder
                 .fromPath("/search_price")
                 .build()
                 .toString();
-        String promptConfiguration = "You are a shopping assistant who specializes in finding the best deals on books. Your task is to parse the given prompt and return a list of relevant deals. Each deal should contain the book title, price, purchase link, and image URL for the book. You should return a list of JSON objects, where each object represents a deal. Organize them as follows: title, author, price, link, imageUrl. prompt: ";
         try {
 
             String rawJson = webClient.post()
                     .uri(searchPriceUrl)
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(promptConfiguration + prompt)
+                    .bodyValue(prompt)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
@@ -77,7 +76,7 @@ public class LLMServiceLivro extends LLMService{
      * @return String com a URL ou base64 da imagem gerada.
      * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
      */
-    public byte[] createImage(LLMRequestDTO prompt) {
+    public byte[] createImage(String prompt) {
         String imageUrlEndpoint = UriComponentsBuilder 
                 .fromPath("/generate-image-from-text")
                 .build()

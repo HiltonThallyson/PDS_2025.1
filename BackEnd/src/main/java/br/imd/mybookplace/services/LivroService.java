@@ -18,13 +18,13 @@ import br.imd.framework.services.ProdutoService;
 import br.imd.mybookplace.DTOS.LivroDTO;
 
 @Service
-public class BookService extends ProdutoService<LivroDTO>{
+public class LivroService extends ProdutoService<LivroDTO>{
 
     final String API_URL = "https://www.googleapis.com/books/v1";
     private final WebClient webClient;
     private static final Logger logger = LoggerFactory.getLogger(ProdutoService.class);
 
-    public BookService(WebClient.Builder webClientBuilder) {
+    public LivroService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl(API_URL).build();
     }
 

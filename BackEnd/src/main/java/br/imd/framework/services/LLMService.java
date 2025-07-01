@@ -11,16 +11,16 @@ import br.imd.framework.DTOs.OfferDTO;
 /**
  * Serviço responsável por consumir a API local de LLM para busca de ofertas e geração de imagens.
  */
-public abstract class LLMService {
+public abstract class LLMService <T extends LLMRequestDTO> {
 
-    public List<OfferDTO> makeSearchPricePrediction(LLMRequestDTO prompt) throws JsonMappingException, JsonProcessingException{
+    public List<OfferDTO> makeSearchPricePrediction(T prompt) throws JsonMappingException, JsonProcessingException{
         String response = searchOffers(prompt);
         return extractSearchPriceResponse(response);
     }
 
-    public abstract String searchOffers(LLMRequestDTO prompt);
+    public abstract String searchOffers(T prompt);
 
-    public abstract byte[] createImage(LLMRequestDTO prompt);
+    public abstract byte[] createImage(String prompt);
 
     public abstract List<OfferDTO> extractSearchPriceResponse(String response) throws JsonMappingException, JsonProcessingException;
         
