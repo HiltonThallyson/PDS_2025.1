@@ -5,15 +5,24 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
 import br.imd.framework.exceptions.LLMServiceException;
 import br.imd.framework.services.LLMService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
-public class BaseLLMController <T extends LLMRequestDTO, S extends LLMService<T>> {
+
+@RestController
+@RequestMapping("/api/llm")
+public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
 
     protected final S llmService;
 
@@ -21,7 +30,9 @@ public class BaseLLMController <T extends LLMRequestDTO, S extends LLMService<T>
         this.llmService = llmService;
     }
 
-    protected ResponseEntity<?> searchOffers(T prompt) {
+    @PostMapping("/search_price")
+    protected ResponseEntity<?> searchOffers(@RequestHeader("Authorization") String authorizationHeader, @RequestBody LLMRequestDTO prompt)  throws JsonMappingException, JsonProcessingException{
+        System.out.println(prompt.getPrompt());
         try {
             List<OfferDTO> offers = llmService.makeSearchPricePrediction(prompt);
             return ResponseEntity.ok(offers);
@@ -32,8 +43,8 @@ public class BaseLLMController <T extends LLMRequestDTO, S extends LLMService<T>
         }
     }
 
-    
-    protected ResponseEntity<byte[]> generateImages(String prompt) {
+    @PostMapping("/generate_image_by_text")
+    protected ResponseEntity<byte[]> generateImages(@RequestHeader("Authorization") String authorizationHeader, @RequestBody String prompt){
         try {
             byte[] imageBytes = llmService.createImage(prompt);
             return ResponseEntity.ok()

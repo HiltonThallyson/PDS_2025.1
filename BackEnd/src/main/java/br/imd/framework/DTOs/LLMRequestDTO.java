@@ -1,6 +1,6 @@
 package br.imd.framework.DTOs;
 
-public abstract class LLMRequestDTO {
+public class LLMRequestDTO {
     private String prompt;
 
     public LLMRequestDTO() {

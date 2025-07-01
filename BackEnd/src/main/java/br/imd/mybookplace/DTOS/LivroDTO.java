@@ -6,11 +6,8 @@ import br.imd.framework.DTOs.ProdutoDTO;
 
 public class LivroDTO extends ProdutoDTO {
 
-    private String subtitle;
     private List<String> authors;
     private String editora;
-    private String description;
-    private List<String> categories;
     private String isbn;
 
     public String getIsbn() {
@@ -19,24 +16,6 @@ public class LivroDTO extends ProdutoDTO {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    
-
-    public List<String> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getEditora() {
@@ -55,12 +34,5 @@ public class LivroDTO extends ProdutoDTO {
         this.authors = authors;
     }
 
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
 
 }
