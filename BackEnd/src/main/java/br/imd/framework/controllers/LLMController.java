@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
 import br.imd.framework.exceptions.LLMServiceException;
@@ -33,13 +36,15 @@ public class LLMController {
      *
      * @param prompt Objeto contendo as informações para busca de ofertas.
      * @return Lista de ofertas encontradas.
+     * @throws JsonProcessingException 
+     * @throws JsonMappingException 
      */
     @PostMapping("/search_price")
 
     public List<OfferDTO> searchOffers(
     @RequestHeader("Authorization") String authorizationHeader,
-     @RequestBody LLMRequestDTO prompt) {
-            return llmService.searchOffers(prompt);
+     @RequestBody LLMRequestDTO prompt) throws JsonMappingException, JsonProcessingException {
+            return llmService.makeSearchPricePrediction(prompt);
     }
 
     /**

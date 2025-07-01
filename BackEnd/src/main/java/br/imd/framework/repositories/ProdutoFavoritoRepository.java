@@ -1,11 +1,11 @@
-package br.imd.framework.repositories;
+// package br.imd.framework.repositories;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+// import org.springframework.data.repository.CrudRepository;
+// import org.springframework.stereotype.Repository;
 
-import br.imd.framework.entities.Produto;
+// import br.imd.framework.entities.Produto;
 
-@Repository
-public interface ProdutoFavoritoRepository extends CrudRepository<Produto, Long> {
+// @Repository
+// public interface ProdutoFavoritoRepository extends CrudRepository<Produto, Long> {
     
-}
+// }

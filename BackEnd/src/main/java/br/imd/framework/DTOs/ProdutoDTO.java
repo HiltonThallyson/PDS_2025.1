@@ -1,30 +1,30 @@
 package br.imd.framework.DTOs;
 
-import br.imd.framework.enums.ProdutoStatus;
-
 public abstract class ProdutoDTO {
     private String title;
-    private String thumbnailUrl;
-    private ProdutoStatus status;
+    private String thumbnail;
 
-    public ProdutoDTO(String title, String thumbnailUrl, ProdutoStatus status) {
+    public ProdutoDTO(String title, String thumbnail) {
         this.title = title;
-        this.thumbnailUrl = thumbnailUrl;
-        this.status = status;
+        this.thumbnail = thumbnail;
     }
+
+    public ProdutoDTO() {}
 
     public String getTitle() {
         return title;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
-    public ProdutoStatus getStatus() {
-        return status;
+    
+
+    public void setTitle(String title) {
+        this.title = title;
     }
-    public void setStatus(ProdutoStatus status) {
-        this.status = status;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

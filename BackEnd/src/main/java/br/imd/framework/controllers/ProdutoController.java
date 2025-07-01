@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.imd.framework.entities.Produto;
+import br.imd.framework.DTOs.ProdutoDTO;
 import br.imd.framework.services.ProdutoService;
 
 @RestController
 @RequestMapping("/api/produtos")
 @ConditionalOnBean(ProdutoService.class)
-public class ProdutoController <T extends Produto>{
+public class ProdutoController <T extends ProdutoDTO>{
     private final ProdutoService<T> produtoService;
 
     public ProdutoController(ProdutoService<T> produtoService) {

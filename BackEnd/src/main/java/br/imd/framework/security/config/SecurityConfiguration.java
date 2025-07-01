@@ -23,11 +23,6 @@ public class SecurityConfiguration {
 
     @Autowired
     private SecurityFilter securityFilter;
-
-     @Bean
-    public SecurityFilter securityFilter() {
-        return new SecurityFilter();
-    }
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
