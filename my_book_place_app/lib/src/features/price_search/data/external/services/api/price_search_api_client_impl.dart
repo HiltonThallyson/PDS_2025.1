@@ -9,7 +9,7 @@ import '../../../../../auth/domain/entities/user.dart';
 import '../../../../domain/infra/services/api/price_search_api_client.dart';
 
 class PriceSearchApiClientImpl implements PriceSearchApiClient {
-  final _apiUrl = "http://localhost:8090/api/livros";
+  final _apiUrl = "http://localhost:8090/api";
   final _searchPriceEndpoint = "/llm/search_price";
 
   final _user = Modular.get<User>();

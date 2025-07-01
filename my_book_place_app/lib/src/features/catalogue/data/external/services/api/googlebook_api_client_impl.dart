@@ -9,7 +9,7 @@ import '../../../../domain/infra/services/api/googlebook_api_client.dart';
 import '../../../../domain/models/book.dart';
 
 class GoogleBookApiClientImpl implements GoogleBookApiClient {
-  final _apiUrl = "http://localhost:8090/api/livros";
+  final _apiUrl = "http://localhost:8090/api/produtos";
   final _bookByQtyEndpoint = "/quantidade";
   final _bookByAuthorEndpoint = "/autor";
   final _bookByTitleEndpoint = "/titulo";
