@@ -21,25 +21,25 @@ tavily_tool = TavilySearch(max_results=5, topic="general")
 
 # Cria o prompt
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant that searches book prices on the internet and return 5 offers that you find on internet. You only consider offers in Brazil that has a price associated with it and the price has value in R$. Dont consider offers with price null. If the offer have multiple prices, pick the lowest one. Get the offers and format the response organizing it as JSON using these keys: title, author, price, link, imageUrl. Return empty array if not found."),
+    ("system", "You are a helpful assistant that searches product prices on the internet and return offers that you find on internet. You only consider offers in Brazil that has a price associated with it and the price has value in R$. Dont consider offers with price null. If the offer have multiple prices, pick the lowest one. Get the offers and format the response organizing it as JSON using these keys provided in the prompt. Return empty array if not found."),
     ("human", "{input}"),
     MessagesPlaceholder(variable_name="agent_scratchpad")
 ])
 
-json_schema = {
-    "title": "book title",
-    "author": "book author",
-    "price": "book price",
-    "link": "store link to book",
-    "type": "object",
-    "properties": {
-        "title": {"type": "string", "description": "The title of the book"},
-        "author": {"type": "string", "description": "The author of the book"},
-        "price": {"type": "number", "description": "The price of the book"},
-        "link": {"type": "string", "description": "Link to the store"},
-    },
-    "required": ["title", "price", "link"],
-}
+# json_schema = {
+#     "title": "book title",
+#     "author": "book author",
+#     "price": "book price",
+#     "link": "store link to book",
+#     "type": "object",
+#     "properties": {
+#         "title": {"type": "string", "description": "The title of the book"},
+#         "author": {"type": "string", "description": "The author of the book"},
+#         "price": {"type": "number", "description": "The price of the book"},
+#         "link": {"type": "string", "description": "Link to the store"},
+#     },
+#     "required": ["title", "price", "link"],
+# }
 
 # Inicializa o modelo com ferramenta
 llm = ChatGoogleGenerativeAI(

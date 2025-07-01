@@ -85,8 +85,23 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        
-
+		<!-- <dependency>
+			<groupId>br.imd.framework</groupId>
+	        <artifactId>framework</artifactId>
+	        <version>0.0.1-SNAPSHOT</version>
+		</dependency> -->
+		<!-- <dependency>
+			<groupId>br.imd</groupId>
+			<artifactId>framework</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/framework.jar</systemPath>
+		</dependency> -->
+        <dependency>
+            <groupId>br.imd</groupId>
+            <artifactId>framework</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -97,5 +112,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
