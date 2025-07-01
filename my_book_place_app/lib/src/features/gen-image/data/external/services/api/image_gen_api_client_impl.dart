@@ -9,7 +9,7 @@ import '../../../../../auth/domain/entities/user.dart';
 import '../../../../domain/infra/services/api/image_gen_api_client.dart';
 
 class ImageGenApiClientImpl implements ImageGenApiClient {
-  final _baseUrl = "http://localhost:8090/api/llm";
+  final _baseUrl = "http://localhost:8090/api/livros/llm";
   final _imageGenEndpoint = "/generate_image_by_text";
 
   final _user = Modular.get<User>();

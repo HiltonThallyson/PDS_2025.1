@@ -9,7 +9,7 @@ import '../../../../../auth/domain/entities/user.dart';
 import '../../../../domain/infra/services/api/price_search_api_client.dart';
 
 class PriceSearchApiClientImpl implements PriceSearchApiClient {
-  final _apiUrl = "http://localhost:8090/api";
+  final _apiUrl = "http://localhost:8090/api/livros";
   final _searchPriceEndpoint = "/llm/search_price";
 
   final _user = Modular.get<User>();
@@ -35,7 +35,9 @@ class PriceSearchApiClientImpl implements PriceSearchApiClient {
       for (var answer in data) {
         offers.add(Offer(
           answer['title'],
-          answer['price'] ?? "Verifique no site",
+          answer['price'] != null
+              ? answer['price'].toString()
+              : "Verifique no site",
           answer['link'],
           answer['imageUrl'] ?? "",
         ));
