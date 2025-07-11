@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from google.genai import types
+from google.generativeai import types
 from google import genai
 from PIL import Image
 from io import BytesIO
