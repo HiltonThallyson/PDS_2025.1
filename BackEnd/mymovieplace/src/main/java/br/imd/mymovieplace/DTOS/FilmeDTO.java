@@ -5,24 +5,22 @@ import java.util.List;
 import br.imd.framework.DTOs.ProdutoDTO;
 
 public class FilmeDTO extends ProdutoDTO {
-    private List<String> desenvolvedores;
-    private String editora;
+    private List<String> criadores;
+    private String publisher;
 
-    public String getEditora() {
-        return editora;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setEditora(String editora) {
-        this.editora = editora;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
-    public List<String> getDevelopers() {
-        return desenvolvedores;
+    public List<String> getCriadores() {
+        return criadores;
     }
 
-    public void setDevelopers(List<String> desenvolvedores) {
-        this.desenvolvedores = desenvolvedores;
+    public void setCriadores(List<String> criadores) {
+        this.criadores = criadores;
     }
-
-
 }

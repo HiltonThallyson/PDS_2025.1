@@ -35,11 +35,9 @@ public class FilmeService extends ProdutoService<FilmeDTO>{
 
     @Override
     public List<FilmeDTO> buscarPorNome(String titulo) {
-        // A API do FreeToGame não tem busca por nome via parâmetro, então talvez você precise filtrar manualmente depois
         String url = "/movie/popular?name=" + titulo;
         List<FilmeDTO> todosFilmes = buscarFilmeDTOs(url);
 
-        // Filtrar por nome
         return todosFilmes.stream()
                 .filter(Filme -> Filme.getTitle() != null && Filme.getTitle().toLowerCase().contains(titulo.toLowerCase()))
                 .toList();
@@ -56,30 +54,30 @@ public class FilmeService extends ProdutoService<FilmeDTO>{
 
     private Map<Integer, String> obterGeneros() {
         String genresUrl = "/genre/movie/list";
-    try {
-        Map<String, Object> response = webClient.get()
-            .uri(genresUrl)
-            .header("Authorization", "Bearer " + tmdbToken)
-            .retrieve()
-            .bodyToMono(Map.class)
-            .block();
+        try {
+            Map<String, Object> response = webClient.get()
+                .uri(genresUrl)
+                .header("Authorization", "Bearer " + tmdbToken)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
 
-        List<Map<String, Object>> genres = (List<Map<String, Object>>) response.get("genres");
-        Map<Integer, String> mapa = new HashMap<>();
+            List<Map<String, Object>> genres = (List<Map<String, Object>>) response.get("genres");
+            Map<Integer, String> mapa = new HashMap<>();
 
-        for (Map<String, Object> genre : genres) {
-            Integer id = (Integer) genre.get("id");
-            String name = (String) genre.get("name");
-            mapa.put(id, name);
+            for (Map<String, Object> genre : genres) {
+                Integer id = (Integer) genre.get("id");
+                String name = (String) genre.get("name");
+                mapa.put(id, name);
+            }
+
+            return mapa;
+
+        } catch (Exception e) {
+            logger.error("Erro ao obter lista de gêneros: {}", e.getMessage());
+            return Collections.emptyMap();
         }
-
-        return mapa;
-
-    } catch (Exception e) {
-        logger.error("Erro ao obter lista de gêneros: {}", e.getMessage());
-        return Collections.emptyMap();
     }
-}
 
 
     private List<FilmeDTO> buscarFilmeDTOs(String url){
@@ -88,53 +86,52 @@ public class FilmeService extends ProdutoService<FilmeDTO>{
     }
 
     private List<Map<String, Object>> fazerRequisicaoTMDB(String urlPath){
-    try {
-        Map<String, Object> response = webClient.get()
-            .uri(urlPath)
-            .header("Authorization", "Bearer " + tmdbToken)
-            .retrieve()
-            .bodyToMono(Map.class)
-            .block();
+        try {
+            Map<String, Object> response = webClient.get()
+                .uri(urlPath)
+                .header("Authorization", "Bearer " + tmdbToken)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
 
-        if (response == null || !response.containsKey("results")) {
-            return Collections.emptyList();
+            if (response == null || !response.containsKey("results")) {
+                return Collections.emptyList();
+            }
+
+            return (List<Map<String, Object>>) response.get("results");
+
+        } catch (WebClientResponseException | WebClientRequestException e) {
+            logger.error("Erro ao acessar a API: ", e.getMessage());
+            throw new GoogleBooksApiException("Erro ao acessar a API TMDB: " + e.getMessage(), e);
         }
-
-        return (List<Map<String, Object>>) response.get("results");
-
-    } catch (WebClientResponseException | WebClientRequestException e) {
-        logger.error("Erro ao acessar a API: {}", e.getMessage());
-        throw new GoogleBooksApiException("Erro ao acessar a API TMDB: " + e.getMessage(), e);
     }
-}
 
 
     private List<FilmeDTO> converterParaFilmeDTOs(List<Map<String, Object>> items) {
-    Map<Integer, String> generos = obterGeneros();
-    List<FilmeDTO> filmeDTOs = new ArrayList<>();
+        Map<Integer, String> generos = obterGeneros();
+        List<FilmeDTO> filmeDTOs = new ArrayList<>();
 
-    for (Map<String, Object> item : items) {
-        FilmeDTO dto = new FilmeDTO();
-        dto.setTitle((String) item.get("title"));
-        dto.setSubtitle((String) item.get("original_title"));
-        dto.setDescription((String) item.get("overview"));
-        dto.setThumbnail("https://image.tmdb.org/t/p/w500" + item.get("poster_path"));
+        for (Map<String, Object> item : items) {
+            FilmeDTO dto = new FilmeDTO();
+            dto.setTitle((String) item.get("title"));
+            dto.setSubtitle((String) item.get("original_title"));
+            dto.setDescription((String) item.get("overview"));
+            dto.setThumbnail("https://image.tmdb.org/t/p/w500" + item.get("poster_path"));
 
-        List<Integer> genreIds = (List<Integer>) item.get("genre_ids");
-        List<String> genreNames = genreIds != null
-            ? genreIds.stream()
-                      .map(generos::get)
-                      .filter(Objects::nonNull)
-                      .toList()
-            : Collections.emptyList();
+            List<Integer> genreIds = (List<Integer>) item.get("genre_ids");
+            List<String> genreNames = genreIds != null
+                ? genreIds.stream()
+                        .map(generos::get)
+                        .filter(Objects::nonNull)
+                        .toList()
+                : Collections.emptyList();
 
-        dto.setCategories(genreNames);
+            dto.setCategories(genreNames);
 
-        filmeDTOs.add(dto);
+            filmeDTOs.add(dto);
+        }
+
+        return filmeDTOs;
     }
-
-    return filmeDTOs;
-    }
-
 
 }
