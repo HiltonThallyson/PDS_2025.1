@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
-import br.imd.framework.exceptions.LLMServiceException;
+import br.imd.framework.exceptions.LLMException;
 import br.imd.framework.services.LLMService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +36,7 @@ public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
         try {
             List<OfferDTO> offers = llmService.makeSearchPricePrediction(prompt);
             return ResponseEntity.ok(offers);
-        } catch (JsonProcessingException | LLMServiceException e) {
+        } catch (JsonProcessingException | LLMException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao processar a busca de ofertas: " + e.getMessage());
@@ -50,7 +50,7 @@ public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_PNG)
                     .body(imageBytes);
-        } catch (LLMServiceException e) {
+        } catch (LLMException e) {
             return ResponseEntity.internalServerError().build();
         }
     }

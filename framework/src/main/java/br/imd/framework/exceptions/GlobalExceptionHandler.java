@@ -19,19 +19,19 @@ public class GlobalExceptionHandler {
                 .body("Erro interno do servidor. Por favor, tente novamente mais tarde");
     }
 
-    @ExceptionHandler(GoogleBooksApiException.class)
-    public ResponseEntity<String> handleGoogleBooksApiException(GoogleBooksApiException e){
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<String> handleGoogleBooksApiException(ApiException e){
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                .body("Não foi possível obter informações dos livros no momento. Por favor, tente novamente mais tarde.");
+                .body("Não foi possível obter acessar a API no momento. Por favor, tente novamente mais tarde.");
     }
 
-    @ExceptionHandler(LivroFavoritoException.class)
-    public ResponseEntity<String> handleLivroFavoritoException (LivroFavoritoException e){
+    @ExceptionHandler(ProdutoFavorito.class)
+    public ResponseEntity<String> handleLivroFavoritoException (ProdutoFavorito e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(LLMServiceException.class)
-    public ResponseEntity<String> handleLLMServiceException(LLMServiceException e){
+    @ExceptionHandler(LLMException.class)
+    public ResponseEntity<String> handleLLMServiceException(LLMException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
@@ -50,4 +50,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<String> handleBusinessException(BusinessException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(HttpException.class)
+    public ResponseEntity<String> handleHttpException(HttpException e) {
+        return ResponseEntity.status(HttpStatus.valueOf(e.getStatusCode())).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ConnectTimeoutException.class)
+    public ResponseEntity<String> handleConnectTimeoutException(ConnectTimeoutException e) {
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(e.getMessage());
+    }
 }
