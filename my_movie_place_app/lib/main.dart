@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'MyBookPlace',
+      title: 'MyMoviePlace',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

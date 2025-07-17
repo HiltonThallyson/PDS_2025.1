@@ -23,9 +23,7 @@ class MenuPage extends StatelessWidget with MyMoviePlaceAppBarMixin {
             runSpacing: 10,
             children: [
               MenuCard(
-                  route: "/catalogue/",
-                  icon: Icons.gamepad_rounded,
-                  title: "Catalogo"),
+                  route: "/catalogue/", icon: Icons.movie, title: "Catalogo"),
               // MenuCard(
               //     route: "/search-price/",
               //     icon: Icons.price_check_rounded,
