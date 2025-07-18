@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import br.imd.framework.DTOs.LLMRequestDTO;
 import br.imd.framework.DTOs.OfferDTO;
 import br.imd.framework.controllers.BaseLLMController;
-import br.imd.framework.exceptions.LLMServiceException;
+import br.imd.framework.exceptions.LLMException;
+import br.imd.mybookplace.DTOS.BookLLMRequestDTO;
 import br.imd.mybookplace.services.LLMServiceLivro;
 
 
 @RestController
 @RequestMapping("/api/llm")
-public class LivroLLMController extends BaseLLMController<LLMServiceLivro> {
+public class LivroLLMController extends BaseLLMController<BookLLMRequestDTO, LLMServiceLivro> {
 
     public LivroLLMController(LLMServiceLivro llmService) {
         super(llmService);
