@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 @RequestMapping("/api/llm")
-public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
+public abstract class BaseLLMController <L extends LLMRequestDTO,S extends LLMService<L>> {
 
     protected final S llmService;
 
@@ -31,7 +31,7 @@ public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
     }
 
     @PostMapping("/search_price")
-    protected ResponseEntity<?> searchOffers(@RequestHeader("Authorization") String authorizationHeader, @RequestBody LLMRequestDTO prompt)  throws JsonMappingException, JsonProcessingException{
+    protected ResponseEntity<?> searchOffers(@RequestHeader("Authorization") String authorizationHeader, @RequestBody L prompt)  throws JsonMappingException, JsonProcessingException{
         System.out.println(prompt.getPrompt());
         try {
             List<OfferDTO> offers = llmService.makeSearchPricePrediction(prompt);
@@ -44,7 +44,7 @@ public abstract class BaseLLMController <S extends LLMService<LLMRequestDTO>> {
     }
 
     @PostMapping("/generate_image_by_text")
-    protected ResponseEntity<byte[]> generateImages(@RequestHeader("Authorization") String authorizationHeader, @RequestBody String prompt){
+    protected ResponseEntity<byte[]> generateImages(@RequestHeader("Authorization") String authorizationHeader, @RequestBody L prompt){
         try {
             byte[] imageBytes = llmService.createImage(prompt);
             return ResponseEntity.ok()

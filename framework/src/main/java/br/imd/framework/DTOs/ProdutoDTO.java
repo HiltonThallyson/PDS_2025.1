@@ -2,19 +2,23 @@ package br.imd.framework.DTOs;
 
 import java.util.List;
 
+import br.imd.framework.enums.ProdutoStatus;
+
 public abstract class ProdutoDTO {
     private String title;
     private String subtitle;
     private String thumbnail;
     private String description;
     private List<String> categories;
+    private ProdutoStatus status;
 
-    public ProdutoDTO(String title, String subtitle, String thumbnail, String description, List<String> categories) {
+    public ProdutoDTO(String title, String subtitle, String thumbnail, String description, List<String> categories, ProdutoStatus status) {
         this.title = title;
         this.subtitle = subtitle;
         this.thumbnail = thumbnail;
         this.description = description;
         this.categories = categories;
+        this.status = status;
     }
 
     public ProdutoDTO() {}
@@ -53,4 +57,12 @@ public abstract class ProdutoDTO {
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
+
+    public ProdutoStatus getStatus() {
+        return status;
+    }
+    public void setStatus(ProdutoStatus status) {
+        this.status = status;
+    }
+
 }
