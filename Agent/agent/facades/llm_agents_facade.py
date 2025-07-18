@@ -1,6 +1,5 @@
 import base64
 import re
-from google.genai import types
 from fastapi import HTTPException, Response
 from agent.price_agent import get_price_agent
 from agent.image_agent import ImageAgent

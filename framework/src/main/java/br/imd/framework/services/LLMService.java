@@ -26,18 +26,18 @@ public abstract class LLMService <L extends LLMRequestDTO> {
 
     final int bufferSizeInBytes = 20 * 1024 * 1024; // Aumentado para 20 MB como exemplo
 
-    public LLMService(){};
 
     public LLMService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl("http://127.0.0.1:8000/api").build();
         ExchangeStrategies strategies = ExchangeStrategies.builder()
-                .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(bufferSizeInBytes))
-                .build();
+         .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(bufferSizeInBytes))
+         .build();
 
-        webClient = builder
-                .baseUrl("http://127.0.0.1:8000/api") 
-                .exchangeStrategies(strategies)       
-                .build();
+        this.webClient = builder
+            .baseUrl("http://127.0.0.1:8000/api")
+            .exchangeStrategies(strategies)
+            .build();
+   
     }
 
 

@@ -4,6 +4,8 @@ python-dotenv
 langchain
 langgraph
 langchain-tavily
+langchain-google-genai
+pillow
 google-generativeai
 
 
