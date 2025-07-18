@@ -15,43 +15,70 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import br.imd.framework.exceptions.GoogleBooksApiException;
+import br.imd.framework.exceptions.ApiException;
 import br.imd.framework.services.ProdutoService;
 import br.imd.mymovieplace.DTOS.FilmeDTO;
 
 @Service
-public class FilmeService extends ProdutoService<FilmeDTO>{
+public class FilmeService extends ProdutoService<FilmeDTO> {
 
-    private final WebClient webClient;
+    private static final String API_URL = "https://api.themoviedb.org/3";
     private static final Logger logger = LoggerFactory.getLogger(FilmeService.class);
-    final String API_URL = "https://api.themoviedb.org/3";
-    
-   @Value("${tmdb.api.token}")
+
+    @Value("${tmdb.api.token}")
     private String tmdbToken;
 
-    public FilmeService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(API_URL).build();
+    public FilmeService(WebClient.Builder builder) {
+        super(builder, API_URL, logger);
     }
 
     @Override
     public List<FilmeDTO> buscarPorNome(String titulo) {
-        String url = "/movie/popular?name=" + titulo;
-        List<FilmeDTO> todosFilmes = buscarFilmeDTOs(url);
-
-        return todosFilmes.stream()
-                .filter(Filme -> Filme.getTitle() != null && Filme.getTitle().toLowerCase().contains(titulo.toLowerCase()))
-                .toList();
+        return buscarComConversao("/movie/popular?name=" + titulo).stream()
+            .filter(f -> f.getTitle() != null && f.getTitle().toLowerCase().contains(titulo.toLowerCase()))
+            .toList();
     }
 
     @Override
-    public List<FilmeDTO> buscarPorQuantidade(int qtdPorCategoria) {
-        String url = "/movie/popular?language=pt-BR";
-        
-                        
-        List<FilmeDTO> todosFilmes = buscarFilmeDTOs(url);
-        return todosFilmes.stream().limit(qtdPorCategoria).toList();
+    public List<FilmeDTO> buscarPorQuantidade(int qtd) {
+        return buscarComConversao("/movie/popular?language=pt-BR").stream()
+            .limit(qtd)
+            .toList();
     }
 
+    @Override
+    protected Map<String, String> getDefaultHeaders() {
+        return Map.of("Authorization", "Bearer " + tmdbToken);
+    }
+
+    @Override
+    protected List<FilmeDTO> converter(List<Map<String, Object>> items) {
+        Map<Integer, String> generos = obterGeneros();
+        List<FilmeDTO> lista = new ArrayList<>();
+        for (Map<String, Object> item : items) {
+            FilmeDTO dto = new FilmeDTO();
+            dto.setTitle((String) item.get("title"));
+            dto.setSubtitle((String) item.get("original_title"));
+            dto.setDescription((String) item.get("overview"));
+            dto.setThumbnail("https://image.tmdb.org/t/p/w500" + item.get("poster_path"));
+
+            List<Integer> genreIds = (List<Integer>) item.get("genre_ids");
+            List<String> names = genreIds != null
+                ? genreIds.stream().map(generos::get).filter(Objects::nonNull).toList()
+                : Collections.emptyList();
+
+            dto.setCategories(names);
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+    @Override
+    protected String getResultsKey() {
+        return "results";
+    }
+
+    
     private Map<Integer, String> obterGeneros() {
         String genresUrl = "/genre/movie/list";
         try {
@@ -79,59 +106,5 @@ public class FilmeService extends ProdutoService<FilmeDTO>{
         }
     }
 
-
-    private List<FilmeDTO> buscarFilmeDTOs(String url){
-        List<Map<String, Object>> items = fazerRequisicaoTMDB(url);
-        return converterParaFilmeDTOs(items);
-    }
-
-    private List<Map<String, Object>> fazerRequisicaoTMDB(String urlPath){
-        try {
-            Map<String, Object> response = webClient.get()
-                .uri(urlPath)
-                .header("Authorization", "Bearer " + tmdbToken)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
-
-            if (response == null || !response.containsKey("results")) {
-                return Collections.emptyList();
-            }
-
-            return (List<Map<String, Object>>) response.get("results");
-
-        } catch (WebClientResponseException | WebClientRequestException e) {
-            logger.error("Erro ao acessar a API: ", e.getMessage());
-            throw new GoogleBooksApiException("Erro ao acessar a API TMDB: " + e.getMessage(), e);
-        }
-    }
-
-
-    private List<FilmeDTO> converterParaFilmeDTOs(List<Map<String, Object>> items) {
-        Map<Integer, String> generos = obterGeneros();
-        List<FilmeDTO> filmeDTOs = new ArrayList<>();
-
-        for (Map<String, Object> item : items) {
-            FilmeDTO dto = new FilmeDTO();
-            dto.setTitle((String) item.get("title"));
-            dto.setSubtitle((String) item.get("original_title"));
-            dto.setDescription((String) item.get("overview"));
-            dto.setThumbnail("https://image.tmdb.org/t/p/w500" + item.get("poster_path"));
-
-            List<Integer> genreIds = (List<Integer>) item.get("genre_ids");
-            List<String> genreNames = genreIds != null
-                ? genreIds.stream()
-                        .map(generos::get)
-                        .filter(Objects::nonNull)
-                        .toList()
-                : Collections.emptyList();
-
-            dto.setCategories(genreNames);
-
-            filmeDTOs.add(dto);
-        }
-
-        return filmeDTOs;
-    }
-
 }
+
