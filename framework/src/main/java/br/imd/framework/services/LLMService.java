@@ -90,13 +90,12 @@ public abstract class LLMService <L extends LLMRequestDTO> {
      * @return String com a URL ou base64 da imagem gerada.
      * @throws LLMServiceException em caso de falha na comunicação ou processamento da resposta da API.
      */
-    public byte[] createImage(L prompt) {
+    public byte[] createImage(String prompt) {
         String imageUrlEndpoint = UriComponentsBuilder 
                 .fromPath("/generate-image-from-text")
                 .build()
                 .toString();
 
-        System.out.println("Prompt para geração de imagem: " + prompt.getPrompt());
 
         try {
             return webClient.post()

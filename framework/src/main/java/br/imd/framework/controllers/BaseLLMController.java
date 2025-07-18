@@ -44,7 +44,7 @@ public abstract class BaseLLMController <L extends LLMRequestDTO,S extends LLMSe
     }
 
     @PostMapping("/generate_image_by_text")
-    protected ResponseEntity<byte[]> generateImages(@RequestHeader("Authorization") String authorizationHeader, @RequestBody L prompt){
+    protected ResponseEntity<byte[]> generateImages(@RequestHeader("Authorization") String authorizationHeader, @RequestBody String prompt){
         try {
             byte[] imageBytes = llmService.createImage(prompt);
             return ResponseEntity.ok()
